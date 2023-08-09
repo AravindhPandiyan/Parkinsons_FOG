@@ -1,8 +1,9 @@
 """
 Create an iris flow
 """
-from config import Location, ModelParams, ProcessConfig
 from prefect import flow
+
+from config import Location, ModelParams, ProcessConfig
 from process import process
 from run_notebook import run_notebook
 from train_model import train
@@ -10,9 +11,9 @@ from train_model import train
 
 @flow
 def iris_flow(
-    location: Location = Location(),
-    process_config: ProcessConfig = ProcessConfig(),
-    model_params: ModelParams = ModelParams(),
+        location: Location = Location(),
+        process_config: ProcessConfig = ProcessConfig(),
+        model_params: ModelParams = ModelParams(),
 ):
     """Flow to run the process, train, and run_notebook flows
 

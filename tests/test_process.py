@@ -1,6 +1,7 @@
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal, assert_series_equal
+
 from src.process import drop_columns, get_X_y
 
 

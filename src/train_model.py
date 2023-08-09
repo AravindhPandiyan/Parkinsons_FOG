@@ -2,10 +2,11 @@
 import joblib
 import numpy as np
 import pandas as pd
-from config import Location, ModelParams
 from prefect import flow, task
 from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
+
+from config import Location, ModelParams
 
 
 @task
@@ -22,7 +23,7 @@ def get_processed_data(data_location: str):
 
 @task
 def train_model(
-    model_params: ModelParams, X_train: pd.DataFrame, y_train: pd.Series
+        model_params: ModelParams, X_train: pd.DataFrame, y_train: pd.Series
 ):
     """Train the model
 
@@ -79,8 +80,8 @@ def save_predictions(predictions: np.array, save_path: str):
 
 @flow
 def train(
-    location: Location = Location(),
-    svc_params: ModelParams = ModelParams(),
+        location: Location = Location(),
+        svc_params: ModelParams = ModelParams(),
 ):
     """Flow to train the model
 

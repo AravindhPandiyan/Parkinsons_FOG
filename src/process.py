@@ -2,9 +2,10 @@
 
 import joblib
 import pandas as pd
-from config import Location, ProcessConfig
 from prefect import flow, task
 from sklearn.model_selection import train_test_split
+
+from config import Location, ProcessConfig
 
 
 @task
@@ -89,8 +90,8 @@ def save_processed_data(data: dict, save_location: str):
 
 @flow
 def process(
-    location: Location = Location(),
-    config: ProcessConfig = ProcessConfig(),
+        location: Location = Location(),
+        config: ProcessConfig = ProcessConfig(),
 ):
     """Flow to process the ata
 

@@ -1,8 +1,11 @@
 import dask.dataframe as dd
+import hydra
 import numpy as np
 import pandas as pd
-from scipy import signal as ss
 import tensorflow as tf
+
+from hydra import utils
+from scipy import signal as ss
 
 
 def convert_to_power_spectrums(features, freq, wsize, step):
@@ -27,7 +30,7 @@ def window_processing(x_win, y_win, freq, wsize, step):
     most_frequent_row = unique_rows[idx_most_frequent_row]
     y_win = pd.DataFrame(most_frequent_row.reshape(1, -1), columns=y_win.columns)
     y = y_win.astype(int).values[0]
-    yield x, y
+    return x, y
 
 
 def tf_record_writer(data, path, freq, wsize, step):
@@ -42,7 +45,7 @@ def tf_record_writer(data, path, freq, wsize, step):
                 x_win = features.iloc[win_start: win_start + wsize, :]
                 y_win = target.iloc[win_start: win_start + wsize, :]
 
-                if x_win.shape[0] == 328:
+                if x_win.shape[0] == wsize:
                     x, y = window_processing(x_win, y_win, freq, wsize, step)
 
                     x = x.tobytes()
@@ -60,18 +63,21 @@ def load_data(meta_path, data_path):
     return dataset
 
 
-def tdcsfog_main():
-    main_path = '../data'
-    dataset = load_data(main_path + '/processed/processed_tdcsfog_metadata.csv', main_path + '/raw/train/tdcsfog/')
-    tf_record_writer(dataset, main_path + '/processed/tdcsfog.tfrecords', 128, 328, 102)
+@hydra.main(config_path='../config', config_name='Config.yaml', version_base='1.3')
+def tdcsfog_main(config):
+    current_path = utils.get_original_cwd() + '/'
+    tdcsfog_paths = config.preprocessing.tdcsfog
+    dataset = load_data(current_path + tdcsfog_paths.metadata, current_path + tdcsfog_paths.dataset)
+    tf_record_writer(dataset, current_path + tdcsfog_paths.tf_record_path, tdcsfog_paths.freq,
+                     tdcsfog_paths.window_size, tdcsfog_paths.steps)
 
 
-def defog_main():
-    main_path = '../data'
-    dataset = load_data(main_path + '/processed/processed_defog_metadata.csv', main_path + '/raw/train/defog/')
-    tf_record_writer(dataset, main_path + '/processed/defog.tfrecords', 128, 328, 102)
-
-
-if __name__ == '__main__':
-    tdcsfog_main()
-    defog_main()
+@hydra.main(config_path='../config', config_name='Config.yaml', version_base='1.3')
+def defog_main(config):
+    current_path = utils.get_original_cwd() + '/'
+    defog_paths = config.preprocessing.defog
+    dataset = load_data(current_path + defog_paths.metadata, current_path + defog_paths.dataset)
+    dataset = dataset.loc[dataset.Valid.eq(True)]
+    dataset = dataset.drop(['Valid', 'Task'], axis=1).reset_index()
+    tf_record_writer(dataset, current_path + defog_paths.tf_record_path, defog_paths.freq, defog_paths.window_size,
+                     defog_paths.steps)
