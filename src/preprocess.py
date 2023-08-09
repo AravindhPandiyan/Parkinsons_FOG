@@ -4,8 +4,6 @@ import pandas as pd
 from scipy import signal as ss
 import tensorflow as tf
 
-main_path = '../data'
-
 
 def convert_to_power_spectrums(features, freq, wsize, step):
     pxxs = []
@@ -55,17 +53,25 @@ def tf_record_writer(data, path, freq, wsize, step):
                     writer.write(record_bytes)
 
 
-def load_data(path):
-    metadata = pd.read_csv(path)
-    dataset_path = list(map(lambda id_: main_path + '/raw/train/tdcsfog/' + id_ + '.csv', metadata.Id.unique()))
+def load_data(meta_path, data_path):
+    metadata = pd.read_csv(meta_path)
+    dataset_path = list(map(lambda id_: data_path + id_ + '.csv', metadata.Id.unique()))
     dataset = dd.read_csv(dataset_path)
     return dataset
 
 
-def main():
-    dataset = load_data(main_path + '/processed/processed_tdcsfog_metadata.csv')
+def tdcsfog_main():
+    main_path = '../data'
+    dataset = load_data(main_path + '/processed/processed_tdcsfog_metadata.csv', main_path + '/raw/train/tdcsfog/')
     tf_record_writer(dataset, main_path + '/processed/tdcsfog.tfrecords', 128, 328, 102)
 
 
+def defog_main():
+    main_path = '../data'
+    dataset = load_data(main_path + '/processed/processed_defog_metadata.csv', main_path + '/raw/train/defog/')
+    tf_record_writer(dataset, main_path + '/processed/defog.tfrecords', 128, 328, 102)
+
+
 if __name__ == '__main__':
-    main()
+    tdcsfog_main()
+    defog_main()
