@@ -1,5 +1,5 @@
-preprocessing:
-  tdcsfog:
+tdcsfog:
+  preprocessing:
     metadata: data/processed/processed_tdcsfog_metadata.csv
     dataset: data/raw/train/tdcsfog/
     tf_record_path: data/processed/tdcsfog.tfrecords
@@ -7,7 +7,8 @@ preprocessing:
     window_size: 328
     steps: 102
 
-  defog:
+defog:
+  preprocessing:
     metadata: data/processed/processed_defog_metadata.csv
     dataset: data/raw/train/defog/
     tf_record_path: data/processed/defog.tfrecords

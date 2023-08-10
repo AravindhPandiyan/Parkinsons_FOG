@@ -5,10 +5,23 @@ import pandas as pd
 import tensorflow as tf
 
 from hydra import utils
+from omegaconf import DictConfig
 from scipy import signal as ss
 
 
-def convert_to_power_spectrums(features, freq, wsize, step):
+def convert_to_power_spectrums(features: pd.DataFrame, freq: int, wsize: int, step: int) -> np.ndarray:
+    """
+    Convert to Power Spectrums method is used to obtain the power spectrum of each columnar signal data in the given
+    dataframe. Initially, hamming window is applied on the data, to minimize the data's side lobe and improve the
+    quality of the data. Next, we make use of FFT to split the data into it's base frequencies. Finally, the power
+    spectrum is attained, by computing the portion of a data's power falling within given frequency bins. This entire
+    process is completed with the help of the welch method of Scipy's signal processing capabilities.
+    :param features: features is the window of dataframe in which each column's power spectrum must be calculated.
+    :param freq: freq is the frequency of the data captured.
+    :param wsize: wsize is the window size of the data frame
+    :param step: step is the step size of the rolling window.
+    :return: This function returns the calculated power spectrums.
+    """
     pxxs = []
     olap = wsize - step
 
@@ -21,7 +34,16 @@ def convert_to_power_spectrums(features, freq, wsize, step):
     return pxxs
 
 
-def window_processing(x_win, y_win, freq, wsize, step):
+def window_processing(x_win: pd.DataFrame, y_win: pd.DataFrame, freq: int, wsize: int, step: int) -> tuple:
+    """
+    Window Processing method is used for processing the feature and targets of a given window dataframe.
+    :param x_win: x_win is the window dataframe of features.
+    :param y_win: y_win is the window dataframe of targets.
+    :param freq: freq is the frequency of the data captured.
+    :param wsize: wsize is the window size of the data frame
+    :param step: step is the step size of the rolling window.
+    :return: This function returns a tuple of features and targets.
+    """
     x = convert_to_power_spectrums(x_win, freq, wsize, step)
 
     arr = y_win.values.astype(str)
@@ -33,7 +55,16 @@ def window_processing(x_win, y_win, freq, wsize, step):
     return x, y
 
 
-def tf_record_writer(data, path, freq, wsize, step):
+def tf_record_writer(data: dd.DataFrame, path: str, freq: int, wsize: int, step: int):
+    """
+    TF Record Writer function is used to create TFRecords from the given data. The TFRecords are used to improve the
+    performance of the model training and handle BIG DATA. This data is usually loaded directly to the GPU.
+    :param data: The DataFrame data to be converted to TFRecords.
+    :param path: The directory in which the TFRecords data must be stored.
+    :param freq: freq is the frequency of the data captured.
+    :param wsize: wsize is the window size of the data frame
+    :param step: step is the step size of the rolling window.
+    """
     data = data.fillna(0)
 
     with tf.io.TFRecordWriter(path) as writer:
@@ -56,7 +87,13 @@ def tf_record_writer(data, path, freq, wsize, step):
                     writer.write(record_bytes)
 
 
-def load_data(meta_path, data_path):
+def load_data(meta_path: str, data_path: str) -> dd.DataFrame:
+    """
+    Load data function is used to filter and fetch the required data from the unprocessed data.
+    :param meta_path: meta path is the directory in which the processed metadata is present.
+    :param data_path: data path is the directory in which all the data is present.
+    :return: Finally, this function returns the filtered data from all the data.
+    """
     metadata = pd.read_csv(meta_path)
     dataset_path = list(map(lambda id_: data_path + id_ + '.csv', metadata.Id.unique()))
     dataset = dd.read_csv(dataset_path)
@@ -64,20 +101,29 @@ def load_data(meta_path, data_path):
 
 
 @hydra.main(config_path='../config', config_name='Config.yaml', version_base='1.3')
-def tdcsfog_main(config):
+def tdcsfog_main(config: DictConfig):
+    """
+    tdcsfog main funtion is used to fetch and filter all the data that was tested in lab conditions.
+    :param config: config parameter is used for accessing the configurations for the specific model.
+    """
     current_path = utils.get_original_cwd() + '/'
-    tdcsfog_paths = config.preprocessing.tdcsfog
+    tdcsfog_paths = config.tdcsfog.preprocessing
     dataset = load_data(current_path + tdcsfog_paths.metadata, current_path + tdcsfog_paths.dataset)
     tf_record_writer(dataset, current_path + tdcsfog_paths.tf_record_path, tdcsfog_paths.freq,
                      tdcsfog_paths.window_size, tdcsfog_paths.steps)
 
 
 @hydra.main(config_path='../config', config_name='Config.yaml', version_base='1.3')
-def defog_main(config):
+def defog_main(config: DictConfig):
+    """
+    defog main funtion is used to fetch and filter all the data that was obtained from the subjects activities in their
+    homes.
+    :param config: config parameter is used for accessing the configurations for the specific model.
+    """
     current_path = utils.get_original_cwd() + '/'
-    defog_paths = config.preprocessing.defog
+    defog_paths = config.defog.preprocessing
     dataset = load_data(current_path + defog_paths.metadata, current_path + defog_paths.dataset)
-    dataset = dataset.loc[dataset.Valid.eq(True)]
+    dataset = dataset.loc[dataset.Valid.eq(True) & dataset.Task.eq(True)]
     dataset = dataset.drop(['Valid', 'Task'], axis=1).reset_index()
     tf_record_writer(dataset, current_path + defog_paths.tf_record_path, defog_paths.freq, defog_paths.window_size,
                      defog_paths.steps)
