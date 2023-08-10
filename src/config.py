@@ -1,63 +1,34 @@
-"""
-create Pydantic models
-"""
-from typing import List
+import hydra
+from hydra import utils
+from omegaconf import DictConfig
 
-from pydantic import BaseModel, validator
+from preprocess import load_data, tf_record_writer
 
 
-def must_be_non_negative(v: float) -> float:
-    """Check if the v is non-negative
-
-    Parameters
-    ----------
-    v : float
-        value
-
-    Returns
-    -------
-    float
-        v
-
-    Raises
-    ------
-    ValueError
-        Raises error when v is negative
+@hydra.main(config_path='../config', config_name='Config.yaml', version_base='1.3')
+def tdcsfog_main(config: DictConfig):
     """
-    if v < 0:
-        raise ValueError(f"{v} must be non-negative")
-    return v
+    tdcsfog main funtion is used to fetch and filter all the data that was tested in lab conditions.
+    :param config: config parameter is used for accessing the configurations for the specific model.
+    """
+    current_path = utils.get_original_cwd() + '/'
+    tdcsfog_paths = config.tdcsfog.preprocessing
+    dataset = load_data(current_path + tdcsfog_paths.metadata, current_path + tdcsfog_paths.dataset)
+    tf_record_writer(dataset, current_path + tdcsfog_paths.tf_record_path, tdcsfog_paths.freq,
+                     tdcsfog_paths.window_size, tdcsfog_paths.steps)
 
 
-class Location(BaseModel):
-    """Specify the locations of inputs and outputs"""
-
-    data_raw: str = "data/raw/iris.csv"
-    data_process: str = "data/processed/xy.pkl"
-    data_final: str = "data/final/predictions.pkl"
-    model: str = "models/svc.pkl"
-    input_notebook: str = "notebooks/analyze_results.ipynb"
-    output_notebook: str = "notebooks/results.ipynb"
-
-
-class ProcessConfig(BaseModel):
-    """Specify the parameters of the `process` flow"""
-
-    drop_columns: List[str] = ["Id"]
-    label: str = "Species"
-    test_size: float = 0.3
-
-    _validated_test_size = validator("test_size", allow_reuse=True)(
-        must_be_non_negative
-    )
-
-
-class ModelParams(BaseModel):
-    """Specify the parameters of the `train` flow"""
-
-    C: List[float] = [0.1, 1, 10, 100, 1000]
-    gamma: List[float] = [1, 0.1, 0.01, 0.001, 0.0001]
-
-    _validated_fields = validator("*", allow_reuse=True, each_item=True)(
-        must_be_non_negative
-    )
+@hydra.main(config_path='../config', config_name='Config.yaml', version_base='1.3')
+def defog_main(config: DictConfig):
+    """
+    defog main funtion is used to fetch and filter all the data that was obtained from the subjects activities in their
+    homes.
+    :param config: config parameter is used for accessing the configurations for the specific model.
+    """
+    current_path = utils.get_original_cwd() + '/'
+    defog_paths = config.defog.preprocessing
+    dataset = load_data(current_path + defog_paths.metadata, current_path + defog_paths.dataset)
+    dataset = dataset.loc[dataset.Valid.eq(True) & dataset.Task.eq(True)]
+    dataset = dataset.drop(['Valid', 'Task'], axis=1).reset_index()
+    tf_record_writer(dataset, current_path + defog_paths.tf_record_path, defog_paths.freq, defog_paths.window_size,
+                     defog_paths.steps)

@@ -1,11 +1,8 @@
 import dask.dataframe as dd
-import hydra
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 
-from hydra import utils
-from omegaconf import DictConfig
 from scipy import signal as ss
 
 
@@ -98,32 +95,3 @@ def load_data(meta_path: str, data_path: str) -> dd.DataFrame:
     dataset_path = list(map(lambda id_: data_path + id_ + '.csv', metadata.Id.unique()))
     dataset = dd.read_csv(dataset_path)
     return dataset
-
-
-@hydra.main(config_path='../config', config_name='Config.yaml', version_base='1.3')
-def tdcsfog_main(config: DictConfig):
-    """
-    tdcsfog main funtion is used to fetch and filter all the data that was tested in lab conditions.
-    :param config: config parameter is used for accessing the configurations for the specific model.
-    """
-    current_path = utils.get_original_cwd() + '/'
-    tdcsfog_paths = config.tdcsfog.preprocessing
-    dataset = load_data(current_path + tdcsfog_paths.metadata, current_path + tdcsfog_paths.dataset)
-    tf_record_writer(dataset, current_path + tdcsfog_paths.tf_record_path, tdcsfog_paths.freq,
-                     tdcsfog_paths.window_size, tdcsfog_paths.steps)
-
-
-@hydra.main(config_path='../config', config_name='Config.yaml', version_base='1.3')
-def defog_main(config: DictConfig):
-    """
-    defog main funtion is used to fetch and filter all the data that was obtained from the subjects activities in their
-    homes.
-    :param config: config parameter is used for accessing the configurations for the specific model.
-    """
-    current_path = utils.get_original_cwd() + '/'
-    defog_paths = config.defog.preprocessing
-    dataset = load_data(current_path + defog_paths.metadata, current_path + defog_paths.dataset)
-    dataset = dataset.loc[dataset.Valid.eq(True) & dataset.Task.eq(True)]
-    dataset = dataset.drop(['Valid', 'Task'], axis=1).reset_index()
-    tf_record_writer(dataset, current_path + defog_paths.tf_record_path, defog_paths.freq, defog_paths.window_size,
-                     defog_paths.steps)
