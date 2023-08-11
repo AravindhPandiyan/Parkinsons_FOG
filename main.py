@@ -1,5 +1,6 @@
-from src.config import tdcsfog_main, defog_main
+from src.config import build_tdcsfog_model
 
 if __name__ == '__main__':
-    tdcsfog_main()
-    defog_main()
+    # tdcsfog_preprocessing()
+    # defog_preprocessing()
+    build_tdcsfog_model()

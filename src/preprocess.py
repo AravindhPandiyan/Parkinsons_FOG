@@ -20,6 +20,7 @@ def convert_to_power_spectrums(features: pd.DataFrame, freq: int, wsize: int, st
     :return: This function returns the calculated power spectrums.
     """
     pxxs = []
+
     olap = wsize - step
 
     for col in features.columns:
@@ -31,7 +32,8 @@ def convert_to_power_spectrums(features: pd.DataFrame, freq: int, wsize: int, st
     return pxxs
 
 
-def window_processing(x_win: pd.DataFrame, y_win: pd.DataFrame, freq: int, wsize: int, step: int) -> tuple:
+def window_processing(x_win: pd.DataFrame, y_win: pd.DataFrame, freq: int, wsize: int, step: int) -> \
+        tuple[np.ndarray, np.ndarray]:
     """
     Window Processing method is used for processing the feature and targets of a given window dataframe.
     :param x_win: x_win is the window dataframe of features.
@@ -52,7 +54,7 @@ def window_processing(x_win: pd.DataFrame, y_win: pd.DataFrame, freq: int, wsize
     return x, y
 
 
-def tf_record_writer(data: dd.DataFrame, path: str, freq: int, wsize: int, step: int):
+def _tf_record_writer(data: dd.DataFrame, path: str, freq: int, wsize: int, step: int):
     """
     TF Record Writer function is used to create TFRecords from the given data. The TFRecords are used to improve the
     performance of the model training and handle BIG DATA. This data is usually loaded directly to the GPU.
@@ -66,19 +68,16 @@ def tf_record_writer(data: dd.DataFrame, path: str, freq: int, wsize: int, step:
 
     with tf.io.TFRecordWriter(path) as writer:
         for partition in data.partitions:
-            features = partition.iloc[:, 1:-3].compute()
+            features = partition.iloc[:, 1: -3].compute()
             target = partition.iloc[:, -3:].compute()
 
             for win_start in range(0, features.shape[0], step):
                 x_win = features.iloc[win_start: win_start + wsize, :]
                 y_win = target.iloc[win_start: win_start + wsize, :]
-
                 if x_win.shape[0] == wsize:
                     x, y = window_processing(x_win, y_win, freq, wsize, step)
-
-                    x = x.tobytes()
                     record_bytes = tf.train.Example(features=tf.train.Features(feature={
-                        "x": tf.train.Feature(bytes_list=tf.train.BytesList(value=[x])),
+                        "x": tf.train.Feature(float_list=tf.train.FloatList(value=x.flatten())),
                         "y": tf.train.Feature(int64_list=tf.train.Int64List(value=y)),
                     })).SerializeToString()
                     writer.write(record_bytes)

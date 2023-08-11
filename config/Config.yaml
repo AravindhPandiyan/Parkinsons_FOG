@@ -6,6 +6,8 @@ tdcsfog:
     freq: 128
     window_size: 328
     steps: 102
+  training_units: 68
+  input_size: (165, 3)
 
 defog:
   preprocessing:
@@ -15,3 +17,9 @@ defog:
     freq: 100
     window_size: 256
     steps: 40
+  training_units: 53
+  input_size: (129, 3)
+
+model_training:
+  batch_size: 16
+  epochs: 100
