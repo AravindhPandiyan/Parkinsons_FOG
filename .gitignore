@@ -8,3 +8,5 @@ __pycache__/
 .flake8
 .pre-commit-config.yaml
 Makefile
+logs
+models

@@ -1,0 +1,6 @@
+{
+  "log_loc": "../logs/training_logs",
+  "checkpoint_loc": "../models/ModelCheckpoint",
+  "batch_size": 16,
+  "epochs": 100
+}

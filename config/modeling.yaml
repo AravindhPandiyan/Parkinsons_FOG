@@ -19,7 +19,3 @@ defog:
     steps: 40
   training_units: 53
   input_size: (129, 3)
-
-model_training:
-  batch_size: 16
-  epochs: 100
