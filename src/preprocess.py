@@ -63,9 +63,10 @@ def _tf_record_writer(data: dd.DataFrame, path: str, freq: int, wsize: int, step
     :param freq: freq is the frequency of the data captured.
     :param wsize: wsize is the window size of the data frame
     :param step: step is the step size of the rolling window.
+    :return: Finally, this function returns the length of the tfrecord dataset..
     """
     data = data.fillna(0)
-
+    size = 0
     with tf.io.TFRecordWriter(path) as writer:
         for partition in data.partitions:
             features = partition.iloc[:, 1: -3].compute()
@@ -81,6 +82,9 @@ def _tf_record_writer(data: dd.DataFrame, path: str, freq: int, wsize: int, step
                         "y": tf.train.Feature(int64_list=tf.train.Int64List(value=y)),
                     })).SerializeToString()
                     writer.write(record_bytes)
+                    size += 1
+
+    return size
 
 
 def load_data(meta_path: str, data_path: str) -> dd.DataFrame:
