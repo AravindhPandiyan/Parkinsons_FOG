@@ -1,7 +1,1 @@
-{
-  "log_loc": "logs/training_logs",
-  "checkpoint_loc": "models/ModelCheckpoint",
-  "batch_size": 16,
-  "epochs": 100,
-  "defog_len": 71051
-}
+{"log_loc": "logs/training_logs", "checkpoint_loc": "models/ModelCheckpoint", "batch_size": 16, "epochs": 100, "defog_len": 71051, "tdcsfog_len": 5578}

@@ -19,7 +19,7 @@ def fitting(model: Model, train_dataset: tf.Tensor, val_dataset: tf.Tensor, mode
 
     save_check_point = tf.keras.callbacks \
         .ModelCheckpoint(config['checkpoint_loc'] + '/' + model_type + '/',
-                         monitor=f'val_{model_type}_precision', save_best_only=True, mode='max', save_weights_only=True)
+                         monitor=f'val_{model_type}_loss', save_best_only=True, mode='min', save_weights_only=True)
     tensorboard_callback = tf.keras.callbacks \
         .TensorBoard(log_dir=config['log_loc'], histogram_freq=1, write_graph=True, write_images=True)
     time_stopping = TimeStopping(seconds=60 * 60 * 4)
