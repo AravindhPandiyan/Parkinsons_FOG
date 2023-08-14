@@ -30,10 +30,11 @@ class Preprocessing:
         len_dataset = _tf_record_writer(dataset, current_path + tdcsfog_paths.tf_record_path, tdcsfog_paths.freq,
                                         tdcsfog_paths.window_size, tdcsfog_paths.steps)
 
-        with open('config/training.json', 'r+') as file:
+        with open('config/training.json') as file:
             config = json.load(file)
+
+        with open('config/training.json', 'w') as file:
             config["tdcsfog_len"] = len_dataset
-            file.seek(0)
             json.dump(config, file)
 
     @staticmethod
@@ -55,8 +56,9 @@ class Preprocessing:
 
         with open('config/training.json', 'r+') as file:
             config = json.load(file)
+
+        with open('config/training.json', 'w') as file:
             config["defog_len"] = len_dataset
-            file.seek(0)
             json.dump(config, file)
 
 
@@ -135,7 +137,8 @@ class Modeling:
         nothing.
         """
         if self.TDCSFOG_TRAIN_DATA and self.TDCSFOG_VAL_DATA and self.TDCSFOG_MODEL:
-            self.TDCSFOG_MODEL = fitting(self.TDCSFOG_MODEL, self.TDCSFOG_TRAIN_DATA, self.TDCSFOG_VAL_DATA)
+            self.TDCSFOG_MODEL = fitting(self.TDCSFOG_MODEL, self.TDCSFOG_TRAIN_DATA, self.TDCSFOG_VAL_DATA,
+                                         'tdcsfog')
             return self.TDCSFOG_MODEL
 
         else:
@@ -148,7 +151,8 @@ class Modeling:
         nothing.
         """
         if self.DEFOG_TRAIN_DATA and self.DEFOG_VAL_DATA and self.DEFOG_MODEL:
-            self.DEFOG_MODEL = fitting(self.DEFOG_MODEL, self.DEFOG_TRAIN_DATA, self.DEFOG_VAL_DATA)
+            self.DEFOG_MODEL = fitting(self.DEFOG_MODEL, self.DEFOG_TRAIN_DATA, self.DEFOG_VAL_DATA,
+                                       'defog')
             return self.DEFOG_MODEL
 
         else:

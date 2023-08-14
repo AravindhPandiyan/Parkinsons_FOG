@@ -54,7 +54,7 @@ def window_processing(x_win: pd.DataFrame, y_win: pd.DataFrame, freq: int, wsize
     return x, y
 
 
-def _tf_record_writer(data: dd.DataFrame, path: str, freq: int, wsize: int, step: int):
+def _tf_record_writer(data: dd.DataFrame, path: str, freq: int, wsize: int, step: int = 1):
     """
     TF Record Writer function is used to create TFRecords from the given data. The TFRecords are used to improve the
     performance of the model training and handle BIG DATA. This data is usually loaded directly to the GPU.
