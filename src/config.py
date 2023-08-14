@@ -14,6 +14,8 @@ from ._load_data import _parse_tdcsfog_tfrecord, _parse_defog_tfrecord
 from .preprocess import load_data, _tf_record_writer
 from .train_model import fitting
 
+tf.keras.backend.set_floatx('float64')
+
 
 class Preprocessing:
 
