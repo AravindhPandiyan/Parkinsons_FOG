@@ -1,0 +1,11 @@
+type: tdcsfog
+metadata: data/processed/processed_tdcsfog_metadata.csv
+dataset: data/raw/train/tdcsfog/
+tf_record_path:
+  rnn: data/processed/tdcsfog_rnn.tfrecords
+  cnn: data/processed/tdcsfog_cnn.tfrecords
+window_size: 328
+steps: 102
+power_spectrum:
+  type: RNN
+  freq: 128

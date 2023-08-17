@@ -1,1 +1,1 @@
-from .config import Preprocessing, Modeling
+from .config import Preprocessing, Modeling, Inference
