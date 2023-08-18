@@ -2,20 +2,34 @@ tdcsfog:
   tf_record_path: data/processed/tdcsfog_cnn.tfrecords
   input_size: ((328, 3), (3,))
   training_units:
-    - 256
-    - 169
-    - 121
-    - 49
-    - 25
-    - 9
+    filter:
+      - 128
+      - 64
+      - 32
+      - 16
+      - 8
+    units:
+      - 289
+      - 169
+      - 121
+      - 49
+      - 25
+      - 9
 
 defog:
   tf_record_path: data/processed/defog_cnn.tfrecords
   input_size: ((256, 3), (3,))
   training_units:
-    - 256
-    - 169
-    - 121
-    - 49
-    - 25
-    - 9
+    filter:
+      - 128
+      - 64
+      - 32
+      - 16
+      - 8
+    units:
+      - 289
+      - 169
+      - 121
+      - 49
+      - 25
+      - 9

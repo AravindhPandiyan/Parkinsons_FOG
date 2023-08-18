@@ -261,6 +261,7 @@ class Inference(Modeling):
     """
     Inference class inherits the Modeling class to allow for loading of model and prediction.
     """
+
     def load_tdcsfog_rnn_model(self):
         """
         load_tdcsfog_rnn_model method is used to load the TDCSFOG RNN model.
