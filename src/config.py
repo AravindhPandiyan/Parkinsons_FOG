@@ -19,7 +19,7 @@ tf.keras.backend.set_floatx('float64')
 
 class Preprocessing:
     """
-    Preprocessing is a configured class which bring together all the other functions and class and makes you of them to
+    Preprocessing is a configured class which bring together all the other functions and class and makes use of them to
     process the data.
     """
     _CONFIG_PATH = '../config/process/'
@@ -108,18 +108,26 @@ class Preprocessing:
 
 
 class Modeling:
-    DEFOG_TRAIN_DATA = None
-    DEFOG_VAL_DATA = None
-    DEFOG_MODEL = None
-    TDCSFOG_TRAIN_DATA = None
-    TDCSFOG_VAL_DATA = None
-    TDCSFOG_MODEL = None
+    """
+    Modeling is a configured class which bring together all the other functions and class and makes use of them to
+    build amd train the model.
+    """
+    TRAIN_DATA = None
+    VAL_DATA = None
+    MODEL = None
+    MODEL_TYPE = None
     _CONFIG_PATH = '../config/model/'
     _VERSION = '1.3'
     _JSON_CONFIG = 'config/training.json'
 
     @classmethod
-    def _build_model(cls, cfg: DictConfig, builder, type_d: str):
+    def _build_model(cls, cfg: DictConfig, builder: ConstructCNN | ConstructRNN, type_d: str):
+        """
+        _build_model is a private method is meant to be only used withing the class for building models.
+        :param cfg: cfg is used to access the model configuration.
+        :param builder: builder is used to construct the model.
+        :param type_d: type_d is used for identifying the type of data.
+        """
         with tf.device("/GPU:0"):
             raw_dataset = tf.data.TFRecordDataset(cfg.tf_record_path)
             raw_dataset = raw_dataset.shuffle(buffer_size=10000)
@@ -128,106 +136,155 @@ class Modeling:
                 json_config = json.load(file)
                 dataset_len = json_config[f'{type_d}_len']
 
-            cls.TDCSFOG_TRAIN_DATA = raw_dataset.take(int(0.8 * dataset_len))
-            cls.TDCSFOG_VAL_DATA = raw_dataset.skip(int(0.8 * dataset_len))
+            cls.TRAIN_DATA = raw_dataset.take(int(0.8 * dataset_len))
+            cls.VAL_DATA = raw_dataset.skip(int(0.8 * dataset_len))
             _input_shape = eval(cfg.input_size)
             parser = TFRecordParsers(_input_shape[0], _input_shape[1])
-            cls.TDCSFOG_TRAIN_DATA = cls.TDCSFOG_TRAIN_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
-            cls.TDCSFOG_VAL_DATA = cls.TDCSFOG_VAL_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
+            cls.TRAIN_DATA = cls.TRAIN_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
+            cls.VAL_DATA = cls.VAL_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
             precision = tf.keras.metrics.Precision(name=f'{type_d}_precision')
-            cls.TDCSFOG_MODEL = builder.build_model(cls.TDCSFOG_TRAIN_DATA, _input_shape[0], cfg.training_units)
+            cls.MODEL = builder.build_model(cls.TRAIN_DATA, _input_shape[0], cfg.training_units)
 
-        cls.TDCSFOG_MODEL.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy', precision])
-        cls.TDCSFOG_MODEL.summary()
+        cls.MODEL.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy', precision])
+        cls.MODEL.summary()
 
     @staticmethod
     @hydra.main(config_path=_CONFIG_PATH, config_name='rnn_model.yaml', version_base=_VERSION)
     def build_tdcsfog_rnn_model(cfg: DictConfig):
         """
-        build_tdcsfog_rnn_model method is used to create and return a rnn model for training on the tdcsfog data.
+        build_tdcsfog_rnn_model method is used to construct a rnn model for training on the tdcsfog data.
         :param cfg: cfg parameter is used for accessing the configurations for the specific model.
         """
         cfg = cfg.tdcsfog
         builder = ConstructRNN()
+        Modeling.MODEL_TYPE = 'RNN'
+        Modeling._build_model(cfg, builder, 'tdcsfog')
+
+    @staticmethod
+    @hydra.main(config_path=_CONFIG_PATH, config_name='cnn_model.yaml', version_base=_VERSION)
+    def build_tdcsfog_cnn_model(cfg: DictConfig):
+        """
+        build_defog_rnn_model method is used to construct a rnn model for training on the defog data.
+        :param cfg: cfg parameter is used for accessing the configurations for the specific model.
+        """
+        cfg = cfg.defog
+        builder = ConstructCNN()
+        Modeling.MODEL_TYPE = 'CNN'
         Modeling._build_model(cfg, builder, 'tdcsfog')
 
     @staticmethod
     @hydra.main(config_path=_CONFIG_PATH, config_name='rnn_model.yaml', version_base=_VERSION)
     def build_defog_rnn_model(cfg: DictConfig):
         """
-        Build defog model method is used to create and return a rnn model for training on the defog data.
-        :param cfg: cfg parameter is used for accessing the configurations for the specific model.
-        """
-        cfg = cfg.defog
-        builder = ConstructRNN()
-        Modeling._build_model(cfg, builder, 'defog')
-
-    @staticmethod
-    @hydra.main(config_path=_CONFIG_PATH, config_name='cnn_model.yaml', version_base=_VERSION)
-    def build_tdcsfog_cnn_model(cfg: DictConfig):
-        """
-        build_tdcsfog_rnn_model method is used to create and return a rnn model for training on the tdcsfog data.
+        build_tdcsfog_rnn_model method is used to construct a cnn model for training on the tdcsfog data.
         :param cfg: cfg parameter is used for accessing the configurations for the specific model.
         """
         cfg = cfg.tdcsfog
-        builder = ConstructCNN()
-        Modeling._build_model(cfg, builder, 'tdcsfog')
+        builder = ConstructRNN()
+        Modeling.MODEL_TYPE = 'RNN'
+        Modeling._build_model(cfg, builder, 'defog')
 
     @staticmethod
     @hydra.main(config_path=_CONFIG_PATH, config_name='cnn_model.yaml', version_base=_VERSION)
     def build_defog_cnn_model(cfg: DictConfig):
         """
-        Build defog model method is used to create and return a rnn model for training on the defog data.
+        build_defog_cnn_model method is used to construct a cnn model for training on the defog data.
         :param cfg: cfg parameter is used for accessing the configurations for the specific model.
         """
         cfg = cfg.defog
         builder = ConstructCNN()
+        Modeling.MODEL_TYPE = 'CNN'
         Modeling._build_model(cfg, builder, 'defog')
 
     @classmethod
-    def train_tdcsfog_model(cls) -> Model | None:
+    def train_tdcsfog_rnn_model(cls) -> Model | None:
         """
-        Train tdcsfog Model method is used to train the TDCSFOG model.
-        :return: It if the necessary components are present it trains the model and return's it, if not it will return
-        nothing.
+        train_tdcsfog_model method is used to train the TDCSFOG RNN model.
+        :return: It if the necessary components are present it trains the model and return's it, if not it will not
+        return anything.
         """
-        if cls.TDCSFOG_TRAIN_DATA and cls.TDCSFOG_VAL_DATA and cls.TDCSFOG_MODEL:
-            cls.TDCSFOG_MODEL = fitting(cls.TDCSFOG_MODEL, cls.TDCSFOG_TRAIN_DATA, cls.TDCSFOG_VAL_DATA,
-                                        'tdcsfog')
-            return cls.TDCSFOG_MODEL
+        if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'RNN':
+            cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
+                                'tdcsfog', 'RNN')
+            return cls.MODEL
 
         else:
-            print('\nPlease First Build the TDCSFOG model to train it.')
+            print('\nPlease First Build the TDCSFOG RNN model to train it.')
 
     @classmethod
-    def train_defog_model(cls) -> Model | None:
+    def train_tdcsfog_cnn_model(cls) -> Model | None:
         """
-        Train defog Model method is used to train the DEFOG model.
-        :return: It if the necessary components are present it trains the model and return's it, if not it will return
-        nothing.
+        train_tdcsfog_model method is used to train the TDCSFOG CNN model.
+        :return: It if the necessary components are present it trains the model and return's it, if not it will not
+        return anything.
         """
-        if cls.DEFOG_TRAIN_DATA and cls.DEFOG_VAL_DATA and cls.DEFOG_MODEL:
-            cls.DEFOG_MODEL = fitting(cls.DEFOG_MODEL, cls.DEFOG_TRAIN_DATA, cls.DEFOG_VAL_DATA,
-                                      'defog')
-            return cls.DEFOG_MODEL
+        if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'CNN':
+            cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
+                                'tdcsfog', 'CNN')
+            return cls.MODEL
 
         else:
-            print('\nPlease First Build the DEFOG model to train it.')
+            print('\nPlease First Build the TDCSFOG CNN model to train it.')
+
+    @classmethod
+    def train_defog_rnn_model(cls) -> Model | None:
+        """
+        train_defog_model method is used to train the DEFOG RNN model.
+        :return: It if the necessary components are present it trains the model and return's it, if not it will not
+        return anything.
+        """
+        if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'RNN':
+            cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
+                                'defog', 'RNN')
+            return cls.MODEL
+
+        else:
+            print('\nPlease First Build the DEFOG RNN model to train it.')
+
+    @classmethod
+    def train_defog_cnn_model(cls) -> Model | None:
+        """
+        train_defog_model method is used to train the DEFOG CNN model.
+        :return: It if the necessary components are present it trains the model and return's it, if not it will not
+        return anything.
+        """
+        if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'CNN':
+            cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
+                                'defog', 'CNN')
+            return cls.MODEL
+
+        else:
+            print('\nPlease First Build the DEFOG CNN model to train it.')
 
 
 class Inference(Modeling):
+    """
+    Inference class inherits the Modeling class to allow for loading of model and prediction.
+    """
     def load_tdcsfog_rnn_model(self):
+        """
+        load_tdcsfog_rnn_model method is used to load the TDCSFOG RNN model.
+        """
         self.build_tdcsfog_rnn_model()
-        self.TDCSFOG_MODEL = self.TDCSFOG_MODEL.load_weights('models/ModelCheckpoint/tdcsfog/RNN/')
+        self.MODEL = self.MODEL.load_weights('models/ModelCheckpoint/tdcsfog/RNN/')
 
     def load_tdcsfog_cnn_model(self):
-        self.build_tdcsfog_rnn_model()
-        self.TDCSFOG_MODEL = self.TDCSFOG_MODEL.load_weights('models/ModelCheckpoint/tdcsfog/CNN/')
+        """
+        load_tdcsfog_rnn_model method is used to load the TDCSFOG CNN model.
+        """
+        self.build_tdcsfog_cnn_model()
+        self.MODEL = self.MODEL.load_weights('models/ModelCheckpoint/tdcsfog/CNN/')
 
     def load_defog_rnn_model(self):
+        """
+        load_tdcsfog_rnn_model method is used to load the DEFOG RNN model.
+        """
         self.build_defog_rnn_model()
-        self.DEFOG_MODEL = self.DEFOG_MODEL.load_weights('models/ModelCheckpoint/defog/RNN')
+        self.MODEL = self.MODEL.load_weights('models/ModelCheckpoint/defog/RNN/')
 
     def load_defog_cnn_model(self):
-        self.build_defog_rnn_model()
-        self.DEFOG_MODEL = self.DEFOG_MODEL.load_weights('models/ModelCheckpoint/defog/CNN')
+        """
+        load_tdcsfog_rnn_model method is used to load the DEFOG CNN model.
+        """
+        self.build_defog_cnn_model()
+        self.MODEL = self.MODEL.load_weights('models/ModelCheckpoint/defog/CNN/')

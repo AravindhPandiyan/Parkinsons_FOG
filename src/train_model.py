@@ -5,7 +5,7 @@ from keras.models import Model
 from tensorflow_addons.callbacks import TimeStopping
 
 
-def fitting(model: Model, train_dataset: tf.Tensor, val_dataset: tf.Tensor, model_type: str) -> Model:
+def fitting(model: Model, train_dataset: tf.Tensor, val_dataset: tf.Tensor, data_type: str, model_type: str) -> Model:
     """
     Fitting function is used to train the model with the given dataset.
     :param model: model to be trained.
@@ -18,8 +18,9 @@ def fitting(model: Model, train_dataset: tf.Tensor, val_dataset: tf.Tensor, mode
         config = json.load(file)
 
     save_check_point = tf.keras.callbacks \
-        .ModelCheckpoint(config['checkpoint_loc'] + '/' + model_type + '/',
-                         monitor=f'val_{model_type}_loss', save_best_only=True, mode='min', save_weights_only=True)
+        .ModelCheckpoint(config['checkpoint_loc'] + '/' + data_type + '/' + model_type + '/',
+                         monitor=f'val_{data_type}_{model_type}_loss', save_best_only=True, mode='min',
+                         save_weights_only=True)
     tensorboard_callback = tf.keras.callbacks \
         .TensorBoard(log_dir=config['log_loc'], histogram_freq=1, write_graph=True, write_images=True)
     time_stopping = TimeStopping(seconds=60 * 60 * 4)

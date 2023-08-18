@@ -30,10 +30,13 @@ def main():
             "d": modeler.build_defog_cnn_model
         },
         "3": {
-            "processes": "\nModel Training Options:\n\ta. Train TDCSFOG Model.\n\tb. Train DEFOG Model.\n\tc. "
+            "processes": "\nModel Training Options:\n\ta. Train TDCSFOG RNN Model.\n\tb. Train TDCSFOG CNN Model."
+                         "\n\tc. Train DEFOG RNN Model.\n\td. Train DEFOG CNN Model.\n\te. "
                          "Press any other key to go back.",
-            "a": modeler.train_tdcsfog_model,
-            "b": modeler.train_defog_model
+            "a": modeler.train_tdcsfog_rnn_model,
+            "b": modeler.train_tdcsfog_cnn_model,
+            "c": modeler.train_defog_rnn_model,
+            "d": modeler.train_defog_cnn_model
         },
         "4": {
             "processes": "\nModel Loading Options:\n\ta. Load TDCSFOG RNN Model.\n\tb. Load TDCSFOG CNN Model.\n\tc. "
