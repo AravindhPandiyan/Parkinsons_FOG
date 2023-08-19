@@ -1,8 +1,10 @@
 {
-  "log_loc": "logs/training_logs",
   "checkpoint_loc": "models/ModelCheckpoint",
+  "log_loc": "logs/training_logs",
   "batch_size": 16,
   "epochs": 100,
+  "buffer_size": 10000,
+  "shuffle_seed": 73,
   "defog_len": 71051,
   "tdcsfog_len": 5578
 }

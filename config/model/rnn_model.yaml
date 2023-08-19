@@ -1,9 +1,9 @@
 tdcsfog:
-  tf_record_path: data/processed/tdcsfog_rnn.tfrecords
+  tf_record_path: data/processed/tdcsfog/rnn.tfrecords
   input_size: ((165, 3), (3,))
   training_units: 68
 
 defog:
-  tf_record_path: data/processed/defog_rnn.tfrecords
+  tf_record_path: data/processed/defog/rnn.tfrecords
   input_size: ((129, 3), (3,))
   training_units: 53

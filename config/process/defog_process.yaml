@@ -1,9 +1,9 @@
 type: defog
-metadata: data/processed/processed_defog_metadata.csv
+metadata: data/processed/defog/processed_defog_metadata.csv
 dataset: data/raw/train/defog/
 tf_record_path:
-  rnn: data/processed/defog_rnn.tfrecords
-  cnn: data/processed/defog_cnn.tfrecords
+  rnn: data/processed/defog/rnn.tfrecords
+  cnn: data/processed/defog/cnn.tfrecords
 window_size: 256
 steps: 40
 power_spectrum:

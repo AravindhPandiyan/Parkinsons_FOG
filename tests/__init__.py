@@ -1,5 +1,1 @@
-# Avoid ModuleNotFoundError
-
-import sys
-
-sys.path.append("./src")
+from tests.test_model import ModelMetrics

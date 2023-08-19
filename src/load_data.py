@@ -5,6 +5,7 @@ class TFRecordParsers:
     """
     TFRecordParsers class is used to parse the tfrecords file.
     """
+
     def __init__(self, x_shape, y_shape):
         """
         TFRecordParsers class is used to parse the tfrecords file.

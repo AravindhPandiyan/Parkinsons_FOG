@@ -114,11 +114,27 @@ class Modeling:
     """
     TRAIN_DATA = None
     VAL_DATA = None
+    TEST_DATA = None
     MODEL = None
     MODEL_TYPE = None
     _CONFIG_PATH = '../config/model/'
     _VERSION = '1.3'
     _JSON_CONFIG = 'config/training.json'
+
+    @staticmethod
+    def _custom_map_loss(y_true, y_pred):
+        """
+        _custom_map_loss is used for calculating the mean Average Precision loss for the model.
+        :param y_true: y_true is the actual values.
+        :param y_pred: y_pred is the predicted values.
+        :return: Finally, the loss values is calculated and returned. The loss value will be in negative.
+        """
+        y_true_float = tf.cast(y_true, tf.float64)
+        intersection = tf.reduce_sum(tf.minimum(y_true_float, y_pred))
+        union = tf.reduce_sum(tf.maximum(y_true_float, y_pred))
+        iou = intersection / union
+        loss = -iou
+        return loss
 
     @classmethod
     def _build_model(cls, cfg: DictConfig, builder: ConstructCNN | ConstructRNN, type_d: str):
@@ -130,22 +146,30 @@ class Modeling:
         """
         with tf.device("/GPU:0"):
             raw_dataset = tf.data.TFRecordDataset(cfg.tf_record_path)
-            raw_dataset = raw_dataset.shuffle(buffer_size=10000)
 
             with open(cls._JSON_CONFIG) as file:
                 json_config = json.load(file)
                 dataset_len = json_config[f'{type_d}_len']
 
-            cls.TRAIN_DATA = raw_dataset.take(int(0.8 * dataset_len))
-            cls.VAL_DATA = raw_dataset.skip(int(0.8 * dataset_len))
-            _input_shape = eval(cfg.input_size)
-            parser = TFRecordParsers(_input_shape[0], _input_shape[1])
+            raw_dataset = raw_dataset
+            train_len = int(0.8 * dataset_len)
+            val_len = int(0.1 * dataset_len)
+            cls.TRAIN_DATA = raw_dataset.take(train_len)
+            remaining_data = raw_dataset.skip(train_len)
+            remaining_data = remaining_data.shuffle(buffer_size=json_config['buffer_size'],
+                                                    seed=json_config['shuffle_seed'])
+            cls.VAL_DATA = remaining_data.take(val_len)
+            cls.TEST_DATA = remaining_data.skip(val_len)
+            input_shape = eval(cfg.input_size)
+            parser = TFRecordParsers(input_shape[0], input_shape[1])
             cls.TRAIN_DATA = cls.TRAIN_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
+            cls.TRAIN_DATA = cls.TRAIN_DATA.shuffle(buffer_size=json_config['buffer_size'],
+                                                    reshuffle_each_iteration=True)
             cls.VAL_DATA = cls.VAL_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
-            precision = tf.keras.metrics.Precision(name=f'{type_d}_precision')
-            cls.MODEL = builder.build_model(cls.TRAIN_DATA, _input_shape[0], cfg.training_units)
+            cls.MODEL = builder.build_model(cls.TRAIN_DATA, input_shape[0], cfg.training_units)
+            auc = tf.keras.metrics.AUC()
 
-        cls.MODEL.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy', precision])
+        cls.MODEL.compile(optimizer='adam', loss=cls._custom_map_loss, metrics=['accuracy', auc])
         cls.MODEL.summary()
 
     @staticmethod
@@ -167,7 +191,7 @@ class Modeling:
         build_defog_rnn_model method is used to construct a rnn model for training on the defog data.
         :param cfg: cfg parameter is used for accessing the configurations for the specific model.
         """
-        cfg = cfg.defog
+        cfg = cfg.tdcsfog
         builder = ConstructCNN()
         Modeling.MODEL_TYPE = 'CNN'
         Modeling._build_model(cfg, builder, 'tdcsfog')
@@ -179,7 +203,7 @@ class Modeling:
         build_tdcsfog_rnn_model method is used to construct a cnn model for training on the tdcsfog data.
         :param cfg: cfg parameter is used for accessing the configurations for the specific model.
         """
-        cfg = cfg.tdcsfog
+        cfg = cfg.defog
         builder = ConstructRNN()
         Modeling.MODEL_TYPE = 'RNN'
         Modeling._build_model(cfg, builder, 'defog')
@@ -205,7 +229,7 @@ class Modeling:
         """
         if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'RNN':
             cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
-                                'tdcsfog', 'RNN')
+                                'tdcsfog/RNN/')
             return cls.MODEL
 
         else:
@@ -220,7 +244,7 @@ class Modeling:
         """
         if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'CNN':
             cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
-                                'tdcsfog', 'CNN')
+                                'tdcsfog/CNN/')
             return cls.MODEL
 
         else:
@@ -235,7 +259,7 @@ class Modeling:
         """
         if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'RNN':
             cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
-                                'defog', 'RNN')
+                                'defog/RNN/')
             return cls.MODEL
 
         else:
@@ -250,7 +274,7 @@ class Modeling:
         """
         if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'CNN':
             cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
-                                'defog', 'CNN')
+                                'defog/CNN/')
             return cls.MODEL
 
         else:

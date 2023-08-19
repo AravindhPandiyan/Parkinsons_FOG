@@ -1,8 +1,8 @@
 import tensorflow as tf
 from keras.engine.keras_tensor import KerasTensor
 from keras.models import Model
-from tensorflow.keras import layers as tkl
 from omegaconf import DictConfig
+from tensorflow.keras import layers as tkl
 
 
 class ConstructRNN:
@@ -78,7 +78,8 @@ class ConstructCNN:
         :param filters: filters value is used for mentioning the number of filters in each layer.
         :return: Finally, this method returns the output of the last layer of the block.
         """
-        cl_in = tkl.Conv1D(filters=filters[0], kernel_size=3, strides=1, activation=self.act_type, name='Convo1D-in')(ly_in)
+        cl_in = tkl.Conv1D(filters=filters[0], kernel_size=3, strides=1, activation=self.act_type, name='Convo1D-in')(
+            ly_in)
         ap1 = tkl.AveragePooling1D(pool_size=3, strides=1, name='AvgPooling1D-1')(cl_in)
         cl2 = tkl.Conv1D(filters=filters[1], kernel_size=2, strides=1, activation=self.act_type, name='Convo1D-2')(ap1)
         ap2 = tkl.AveragePooling1D(pool_size=2, strides=1, name='AvgPooling1D-2')(cl2)

@@ -1,0 +1,88 @@
+.
+├── api
+│   ├── app
+│   │   ├── controller
+│   │   │   ├── __init__.py
+│   │   │   ├── inference_controller.py
+│   │   │   ├── modeling_controller.py
+│   │   │   └── preprocessing_controller.py
+│   │   └── router
+│   │       ├── __init__.py
+│   │       ├── inference_router.py
+│   │       ├── modeling_router.py
+│   │       └── preprocessing_router.py
+│   ├──__init__.py
+│   └── main.py
+├── config
+│   ├── model
+│   │   ├── __init__.py
+│   │   ├── cnn_model.yaml
+│   │   └── rnn_model.yaml
+│   ├── process
+│   │   ├── __init__.py
+│   │   ├── defog_process.yaml
+│   │   └── tdcsfog_process.yaml
+│   ├── __init__.py
+│   └── training.json
+├── data
+│   ├── final
+│   ├── processed
+│   │   ├── defog
+│   │   │   ├── cnn.tfrecords
+│   │   │   ├── rnn.tfrecords
+│   │   │   └── processed_defog_metadata.csv
+│   │   └── tdcsfog
+│   │       ├── cnn.tfrecords
+│   │       ├── rnn.tfrecords
+│   │       └── processed_tdcsfog_metadata.csv
+│   └── raw
+│       ├── daily_metadata.csv
+│       ├── defog_metadata.csv
+│       ├── events.csv
+│       ├── sample_submission.csv
+│       ├── subjects.csv
+│       ├── tasks.csv
+│       ├── tdcsfog_metadata.csv
+│       ├── test
+│       │   ├── defog
+│       │   └── tdcsfog
+│       ├── train
+│       │   ├── defog
+│       │   ├── notype
+│       │   └── tdcsfog
+│	└── unlabeled
+│
+├── docs
+├── images
+├── logs
+│   └── training_logs
+│       ├── train
+│       └── validation
+├── models
+│   ├── ModelCheckpoint
+│   │   ├── defog
+│   │   │   ├── CNN
+│   │   │   └── RNN
+│   │   └── tdcsfog
+│   │       ├── CNN
+│   │       └── RNN
+├── notebooks
+│   ├── analyze_results.ipynb
+│   ├── defog_metadata_processing.ipynb
+│   ├── Parkinsons_FOG_Prediction.ipynb
+│   └── tdcsfog_metadata_processing.ipynb
+├── README.md
+├── src
+│   ├── __init__.py
+│   ├── build_model.py
+│   ├── config.py
+│   ├── load_data.py
+│   ├── preprocess.py
+│   └── train_model.py
+├── main.py
+└── tests
+    ├── __init__.py
+    ├── test_process.py
+    └── test_train_model.py
+
+44 directories, 1133 files

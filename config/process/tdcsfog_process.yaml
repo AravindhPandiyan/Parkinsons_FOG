@@ -1,9 +1,9 @@
 type: tdcsfog
-metadata: data/processed/processed_tdcsfog_metadata.csv
+metadata: data/processed/tdcsfog/processed_tdcsfog_metadata.csv
 dataset: data/raw/train/tdcsfog/
 tf_record_path:
-  rnn: data/processed/tdcsfog_rnn.tfrecords
-  cnn: data/processed/tdcsfog_cnn.tfrecords
+  rnn: data/processed/tdcsfog/rnn.tfrecords
+  cnn: data/processed/tdcsfog/cnn.tfrecords
 window_size: 328
 steps: 102
 power_spectrum:
