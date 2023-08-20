@@ -287,10 +287,16 @@ class Inference(Modeling):
     Inference class inherits the Modeling class to allow for loading of model and prediction.
     """
 
+    def __init__(self):
+        self._m_type = None
+        self._d_type = None
+
     def load_tdcsfog_rnn_model(self):
         """
         load_tdcsfog_rnn_model method is used to load the TDCSFOG RNN model.
         """
+        self._d_type = 'tdcsfog'
+        self._m_type = 'RNN'
         self.build_tdcsfog_rnn_model()
         self.MODEL.load_weights('models/ModelCheckpoint/tdcsfog/RNN/')
 
@@ -298,6 +304,8 @@ class Inference(Modeling):
         """
         load_tdcsfog_rnn_model method is used to load the TDCSFOG CNN model.
         """
+        self._d_type = 'tdcsfog'
+        self._m_type = 'CNN'
         self.build_tdcsfog_cnn_model()
         self.MODEL.load_weights('models/ModelCheckpoint/tdcsfog/CNN/')
 
@@ -305,6 +313,8 @@ class Inference(Modeling):
         """
         load_tdcsfog_rnn_model method is used to load the DEFOG RNN model.
         """
+        self._d_type = 'defog'
+        self._m_type = 'RNN'
         self.build_defog_rnn_model()
         self.MODEL.load_weights('models/ModelCheckpoint/defog/RNN/')
 
@@ -312,5 +322,11 @@ class Inference(Modeling):
         """
         load_tdcsfog_rnn_model method is used to load the DEFOG CNN model.
         """
+        self._d_type = 'defog'
+        self._m_type = 'CNN'
         self.build_defog_cnn_model()
         self.MODEL.load_weights('models/ModelCheckpoint/defog/CNN/')
+
+    def predict(self, data):
+        res = self.MODEL.predict(data)
+        return res

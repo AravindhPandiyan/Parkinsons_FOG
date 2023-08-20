@@ -1,4 +1,4 @@
-from src import *
+from src import Inference, Modeling, Preprocessing
 from tests import ModelMetrics
 
 
