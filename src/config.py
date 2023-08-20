@@ -156,7 +156,7 @@ class Modeling:
             val_len = int(0.1 * dataset_len)
             cls.TRAIN_DATA = raw_dataset.take(train_len)
             remaining_data = raw_dataset.skip(train_len)
-            remaining_data = remaining_data.shuffle(buffer_size=json_config['buffer_size'],
+            remaining_data = remaining_data.shuffle(buffer_size=val_len * 2,
                                                     seed=json_config['shuffle_seed'])
             cls.VAL_DATA = remaining_data.take(val_len)
             cls.TEST_DATA = remaining_data.skip(val_len)
@@ -166,10 +166,11 @@ class Modeling:
             cls.TRAIN_DATA = cls.TRAIN_DATA.shuffle(buffer_size=json_config['buffer_size'],
                                                     reshuffle_each_iteration=True)
             cls.VAL_DATA = cls.VAL_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
+            cls.TEST_DATA = cls.TEST_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
             cls.MODEL = builder.build_model(cls.TRAIN_DATA, input_shape[0], cfg.training_units)
-            auc = tf.keras.metrics.AUC()
+            auc = tf.keras.metrics.AUC(name='auc')
 
-        cls.MODEL.compile(optimizer='adam', loss=cls._custom_map_loss, metrics=['accuracy', auc])
+        cls.MODEL.compile(optimizer='adam', loss=cls._custom_map_loss, metrics=[auc])
         cls.MODEL.summary()
 
     @staticmethod
@@ -291,25 +292,25 @@ class Inference(Modeling):
         load_tdcsfog_rnn_model method is used to load the TDCSFOG RNN model.
         """
         self.build_tdcsfog_rnn_model()
-        self.MODEL = self.MODEL.load_weights('models/ModelCheckpoint/tdcsfog/RNN/')
+        self.MODEL.load_weights('models/ModelCheckpoint/tdcsfog/RNN/')
 
     def load_tdcsfog_cnn_model(self):
         """
         load_tdcsfog_rnn_model method is used to load the TDCSFOG CNN model.
         """
         self.build_tdcsfog_cnn_model()
-        self.MODEL = self.MODEL.load_weights('models/ModelCheckpoint/tdcsfog/CNN/')
+        self.MODEL.load_weights('models/ModelCheckpoint/tdcsfog/CNN/')
 
     def load_defog_rnn_model(self):
         """
         load_tdcsfog_rnn_model method is used to load the DEFOG RNN model.
         """
         self.build_defog_rnn_model()
-        self.MODEL = self.MODEL.load_weights('models/ModelCheckpoint/defog/RNN/')
+        self.MODEL.load_weights('models/ModelCheckpoint/defog/RNN/')
 
     def load_defog_cnn_model(self):
         """
         load_tdcsfog_rnn_model method is used to load the DEFOG CNN model.
         """
         self.build_defog_cnn_model()
-        self.MODEL = self.MODEL.load_weights('models/ModelCheckpoint/defog/CNN/')
+        self.MODEL.load_weights('models/ModelCheckpoint/defog/CNN/')
