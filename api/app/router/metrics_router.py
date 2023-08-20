@@ -1,42 +1,42 @@
 from fastapi import APIRouter, HTTPException
 
-from api.app.controller import PreprocessorController
+from api.app.controller import MetricsController
 
 router = APIRouter()
-controller = PreprocessorController()
+controller = MetricsController()
 
 
 @router.post('/tdcsfog/rnn', status_code=200)
-def process_tdcsfog_rnn():
+def test_tdcsfog_rnn():
     try:
-        controller.process_tdcsfog_rnn()
+        controller.test_tdcsfog_rnn()
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post('/tdcsfog/cnn', status_code=200)
-def process_tdcsfog_cnn():
+def test_tdcsfog_cnn():
     try:
-        controller.process_tdcsfog_cnn()
+        controller.test_tdcsfog_cnn()
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post('/defog/rnn', status_code=200)
-def process_defog_rnn():
+def test_defog_rnn():
     try:
-        controller.process_defog_rnn()
+        controller.test_defog_rnn()
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post('/defog/cnn', status_code=200)
-def process_defog_cnn():
+def test_defog_cnn():
     try:
-        controller.process_defog_cnn()
+        controller.test_defog_cnn()
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

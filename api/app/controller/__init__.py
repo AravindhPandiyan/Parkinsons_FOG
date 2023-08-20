@@ -1,3 +1,4 @@
-from .inference_controller import InferenceController
-from .modeling_controller import ModelingController
-from .preprocessing_controller import PreprocessorController
+from api.app.controller.inference_controller import InferenceController
+from api.app.controller.metrics_controller import MetricsController
+from api.app.controller.modeling_controller import ModelingController
+from api.app.controller.preprocessing_controller import PreprocessorController
