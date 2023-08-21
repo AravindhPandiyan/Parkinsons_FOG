@@ -144,34 +144,38 @@ class Modeling:
         :param builder: builder is used to construct the model.
         :param type_d: type_d is used for identifying the type of data.
         """
-        with tf.device("/GPU:0"):
-            raw_dataset = tf.data.TFRecordDataset(cfg.tf_record_path)
+        try:
+            with tf.device("/GPU:0"):
+                raw_dataset = tf.data.TFRecordDataset(cfg.tf_record_path)
 
-            with open(cls._JSON_CONFIG) as file:
-                json_config = json.load(file)
-                dataset_len = json_config[f'{type_d}_len']
+                with open(cls._JSON_CONFIG) as file:
+                    json_config = json.load(file)
+                    dataset_len = json_config[f'{type_d}_len']
 
-            raw_dataset = raw_dataset
-            train_len = int(0.8 * dataset_len)
-            val_len = int(0.1 * dataset_len)
-            cls.TRAIN_DATA = raw_dataset.take(train_len)
-            remaining_data = raw_dataset.skip(train_len)
-            remaining_data = remaining_data.shuffle(buffer_size=val_len * 2,
-                                                    seed=json_config['shuffle_seed'])
-            cls.VAL_DATA = remaining_data.take(val_len)
-            cls.TEST_DATA = remaining_data.skip(val_len)
-            input_shape = eval(cfg.input_size)
-            parser = TFRecordParsers(input_shape[0], input_shape[1])
-            cls.TRAIN_DATA = cls.TRAIN_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
-            cls.TRAIN_DATA = cls.TRAIN_DATA.shuffle(buffer_size=json_config['buffer_size'],
-                                                    reshuffle_each_iteration=True)
-            cls.VAL_DATA = cls.VAL_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
-            cls.TEST_DATA = cls.TEST_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
-            cls.MODEL = builder.build_model(cls.TRAIN_DATA, input_shape[0], cfg.training_units)
-            auc = tf.keras.metrics.AUC(name='auc')
+                raw_dataset = raw_dataset
+                train_len = int(0.8 * dataset_len)
+                val_len = int(0.1 * dataset_len)
+                cls.TRAIN_DATA = raw_dataset.take(train_len)
+                remaining_data = raw_dataset.skip(train_len)
+                remaining_data = remaining_data.shuffle(buffer_size=val_len * 2,
+                                                        seed=json_config['shuffle_seed'])
+                cls.VAL_DATA = remaining_data.take(val_len)
+                cls.TEST_DATA = remaining_data.skip(val_len)
+                input_shape = eval(cfg.input_size)
+                parser = TFRecordParsers(input_shape[0], input_shape[1])
+                cls.TRAIN_DATA = cls.TRAIN_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
+                cls.TRAIN_DATA = cls.TRAIN_DATA.shuffle(buffer_size=json_config['buffer_size'],
+                                                        reshuffle_each_iteration=True)
+                cls.VAL_DATA = cls.VAL_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
+                cls.TEST_DATA = cls.TEST_DATA.map(parser.tfrecord_parser, num_parallel_calls=AUTOTUNE)
+                cls.MODEL = builder.build_model(cls.TRAIN_DATA, input_shape[0], cfg.training_units)
+                auc = tf.keras.metrics.AUC(name='auc')
 
-        cls.MODEL.compile(optimizer='adam', loss=cls._custom_map_loss, metrics=[auc])
-        cls.MODEL.summary()
+            cls.MODEL.compile(optimizer='adam', loss=cls._custom_map_loss, metrics=[auc])
+            cls.MODEL.summary()
+
+        except tf.errors.NotFoundError:
+            print("\nData for training couldn't be found.")
 
     @staticmethod
     @hydra.main(config_path=_CONFIG_PATH, config_name='rnn_model.yaml', version_base=_VERSION)
@@ -222,7 +226,7 @@ class Modeling:
         Modeling._build_model(cfg, builder, 'defog')
 
     @classmethod
-    def train_tdcsfog_rnn_model(cls) -> Model | None:
+    def train_tdcsfog_rnn_model(cls) -> Model | str:
         """
         train_tdcsfog_model method is used to train the TDCSFOG RNN model.
         :return: It if the necessary components are present it trains the model and return's it, if not it will not
@@ -234,14 +238,16 @@ class Modeling:
             return cls.MODEL
 
         else:
-            print('\nPlease First Build the TDCSFOG RNN model to train it.')
+            msg = 'Please First Build the TDCSFOG RNN model to train it.'
+            print(f'\n{msg}')
+            return msg
 
     @classmethod
-    def train_tdcsfog_cnn_model(cls) -> Model | None:
+    def train_tdcsfog_cnn_model(cls) -> Model | str:
         """
         train_tdcsfog_model method is used to train the TDCSFOG CNN model.
-        :return: It if the necessary components are present it trains the model and return's it, if not it will not
-        return anything.
+        :return: It if the necessary components are present it trains the model and return's it, if not it will return
+        a warning message.
         """
         if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'CNN':
             cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
@@ -249,14 +255,16 @@ class Modeling:
             return cls.MODEL
 
         else:
-            print('\nPlease First Build the TDCSFOG CNN model to train it.')
+            msg = 'Please First Build the TDCSFOG CNN model to train it.'
+            print(f'\n{msg}')
+            return msg
 
     @classmethod
-    def train_defog_rnn_model(cls) -> Model | None:
+    def train_defog_rnn_model(cls) -> Model | str:
         """
         train_defog_model method is used to train the DEFOG RNN model.
-        :return: It if the necessary components are present it trains the model and return's it, if not it will not
-        return anything.
+        :return: It if the necessary components are present it trains the model and return's it, if not it will return
+        a warning message.
         """
         if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'RNN':
             cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
@@ -264,14 +272,16 @@ class Modeling:
             return cls.MODEL
 
         else:
-            print('\nPlease First Build the DEFOG RNN model to train it.')
+            msg = 'Please First Build the DEFOG RNN model to train it.'
+            print(f'\n{msg}')
+            return msg
 
     @classmethod
-    def train_defog_cnn_model(cls) -> Model | None:
+    def train_defog_cnn_model(cls) -> Model | str:
         """
         train_defog_model method is used to train the DEFOG CNN model.
-        :return: It if the necessary components are present it trains the model and return's it, if not it will not
-        return anything.
+        :return: It if the necessary components are present it trains the model and return's it, if not it will return
+        a warning message.
         """
         if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'CNN':
             cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
@@ -279,7 +289,9 @@ class Modeling:
             return cls.MODEL
 
         else:
-            print('\nPlease First Build the DEFOG CNN model to train it.')
+            msg = 'Please First Build the DEFOG CNN model to train it.'
+            print(f'\n{msg}')
+            return msg
 
 
 class Inference(Modeling):
@@ -291,41 +303,69 @@ class Inference(Modeling):
         self._m_type = None
         self._d_type = None
 
-    def load_tdcsfog_rnn_model(self):
+    def load_tdcsfog_rnn_model(self) -> str | None:
         """
         load_tdcsfog_rnn_model method is used to load the TDCSFOG RNN model.
+        :returns: If there is no checkpoints of the tdcsfog rnn model it will return a warning message, else nothing.
         """
-        self._d_type = 'tdcsfog'
-        self._m_type = 'RNN'
-        self.build_tdcsfog_rnn_model()
-        self.MODEL.load_weights('models/ModelCheckpoint/tdcsfog/RNN/')
+        try:
+            self._d_type = 'tdcsfog'
+            self._m_type = 'RNN'
+            self.build_tdcsfog_rnn_model()
+            self.MODEL.load_weights('models/ModelCheckpoint/tdcsfog/RNN/')
 
-    def load_tdcsfog_cnn_model(self):
+        except IsADirectoryError:
+            msg = 'Please First Train the TDCSFOG RNN model.'
+            print(f'\n{msg}')
+            return msg
+
+    def load_tdcsfog_cnn_model(self) -> str | None:
         """
         load_tdcsfog_rnn_model method is used to load the TDCSFOG CNN model.
+        :returns: If there is no checkpoints of the tdcsfog cnn model it will return a warning message, else nothing.
         """
-        self._d_type = 'tdcsfog'
-        self._m_type = 'CNN'
-        self.build_tdcsfog_cnn_model()
-        self.MODEL.load_weights('models/ModelCheckpoint/tdcsfog/CNN/')
+        try:
+            self._d_type = 'tdcsfog'
+            self._m_type = 'CNN'
+            self.build_tdcsfog_cnn_model()
+            self.MODEL.load_weights('models/ModelCheckpoint/tdcsfog/CNN/')
 
-    def load_defog_rnn_model(self):
+        except IsADirectoryError:
+            msg = 'Please First Train the TDCSFOG CNN model.'
+            print(f'\n{msg}')
+            return msg
+
+    def load_defog_rnn_model(self) -> str | None:
         """
         load_tdcsfog_rnn_model method is used to load the DEFOG RNN model.
+        :returns: If there is no checkpoints of the defog rnn model it will return a warning message, else nothing.
         """
-        self._d_type = 'defog'
-        self._m_type = 'RNN'
-        self.build_defog_rnn_model()
-        self.MODEL.load_weights('models/ModelCheckpoint/defog/RNN/')
+        try:
+            self._d_type = 'defog'
+            self._m_type = 'RNN'
+            self.build_defog_rnn_model()
+            self.MODEL.load_weights('models/ModelCheckpoint/defog/RNN/')
 
-    def load_defog_cnn_model(self):
+        except IsADirectoryError:
+            msg = 'Please First Train the DEFOG RNN model.'
+            print(f'\n{msg}')
+            return msg
+
+    def load_defog_cnn_model(self) -> str | None:
         """
         load_tdcsfog_rnn_model method is used to load the DEFOG CNN model.
+        :returns: If there is no checkpoints of the defog cnn model it will return a warning message, else nothing.
         """
-        self._d_type = 'defog'
-        self._m_type = 'CNN'
-        self.build_defog_cnn_model()
-        self.MODEL.load_weights('models/ModelCheckpoint/defog/CNN/')
+        try:
+            self._d_type = 'defog'
+            self._m_type = 'CNN'
+            self.build_defog_cnn_model()
+            self.MODEL.load_weights('models/ModelCheckpoint/defog/CNN/')
+
+        except IsADirectoryError:
+            msg = 'Please First Train the DEFOG CNN model.'
+            print(f'\n{msg}')
+            return msg
 
     def predict(self, data):
         res = self.MODEL.predict(data)

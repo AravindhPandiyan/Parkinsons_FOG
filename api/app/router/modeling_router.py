@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
 
 from api.app.controller import ModelingController
 
@@ -60,7 +61,10 @@ async def train_tdcsfog_rnn():
     train_tdcsfog_rnn is api router path for training the rnn model with tdcsfog data.
     """
     try:
-        modeler.train_tdcsfog_rnn()
+        msg = modeler.train_tdcsfog_rnn()
+
+        if isinstance(msg, str):
+            return JSONResponse(status_code=424, content={"details": msg})
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -72,7 +76,10 @@ async def train_tdcsfog_cnn():
     train_tdcsfog_cnn is api router path for training the cnn model with tdcsfog data.
     """
     try:
-        modeler.train_tdcsfog_cnn()
+        msg = modeler.train_tdcsfog_cnn()
+
+        if isinstance(msg, str):
+            return JSONResponse(status_code=424, content={"details": msg})
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -84,7 +91,10 @@ async def train_defog_rnn():
     train_defog_rnn is api router path for training the rnn model with defog data.
     """
     try:
-        modeler.train_defog_rnn()
+        msg = modeler.train_defog_rnn()
+
+        if isinstance(msg, str):
+            return JSONResponse(status_code=424, content={"details": msg})
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -96,7 +106,10 @@ async def train_defog_cnn():
     train_defog_rnn is api router path for training the cnn model with defog data.
     """
     try:
-        modeler.train_defog_cnn()
+        msg = modeler.train_defog_cnn()
+
+        if isinstance(msg, str):
+            return JSONResponse(status_code=424, content={"details": msg})
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

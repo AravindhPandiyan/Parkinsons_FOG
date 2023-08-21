@@ -37,22 +37,22 @@ class ModelingController:
         """
         train_tdcsfog_rnn method is used for training a rnn model on tdcsfog.
         """
-        self.modeler.train_tdcsfog_rnn_model()
+        return self.modeler.train_tdcsfog_rnn_model()
 
     def train_tdcsfog_cnn(self):
         """
         train_tdcsfog_cnn method is used for training a cnn model on tdcsfog.
         """
-        self.modeler.train_tdcsfog_cnn_model()
+        return self.modeler.train_tdcsfog_cnn_model()
 
     def train_defog_rnn(self):
         """
         train_defog_rnn method is used for training a rnn model on defog.
         """
-        self.modeler.train_defog_rnn_model()
+        return self.modeler.train_defog_rnn_model()
 
     def train_defog_cnn(self):
         """
         train_defog_cnn method is used for training a cnn model on defog.
         """
-        self.modeler.train_defog_cnn_model()
+        return self.modeler.train_defog_cnn_model()

@@ -13,22 +13,22 @@ class InferenceController:
         """
         load_tdcsfog_rnn method loads tdcsfog rnn model into memory.
         """
-        self.infer.load_tdcsfog_rnn_model()
+        return self.infer.load_tdcsfog_rnn_model()
 
     def load_tdcsfog_cnn(self):
         """
         load_tdcsfog_cnn method loads tdcsfog cnn model into memory.
         """
-        self.infer.load_tdcsfog_cnn_model()
+        return self.infer.load_tdcsfog_cnn_model()
 
     def load_defog_rnn(self):
         """
         load_defog_rnn method loads defog rnn model into memory.
         """
-        self.infer.load_defog_rnn_model()
+        return self.infer.load_defog_rnn_model()
 
     def load_defog_cnn(self):
         """
         load_defog_cnn method loads defog cnn model into memory.
         """
-        self.infer.load_defog_cnn_model()
+        return self.infer.load_defog_cnn_model()

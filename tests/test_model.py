@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from src import Inference
 
 
@@ -17,34 +19,50 @@ class ModelMetrics(Inference):
         print(f'Area Under the Curve(AUC): {metrics["auc"]}')
         return metrics
 
-    def test_tdcsfog_rnn_model(self) -> dict:
+    def test_tdcsfog_rnn_model(self) -> dict | str:
         """
         test_tdcsfog_rnn_model method is used to test the TDCSFOG RNN model.
         :return: Finally, this method returns the calculated metrics for TDCSFOG RNN model in the form of a dictionary.
         """
-        self.load_tdcsfog_rnn_model()
-        return self._test_model()
+        msg = self.load_tdcsfog_rnn_model()
 
-    def test_tdcsfog_cnn_model(self) -> dict:
+        if msg:
+            return msg
+        else:
+            return self._test_model()
+
+    def test_tdcsfog_cnn_model(self) -> dict | str:
         """
         test_tdcsfog_rnn_model method is used to test the TDCSFOG CNN model.
         :return: Finally, this method returns the calculated metrics for TDCSFOG CNN model in the form of a dictionary.
         """
-        self.load_tdcsfog_cnn_model()
-        return self._test_model()
+        msg = self.load_tdcsfog_cnn_model()
 
-    def test_defog_rnn_model(self) -> dict:
+        if msg:
+            return msg
+        else:
+            return self._test_model()
+
+    def test_defog_rnn_model(self) -> dict | str:
         """
         test_tdcsfog_rnn_model method is used to test the DEFOG RNN model.
         :return: Finally, this method returns the calculated metrics for DEFOG RNN model in the form of a dictionary.
         """
-        self.load_defog_rnn_model()
-        return self._test_model()
+        msg = self.load_defog_rnn_model()
 
-    def test_defog_cnn_model(self) -> dict:
+        if msg:
+            return msg
+        else:
+            return self._test_model()
+
+    def test_defog_cnn_model(self) -> dict | str:
         """
         test_tdcsfog_rnn_model method is used to test the DEFOG CNN model.
         :return: Finally, this method returns the calculated metrics for DEFOG CNN model in the form of a dictionary.
         """
-        self.load_defog_cnn_model()
-        return self._test_model()
+        msg = self.load_defog_cnn_model()
+
+        if msg:
+            return msg
+        else:
+            return self._test_model()
