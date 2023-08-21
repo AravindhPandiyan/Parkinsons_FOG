@@ -12,7 +12,7 @@ class ModelMetrics(Inference):
         :return: Finally, this method returns the calculated metrics in the form of a dictionary.
         """
         metrics = self.MODEL.evaluate(self.TEST_DATA.batch(1))
-        metrics = dict(map=metrics[0], auc=metrics[1])
+        metrics = dict(map=round(metrics[0] * -1, 4), auc=round(metrics[1], 4))
         print(f'Mean Average Precision(mAP): {metrics["map"]}')
         print(f'Area Under the Curve(AUC): {metrics["auc"]}')
         return metrics

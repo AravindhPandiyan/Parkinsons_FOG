@@ -7,7 +7,10 @@ modeler = ModelingController()
 
 
 @router.post('/build/tdcsfog/rnn', status_code=201)
-def build_tdcsfog_rnn():
+async def build_tdcsfog_rnn():
+    """
+    build_tdcsfog_rnn is api router path for building a rnn model for tdcsfog data.
+    """
     try:
         modeler.build_tdcsfog_rnn()
 
@@ -16,7 +19,10 @@ def build_tdcsfog_rnn():
 
 
 @router.post('/build/tdcsfog/cnn', status_code=201)
-def build_tdcsfog_cnn():
+async def build_tdcsfog_cnn():
+    """
+    build_tdcsfog_cnn is api router path for building a cnn model for tdcsfog data.
+    """
     try:
         modeler.build_tdcsfog_cnn()
 
@@ -25,7 +31,10 @@ def build_tdcsfog_cnn():
 
 
 @router.post('/build/defog/rnn', status_code=201)
-def build_defog_rnn():
+async def build_defog_rnn():
+    """
+    build_defog_rnn is api router path for building a rnn model for defog data.
+    """
     try:
         modeler.build_defog_rnn()
 
@@ -34,7 +43,10 @@ def build_defog_rnn():
 
 
 @router.post('/build/defog/cnn', status_code=201)
-def build_defog_cnn():
+async def build_defog_cnn():
+    """
+    build_defog_cnn is api router path for building a cnn model for defog data.
+    """
     try:
         modeler.build_defog_cnn()
 
@@ -43,7 +55,10 @@ def build_defog_cnn():
 
 
 @router.post('/train/tdcsfog/rnn', status_code=200)
-def train_tdcsfog_rnn():
+async def train_tdcsfog_rnn():
+    """
+    train_tdcsfog_rnn is api router path for training the rnn model with tdcsfog data.
+    """
     try:
         modeler.train_tdcsfog_rnn()
 
@@ -52,7 +67,10 @@ def train_tdcsfog_rnn():
 
 
 @router.post('/train/tdcsfog/cnn', status_code=200)
-def train_tdcsfog_cnn():
+async def train_tdcsfog_cnn():
+    """
+    train_tdcsfog_cnn is api router path for training the cnn model with tdcsfog data.
+    """
     try:
         modeler.train_tdcsfog_cnn()
 
@@ -61,7 +79,10 @@ def train_tdcsfog_cnn():
 
 
 @router.post('/train/defog/rnn', status_code=200)
-def train_defog_rnn():
+async def train_defog_rnn():
+    """
+    train_defog_rnn is api router path for training the rnn model with defog data.
+    """
     try:
         modeler.train_defog_rnn()
 
@@ -70,7 +91,10 @@ def train_defog_rnn():
 
 
 @router.post('/train/defog/cnn', status_code=200)
-def train_defog_cnn():
+async def train_defog_cnn():
+    """
+    train_defog_rnn is api router path for training the cnn model with defog data.
+    """
     try:
         modeler.train_defog_cnn()
 

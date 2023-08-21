@@ -6,8 +6,11 @@ router = APIRouter()
 infer = InferenceController()
 
 
-@router.post('/tdcsfog/rnn', status_code=200)
-def load_tdcsfog_rnn():
+@router.post('/load/tdcsfog/rnn', status_code=200)
+async def load_tdcsfog_rnn():
+    """
+    load_tdcsfog_rnn is api router path for loading tdcsfog data trained rnn model into memory.
+    """
     try:
         infer.load_tdcsfog_rnn()
 
@@ -15,8 +18,11 @@ def load_tdcsfog_rnn():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post('/tdcsfog/cnn', status_code=200)
-def load_tdcsfog_cnn():
+@router.post('/load/tdcsfog/cnn', status_code=200)
+async def load_tdcsfog_cnn():
+    """
+    load_tdcsfog_cnn is api router path for loading tdcsfog data trained cnn model into memory.
+    """
     try:
         infer.load_tdcsfog_cnn()
 
@@ -24,8 +30,11 @@ def load_tdcsfog_cnn():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post('/defog/rnn', status_code=200)
-def load_defog_rnn():
+@router.post('/load/defog/rnn', status_code=200)
+async def load_defog_rnn():
+    """
+    load_defog_rnn is api router path for loading defog data trained rnn model into memory.
+    """
     try:
         infer.load_defog_rnn()
 
@@ -33,8 +42,11 @@ def load_defog_rnn():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post('/defog/cnn', status_code=200)
-def load_defog_cnn():
+@router.post('/load/defog/cnn', status_code=200)
+async def load_defog_cnn():
+    """
+    load_defog_rnn is api router path for loading defog data trained cnn model into memory.
+    """
     try:
         infer.load_defog_cnn()
 

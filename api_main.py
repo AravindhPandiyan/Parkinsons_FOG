@@ -11,4 +11,4 @@ app.include_router(prprocessing_router.router, prefix='/preprocessing')
 app.include_router(metrics_router.router, prefix='/metrics')
 
 if __name__ == '__main__':
-    uvicorn.run('main:app')
+    uvicorn.run('api_main:app')
