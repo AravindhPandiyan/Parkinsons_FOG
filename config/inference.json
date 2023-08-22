@@ -1,0 +1,10 @@
+{
+  "tdcsfog": {
+    "window_size": 328,
+    "steps": 102
+  },
+  "defog": {
+    "window_size": 256,
+    "steps": 40
+  }
+}

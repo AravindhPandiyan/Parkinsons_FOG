@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 
 import hydra
+import numpy as np
+import pandas as pd
 import tensorflow as tf
 from hydra import utils
 from keras.models import Model
@@ -300,8 +302,11 @@ class Inference(Modeling):
     """
 
     def __init__(self):
+        self.window_size = None
+        self.steps = None
         self._m_type = None
         self._d_type = None
+        self._processor = WindowWriter()
 
     def load_tdcsfog_rnn_model(self) -> str | None:
         """
@@ -319,6 +324,12 @@ class Inference(Modeling):
             print(f'\n{msg}')
             return msg
 
+        with open('config/inference.json') as file:
+            cfg = json.load(file)
+            cfg = cfg[self._d_type]
+            self.window_size = cfg['window_size']
+            self.steps = cfg['steps']
+
     def load_tdcsfog_cnn_model(self) -> str | None:
         """
         load_tdcsfog_rnn_model method is used to load the TDCSFOG CNN model.
@@ -334,6 +345,12 @@ class Inference(Modeling):
             msg = 'Please First Train the TDCSFOG CNN model.'
             print(f'\n{msg}')
             return msg
+
+        with open('config/inference.json') as file:
+            cfg = json.load(file)
+            cfg = cfg[self._d_type]
+            self.window_size = cfg['window_size']
+            self.steps = cfg['steps']
 
     def load_defog_rnn_model(self) -> str | None:
         """
@@ -351,6 +368,12 @@ class Inference(Modeling):
             print(f'\n{msg}')
             return msg
 
+        with open('config/inference.json') as file:
+            cfg = json.load(file)
+            cfg = cfg[self._d_type]
+            self.window_size = cfg['window_size']
+            self.steps = cfg['steps']
+
     def load_defog_cnn_model(self) -> str | None:
         """
         load_tdcsfog_rnn_model method is used to load the DEFOG CNN model.
@@ -367,6 +390,30 @@ class Inference(Modeling):
             print(f'\n{msg}')
             return msg
 
-    def predict(self, data):
-        res = self.MODEL.predict(data)
-        return res
+        with open('config/inference.json') as file:
+            cfg = json.load(file)
+            cfg = cfg[self._d_type]
+            self.window_size = cfg['window_size']
+            self.steps = cfg['steps']
+
+    def predict_fog(self, data: pd.DataFrame) -> list | str:
+        """
+        predict_fog method is used for performing prediction on the ML model that has been loaded into memory.
+        :param data: data is the series of data from accelerometer used for predicting if there is a fog detected.
+        :return: Finally, it returns the prediction list or if the model is not loaded it will return a warning string.
+        """
+        if self.window_size and self.steps:
+            if self._m_type == 'RNN':
+                data, _ = self._processor.window_processing(data)
+                data = data.reshape(shape=(1, self.window_size // 2 + 1, 3))
+
+            else:
+                data = np.array([data.values])
+
+            res = self.MODEL.predict(data)
+            return res
+
+        else:
+            msg = 'Please First Load the model.'
+            print(f'\n{msg}')
+            return msg

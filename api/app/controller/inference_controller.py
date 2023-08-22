@@ -32,3 +32,9 @@ class InferenceController:
         load_defog_cnn method loads defog cnn model into memory.
         """
         return self.infer.load_defog_cnn_model()
+
+    def predict(self, data):
+        """
+        predict method is used to predict the freezing of gait from the given data.
+        """
+        return self.infer.predict_fog(data)

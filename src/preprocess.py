@@ -46,9 +46,10 @@ class WindowWriter:
         pxxs = pxxs.reshape((-1, pxxs.shape[0]))
         return pxxs
 
-    def _window_processing(self, x_win: pd.DataFrame, y_win: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
+    def window_processing(self, x_win: pd.DataFrame, y_win: pd.DataFrame = pd.DataFrame([[0, 0, 0]])) -> \
+            tuple[np.ndarray, np.ndarray]:
         """
-        _window_processing method is used for processing the feature and targets of a given window dataframe.
+        window_processing method is used for processing the feature and targets of a given window dataframe.
         :param x_win: x_win is the window dataframe of features.
         :param y_win: y_win is the window dataframe of targets.
         :return: This function returns a tuple of flattened features and majority target.
@@ -87,7 +88,7 @@ class WindowWriter:
                     y_win = target.iloc[win_start: win_start + self.wsize, :]
 
                     if x_win.shape[0] == self.wsize:
-                        x, y = self._window_processing(x_win, y_win)
+                        x, y = self.window_processing(x_win, y_win)
                         record_bytes = tf.train.Example(features=tf.train.Features(feature={
                             "x": tf.train.Feature(float_list=tf.train.FloatList(value=x)),
                             "y": tf.train.Feature(int64_list=tf.train.Int64List(value=y)),
