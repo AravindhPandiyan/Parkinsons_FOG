@@ -1,5 +1,13 @@
+import concurrent.futures
+
 from src import Inference, Modeling, Preprocessing
-from tests import ModelMetrics
+from tests import ModelMetrics, data_streamer, server
+
+
+def _grpc_test(inference):
+    with concurrent.futures.ThreadPoolExecutor() as exe:
+        exe.submit(server, inference)
+        exe.submit(data_streamer)
 
 
 def main():
@@ -10,9 +18,10 @@ def main():
     modeler = Modeling()
     infer = Inference()
     metrics = ModelMetrics()
+
     calls = {
         "processes": "\nModeling Options:\n\t1. Preprocessing.\n\t2. Build Models.\n\t3. Train Models.\n\t4. "
-                     "Load Models.\n\t5. Test Models.\n\t6. Press any key to Exit.",
+                     "Load Models.\n\t5. Test Models.\n\t6. Stream For Inference.\n\t7. Press any key to Exit.",
         "1": {
             "processes": "\nPre-Processing Options:\n\ta. TDCSFOG RNN Pre-Processing.\n\tb. TDCSFOG CNN Pre-Processing."
                          "\n\tc. DEFOG RNN Pre-Processing.\n\td. DEFOG CNN Pre-Processing.\n\te. "
@@ -55,6 +64,12 @@ def main():
             "b": metrics.test_tdcsfog_cnn_model,
             "c": metrics.test_defog_rnn_model,
             "d": metrics.test_defog_cnn_model
+        },
+        "6": {
+            "processes": "\nInference Stream Options:\n\ta. WebSocket Stream.\n\tb. gRPC Stream.\n\te. "
+                         "Press any other key to go back.",
+            "a": print('sam'),
+            "b": _grpc_test
         }
     }
 
@@ -66,7 +81,10 @@ def main():
 
             try:
                 stage_2 = input('Enter the option alphabet: ')
-                calls[stage_1][stage_2]()
+                if stage_1 != '6':
+                    calls[stage_1][stage_2]()
+                else:
+                    calls[stage_1][stage_2](infer)
 
             except KeyError:
                 print('\nGoing back...')

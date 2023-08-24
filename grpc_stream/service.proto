@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package biStream;
+
+service Package{
+  rpc bidirectionalStream (stream Data) returns (stream Prediction);
+}
+
+message Data {
+  float AccV = 1;
+  float AccML = 2;
+  float AccAP = 3;
+}
+
+message Prediction {
+  int32 StartHesitation = 1;
+  int32 Turn = 2;
+  int32 Walking = 3;
+}
