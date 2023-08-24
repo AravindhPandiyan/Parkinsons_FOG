@@ -8,11 +8,30 @@ from grpc_stream import service_pb2_grpc
 
 
 class Jobs:
-    pass
+    """
+    Jobs is an empty class used for grouping classes of similar type under one. This class is inherited by the similar
+    classes to become part of the same grouping. The work of any 'JOB' class is for setting up services like Unary RPC,
+    Server-side streaming RPC, Client-side streaming RPC and Bi-directional streaming RPC. The 'JOB' classes will be
+    specific to their work. There can exist multiple 'JOB' of same service.
+    """
+    NAME = 'JOB'
 
 
 class PredictorJob(Jobs, service_pb2_grpc.PackageServicer):
+    """
+    PredictorJob class is part of the main 'JOB' group of classes. This 'JOB' is used for Bi-directional streaming
+    of data and predictions between client and server respectively. This class also inherits the Servicer class
+    from pb2_grpc file.
+    """
+    CHILD_NAME = f'PREDICTOR_{Jobs.NAME}'
+
     def __init__(self, inference):
+        """
+        PredictorJob class is part of the main 'JOB' group of classes. This 'JOB' is used for Bi-directional streaming
+        of data and predictions between client and server respectively. This class also inherits the Servicer class
+        from pb2_grpc file.
+        :param inference: inference is expecting the inference class of the model.
+        """
         self.infer = inference
         self.w_size = self.infer.window_size
         self.buffer = deque(maxlen=self.w_size)
@@ -20,6 +39,13 @@ class PredictorJob(Jobs, service_pb2_grpc.PackageServicer):
         self.count = 0
 
     def bidirectionalStream(self, request_iterator, context):
+        """
+        This method is used to override the method in the servicer class and allows to write down the specific code for
+        handling Bi-directional streaming of the data packages.
+        :param request_iterator: request_iterator is used for iterating over the data packets sent form the client side.
+        :param context: context contains the metadata of the client, method name and deadline for the calls.
+        :return: This method streams predictions to the client. It acts like a Generator.
+        """
         for package in request_iterator:
             data = [package.AccV, package.AccML, package.AccAP]
             if self.count < self.steps:

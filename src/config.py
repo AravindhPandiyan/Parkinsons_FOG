@@ -50,7 +50,6 @@ class Preprocessing:
         conditions for rnn model.
         :param cfg: cfg parameter is used for accessing the configurations for the specific process types processing.
         """
-
         cfg_ps = cfg.power_spectrum
         current_path = utils.get_original_cwd() + '/'
         ww = WindowWriter(cfg.window_size, cfg.steps, cfg_ps.freq, cfg_ps.type)
@@ -66,7 +65,6 @@ class Preprocessing:
         conditions for cnn model.
         :param cfg: cfg parameter is used for accessing the configurations for the specific process types processing.
         """
-
         current_path = utils.get_original_cwd() + '/'
         ww = WindowWriter(cfg.window_size, cfg.steps)
         dataset = ww.load_csv_data(current_path + cfg.metadata, current_path + cfg.dataset)
