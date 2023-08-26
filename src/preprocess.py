@@ -2,7 +2,6 @@ import dask.dataframe as dd
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-
 from scipy import signal as ss
 
 
@@ -11,7 +10,13 @@ class WindowWriter:
     WindowWriter class is used for converting the data into tfrecords.
     """
 
-    def __init__(self, window_size: int = 10, steps: int = 1, freq: int = 100, model_type: str = 'CNN'):
+    def __init__(
+        self,
+        window_size: int = 10,
+        steps: int = 1,
+        freq: int = 100,
+        model_type: str = "CNN",
+    ):
         """
         :param model_type: model_type it is to mention the type of model to opt into a particular type of processing of data.
         :param freq: freq is the frequency of the data captured.
@@ -38,23 +43,30 @@ class WindowWriter:
         pxxs = []
 
         for col in features.columns:
-            _, pxx = ss.welch(x=features[col], fs=self.freq, window='hamming', nperseg=self.wsize, noverlap=self._olap,
-                              scaling='spectrum')
+            _, pxx = ss.welch(
+                x=features[col],
+                fs=self.freq,
+                window="hamming",
+                nperseg=self.wsize,
+                noverlap=self._olap,
+                scaling="spectrum",
+            )
             pxxs.append(pxx)
 
         pxxs = np.array(pxxs)
         pxxs = pxxs.reshape((-1, pxxs.shape[0]))
         return pxxs
 
-    def window_processing(self, x_win: pd.DataFrame, y_win: pd.DataFrame = pd.DataFrame([[0, 0, 0]])) -> \
-            tuple[np.ndarray, np.ndarray]:
+    def window_processing(
+        self, x_win: pd.DataFrame, y_win: pd.DataFrame = pd.DataFrame([[0, 0, 0]])
+    ) -> tuple[np.ndarray, np.ndarray]:
         """
         window_processing method is used for processing the feature and targets of a given window dataframe.
         :param x_win: x_win is the window dataframe of features.
         :param y_win: y_win is the window dataframe of targets.
         :return: This function returns a tuple of flattened features and majority target.
         """
-        if self.m_type == 'RNN':
+        if self.m_type == "RNN":
             x = self._convert_to_power_spectrums(x_win)
 
         else:
@@ -80,19 +92,27 @@ class WindowWriter:
         size = 0
         with tf.io.TFRecordWriter(path) as writer:
             for partition in data.partitions:
-                features = partition.iloc[:, 1: -3].compute()
+                features = partition.iloc[:, 1:-3].compute()
                 target = partition.iloc[:, -3:].compute()
 
                 for win_start in range(0, features.shape[0], self.steps):
-                    x_win = features.iloc[win_start: win_start + self.wsize, :]
-                    y_win = target.iloc[win_start: win_start + self.wsize, :]
+                    x_win = features.iloc[win_start : win_start + self.wsize, :]
+                    y_win = target.iloc[win_start : win_start + self.wsize, :]
 
                     if x_win.shape[0] == self.wsize:
                         x, y = self.window_processing(x_win, y_win)
-                        record_bytes = tf.train.Example(features=tf.train.Features(feature={
-                            "x": tf.train.Feature(float_list=tf.train.FloatList(value=x)),
-                            "y": tf.train.Feature(int64_list=tf.train.Int64List(value=y)),
-                        })).SerializeToString()
+                        record_bytes = tf.train.Example(
+                            features=tf.train.Features(
+                                feature={
+                                    "x": tf.train.Feature(
+                                        float_list=tf.train.FloatList(value=x)
+                                    ),
+                                    "y": tf.train.Feature(
+                                        int64_list=tf.train.Int64List(value=y)
+                                    ),
+                                }
+                            )
+                        ).SerializeToString()
                         writer.write(record_bytes)
                         size += 1
 
@@ -107,6 +127,8 @@ class WindowWriter:
         :return: Finally, this function returns the filtered data from all the data.
         """
         metadata = pd.read_csv(meta_path)
-        dataset_path = list(map(lambda id_: data_path + id_ + '.csv', metadata.Id.unique()))
+        dataset_path = list(
+            map(lambda id_: data_path + id_ + ".csv", metadata.Id.unique())
+        )
         dataset = dd.read_csv(dataset_path)
         return dataset

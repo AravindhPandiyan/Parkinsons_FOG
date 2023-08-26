@@ -22,8 +22,8 @@ class TFRecordParsers:
         :return: Finally, the parsed record is divided as feature amd target and returned as a tuple.
         """
         feature_description = {
-            'x': tf.io.FixedLenFeature(self.x_shape, tf.float32),
-            'y': tf.io.FixedLenFeature(self.y_shape, tf.int64)
+            "x": tf.io.FixedLenFeature(self.x_shape, tf.float32),
+            "y": tf.io.FixedLenFeature(self.y_shape, tf.int64),
         }
         parsed_features = tf.io.parse_single_example(example_proto, feature_description)
-        return parsed_features['x'], parsed_features['y']
+        return parsed_features["x"], parsed_features["y"]

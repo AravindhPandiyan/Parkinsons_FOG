@@ -3,8 +3,7 @@ from collections import deque
 
 import pandas as pd
 
-from grpc_stream import service_pb2
-from grpc_stream import service_pb2_grpc
+from grpc_stream import service_pb2, service_pb2_grpc
 
 
 class Jobs:
@@ -14,7 +13,8 @@ class Jobs:
     Server-side streaming RPC, Client-side streaming RPC and Bi-directional streaming RPC. The 'JOB' classes will be
     specific to their work. There can exist multiple 'JOB' of same service.
     """
-    NAME = 'JOB'
+
+    NAME = "JOB"
 
 
 class PredictorJob(Jobs, service_pb2_grpc.PackageServicer):
@@ -23,7 +23,8 @@ class PredictorJob(Jobs, service_pb2_grpc.PackageServicer):
     of data and predictions between client and server respectively. This class also inherits the Servicer class
     from pb2_grpc file.
     """
-    CHILD_NAME = f'PREDICTOR_{Jobs.NAME}'
+
+    CHILD_NAME = f"PREDICTOR_{Jobs.NAME}"
 
     def __init__(self, inference):
         """
@@ -61,7 +62,9 @@ class PredictorJob(Jobs, service_pb2_grpc.PackageServicer):
                 pred = self.infer.predict_fog(df)
                 pred = pred.astype(int)
                 pred = pred[0].tolist()
-                pred = service_pb2.Prediction(StartHesitation=pred[0], Turn=pred[1], Walking=pred[2])
+                pred = service_pb2.Prediction(
+                    StartHesitation=pred[0], Turn=pred[1], Walking=pred[2]
+                )
                 yield pred
                 time.sleep(1)
                 self.buffer.append(data)

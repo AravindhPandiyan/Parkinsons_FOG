@@ -4,8 +4,7 @@ from typing import Generator
 
 import grpc
 
-from grpc_stream import service_pb2
-from grpc_stream import service_pb2_grpc
+from grpc_stream import service_pb2, service_pb2_grpc
 
 
 class GRPCConnect:
@@ -32,7 +31,9 @@ class GRPCConnect:
         :return: Every time the method is called the next data packet in the generator is returned.
         """
         for row in self.gen:
-            service_request = service_pb2.Data(AccV=row.AccV, AccML=row.AccML, AccAP=row.AccAP)
+            service_request = service_pb2.Data(
+                AccV=row.AccV, AccML=row.AccML, AccAP=row.AccAP
+            )
             yield service_request
 
     def connect_to_stream(self) -> Generator[dict] | None:
@@ -50,4 +51,6 @@ class GRPCConnect:
                 return (pred for pred in predictions)
             else:
                 for pred in predictions:
-                    print(f'StartHesitation: {pred.StartHesitation}, Turn: {pred.Turn}, Walking: {pred.Walking}')
+                    print(
+                        f"StartHesitation: {pred.StartHesitation}, Turn: {pred.Turn}, Walking: {pred.Walking}"
+                    )
