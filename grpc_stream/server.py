@@ -30,7 +30,7 @@ class GRPCServe:
         service_pb2_grpc.add_PackageServicer_to_server(self.services, self._server)
         self._server.add_insecure_port(self.address)
         self._server.start()
-        self._server.wait_for_termination()
+        self._server.wait_for_termination(timeout=60.0)
 
     def close_line(self):
         """

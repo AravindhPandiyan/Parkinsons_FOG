@@ -9,7 +9,7 @@ from api.app.dependencies import APIResponseModel, ModelTypesModel, UsableData, 
 router = APIRouter()
 controller = ModelingController()
 executor = concurrent.futures.ThreadPoolExecutor()
-task_status = {}
+background_task_status = {}
 
 
 def background_training(task_data):
@@ -28,7 +28,7 @@ def background_training(task_data):
             controller.train_defog_cnn()
 
     result = f'\n{task_data.architecture} model training using {task_data.use_data} data has been completed.'
-    task_status[f'{task_data.use_data}_{task_data.architecture}'] = "completed"
+    background_task_status[f'{task_data.use_data}_{task_data.architecture}'] = "completed"
     print(result)
 
 
@@ -59,7 +59,7 @@ async def build_model(build: ModelTypesModel):
 
 @router.post('/train', response_model=APIResponseModel)
 async def train_model(train: ModelTypesModel, background_tasks: BackgroundTasks):
-    if task_status.get(f'{train.use_data}_{train.architecture}') == 'running':
+    if background_task_status.get(f'{train.use_data}_{train.architecture}') == 'running':
         msg = f"Training of {train.architecture} model using {train.use_data} data is already running."
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
 
@@ -69,7 +69,7 @@ async def train_model(train: ModelTypesModel, background_tasks: BackgroundTasks)
 
     else:
         try:
-            task_status[f'{train.use_data}_{train.architecture}'] = "running"
+            background_task_status[f'{train.use_data}_{train.architecture}'] = "running"
             background_tasks.add_task(background_training, train)
             msg = f"Training of {train.architecture} model using {train.use_data} data has been enqueued for " \
                   "background execution."
