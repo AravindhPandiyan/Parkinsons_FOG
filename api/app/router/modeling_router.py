@@ -1,115 +1,80 @@
-from fastapi import APIRouter, HTTPException, status
+import concurrent.futures
+
+from fastapi import APIRouter, BackgroundTasks, HTTPException, status
 from fastapi.responses import JSONResponse
 
 from api.app.controller import ModelingController
+from api.app.dependencies import APIResponseModel, ModelTypesModel, UsableData, ArchitectureTypes
 
 router = APIRouter()
-modeler = ModelingController()
+controller = ModelingController()
+executor = concurrent.futures.ThreadPoolExecutor()
+task_status = {}
 
 
-@router.post('/build/tdcsfog/rnn', status_code=status.HTTP_201_CREATED)
-async def build_tdcsfog_rnn():
-    """
-    build_tdcsfog_rnn is api router path for building a rnn model for tdcsfog data.
-    """
+def background_training(task_data):
+    if task_data.use_data == UsableData.TDCSFOG:
+        if task_data.architecture == ArchitectureTypes.RNN:
+            controller.train_tdcsfog_rnn()
+
+        else:
+            controller.train_tdcsfog_cnn()
+
+    elif task_data.use_data == UsableData.DEFOG:
+        if task_data.architecture == ArchitectureTypes.RNN:
+            controller.train_defog_rnn()
+
+        else:
+            controller.train_defog_cnn()
+
+    result = f'\n{task_data.architecture} model training using {task_data.use_data} data has been completed.'
+    task_status[f'{task_data.use_data}_{task_data.architecture}'] = "completed"
+    print(result)
+
+
+@router.post('/build', response_model=APIResponseModel)
+async def build_model(build: ModelTypesModel):
     try:
-        modeler.build_tdcsfog_rnn()
+        if build.use_data == UsableData.TDCSFOG:
+            if build.architecture == ArchitectureTypes.RNN:
+                controller.build_tdcsfog_rnn()
 
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+            else:
+                controller.build_tdcsfog_cnn()
 
+        elif build.use_data == UsableData.DEFOG:
+            if build.architecture == ArchitectureTypes.RNN:
+                controller.build_defog_rnn()
 
-@router.post('/build/tdcsfog/cnn', status_code=status.HTTP_201_CREATED)
-async def build_tdcsfog_cnn():
-    """
-    build_tdcsfog_cnn is api router path for building a cnn model for tdcsfog data.
-    """
-    try:
-        modeler.build_tdcsfog_cnn()
+            else:
+                controller.build_defog_cnn()
 
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        msg = f'{build.architecture} model has been constructed to train on {build.use_data} data.'
+        resp = {'detail': msg}
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content=resp)
 
-
-@router.post('/build/defog/rnn', status_code=status.HTTP_201_CREATED)
-async def build_defog_rnn():
-    """
-    build_defog_rnn is api router path for building a rnn model for defog data.
-    """
-    try:
-        modeler.build_defog_rnn()
-
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='The Server has a Boo Boo.')
 
 
-@router.post('/build/defog/cnn', status_code=status.HTTP_201_CREATED)
-async def build_defog_cnn():
-    """
-    build_defog_cnn is api router path for building a cnn model for defog data.
-    """
-    try:
-        modeler.build_defog_cnn()
+@router.post('/train', response_model=APIResponseModel)
+async def train_model(train: ModelTypesModel, background_tasks: BackgroundTasks):
+    if task_status.get(f'{train.use_data}_{train.architecture}') == 'running':
+        msg = f"Training of {train.architecture} model using {train.use_data} data is already running."
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
 
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    elif controller.MODEL_TYPE != f'{train.use_data}_{train.architecture}':
+        msg = f'Please First Build the {train.use_data} {train.architecture} model to train it.'
+        raise HTTPException(status_code=status.HTTP_424_FAILED_DEPENDENCY, detail=msg)
 
+    else:
+        try:
+            task_status[f'{train.use_data}_{train.architecture}'] = "running"
+            background_tasks.add_task(background_training, train)
+            msg = f"Training of {train.architecture} model using {train.use_data} data has been enqueued for " \
+                  "background execution."
+            resp = {'detail': msg}
+            return JSONResponse(status_code=status.HTTP_200_OK, content=resp)
 
-@router.post('/train/tdcsfog/rnn', status_code=status.HTTP_200_OK)
-async def train_tdcsfog_rnn():
-    """
-    train_tdcsfog_rnn is api router path for training the rnn model with tdcsfog data.
-    """
-    try:
-        msg = modeler.train_tdcsfog_rnn()
-
-        if isinstance(msg, str):
-            return JSONResponse(status_code=status.HTTP_424_FAILED_DEPENDENCY, content={"details": msg})
-
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-
-
-@router.post('/train/tdcsfog/cnn', status_code=status.HTTP_200_OK)
-async def train_tdcsfog_cnn():
-    """
-    train_tdcsfog_cnn is api router path for training the cnn model with tdcsfog data.
-    """
-    try:
-        msg = modeler.train_tdcsfog_cnn()
-
-        if isinstance(msg, str):
-            return JSONResponse(status_code=status.HTTP_424_FAILED_DEPENDENCY, content={"details": msg})
-
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-
-
-@router.post('/train/defog/rnn', status_code=status.HTTP_200_OK)
-async def train_defog_rnn():
-    """
-    train_defog_rnn is api router path for training the rnn model with defog data.
-    """
-    try:
-        msg = modeler.train_defog_rnn()
-
-        if isinstance(msg, str):
-            return JSONResponse(status_code=status.HTTP_424_FAILED_DEPENDENCY, content={"details": msg})
-
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-
-
-@router.post('/train/defog/cnn', status_code=status.HTTP_200_OK)
-async def train_defog_cnn():
-    """
-    train_defog_rnn is api router path for training the cnn model with defog data.
-    """
-    try:
-        msg = modeler.train_defog_cnn()
-
-        if isinstance(msg, str):
-            return JSONResponse(status_code=status.HTTP_424_FAILED_DEPENDENCY, content={"details": msg})
-
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        except Exception:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='The Server has a Boo Boo.')

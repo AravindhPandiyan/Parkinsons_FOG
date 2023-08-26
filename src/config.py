@@ -186,7 +186,7 @@ class Modeling:
         """
         cfg = cfg.tdcsfog
         builder = ConstructRNN()
-        Modeling.MODEL_TYPE = 'RNN'
+        Modeling.MODEL_TYPE = 'TDCSFOG_RNN'
         Modeling._build_model(cfg, builder, 'tdcsfog')
 
     @staticmethod
@@ -198,7 +198,7 @@ class Modeling:
         """
         cfg = cfg.tdcsfog
         builder = ConstructCNN()
-        Modeling.MODEL_TYPE = 'CNN'
+        Modeling.MODEL_TYPE = 'TDCSFOG_CNN'
         Modeling._build_model(cfg, builder, 'tdcsfog')
 
     @staticmethod
@@ -210,7 +210,7 @@ class Modeling:
         """
         cfg = cfg.defog
         builder = ConstructRNN()
-        Modeling.MODEL_TYPE = 'RNN'
+        Modeling.MODEL_TYPE = 'DEFOG_RNN'
         Modeling._build_model(cfg, builder, 'defog')
 
     @staticmethod
@@ -222,7 +222,7 @@ class Modeling:
         """
         cfg = cfg.defog
         builder = ConstructCNN()
-        Modeling.MODEL_TYPE = 'CNN'
+        Modeling.MODEL_TYPE = 'DEFOG_CNN'
         Modeling._build_model(cfg, builder, 'defog')
 
     @classmethod
@@ -232,7 +232,7 @@ class Modeling:
         :return: It if the necessary components are present it trains the model and return's it, if not it will not
         return anything.
         """
-        if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'RNN':
+        if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'TDCSFOG_RNN':
             cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
                                 'tdcsfog/RNN/')
             return cls.MODEL
@@ -249,7 +249,7 @@ class Modeling:
         :return: It if the necessary components are present it trains the model and return's it, if not it will return
         a warning message.
         """
-        if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'CNN':
+        if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'TDCSFOG_CNN':
             cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
                                 'tdcsfog/CNN/')
             return cls.MODEL
@@ -266,7 +266,7 @@ class Modeling:
         :return: It if the necessary components are present it trains the model and return's it, if not it will return
         a warning message.
         """
-        if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'RNN':
+        if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'DEFOG_RNN':
             cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
                                 'defog/RNN/')
             return cls.MODEL
@@ -283,7 +283,7 @@ class Modeling:
         :return: It if the necessary components are present it trains the model and return's it, if not it will return
         a warning message.
         """
-        if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'CNN':
+        if cls.TRAIN_DATA and cls.VAL_DATA and cls.MODEL and cls.MODEL_TYPE == 'DEFOG_CNN':
             cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA,
                                 'defog/CNN/')
             return cls.MODEL

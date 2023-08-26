@@ -1,54 +1,34 @@
 from fastapi import APIRouter, HTTPException, status
+from fastapi.responses import JSONResponse
 
 from api.app.controller import PreprocessorController
+from api.app.dependencies import APIResponseModel, ArchitectureTypes, ModelTypesModel, UsableData
 
 router = APIRouter()
 controller = PreprocessorController()
 
 
-@router.post('/tdcsfog/rnn', status_code=status.HTTP_200_OK)
-async def process_tdcsfog_rnn():
-    """
-    process_tdcsfog_rnn is api router path for processing the tdcsfog data for rnn model.
-    """
+@router.post('/', response_model=APIResponseModel)
+async def process(build: ModelTypesModel):
     try:
-        controller.process_tdcsfog_rnn()
+        if build.use_data == UsableData.TDCSFOG:
+            if build.architecture == ArchitectureTypes.RNN:
+                controller.process_tdcsfog_rnn()
 
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+            else:
+                controller.process_tdcsfog_cnn()
 
+        elif build.use_data == UsableData.DEFOG:
+            if build.architecture == ArchitectureTypes.RNN:
+                controller.process_defog_rnn()
 
-@router.post('/tdcsfog/cnn', status_code=status.HTTP_200_OK)
-async def process_tdcsfog_cnn():
-    """
-    process_tdcsfog_cnn is api router path for processing the tdcsfog data for cnn model.
-    """
-    try:
-        controller.process_tdcsfog_cnn()
+            else:
+                controller.process_defog_cnn()
 
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        msg = f"""{build.use_data} for training the {build.architecture} model has been processed and converted to 
+        TFRecords."""
+        resp = {'detail': msg}
+        return JSONResponse(status_code=status.HTTP_201_CREATED, content=resp)
 
-
-@router.post('/defog/rnn', status_code=status.HTTP_200_OK)
-async def process_defog_rnn():
-    """
-    process_defog_rnn is api router path for processing the defog data for rnn model.
-    """
-    try:
-        controller.process_defog_rnn()
-
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-
-
-@router.post('/defog/cnn', status_code=status.HTTP_200_OK)
-async def process_defog_cnn():
-    """
-    process_defog_rnn is api router path for processing the defog data for cnn model.
-    """
-    try:
-        controller.process_defog_cnn()
-
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='The Server has a Boo Boo.')

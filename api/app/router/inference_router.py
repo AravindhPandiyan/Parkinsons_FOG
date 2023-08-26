@@ -6,66 +6,40 @@ from fastapi import APIRouter, HTTPException, status, WebSocket, WebSocketDiscon
 from fastapi.responses import JSONResponse
 
 from api.app.controller import InferenceController
+from api.app.dependencies import APIResponseModel, ArchitectureTypes, ModelTypesModel, UsableData
+from api.app.models import SocketPackageModel
 
 router = APIRouter()
-infer = InferenceController()
+controller = InferenceController()
 
 
-@router.post('/load/tdcsfog/rnn', status_code=status.HTTP_200_OK)
-async def load_tdcsfog_rnn():
-    """
-    load_tdcsfog_rnn is api router path for loading tdcsfog data trained rnn model into memory.
-    """
+@router.post('/load', response_model=APIResponseModel)
+async def load_model(load: ModelTypesModel):
     try:
-        msg = infer.load_tdcsfog_rnn()
+        msg = None
+
+        if load.use_data == UsableData.TDCSFOG:
+            if load.architecture == ArchitectureTypes.RNN:
+                msg = controller.load_tdcsfog_rnn()
+
+            else:
+                msg = controller.load_tdcsfog_cnn()
+
+        elif load.use_data == UsableData.DEFOG:
+            if load.architecture == ArchitectureTypes.RNN:
+                msg = controller.load_defog_rnn()
+
+            else:
+                msg = controller.load_defog_cnn()
 
         if msg:
-            return JSONResponse(status_code=status.HTTP_424_FAILED_DEPENDENCY, content={"details": msg})
+            resp = {"detail": msg}
+            return JSONResponse(status_code=status.HTTP_424_FAILED_DEPENDENCY, content=resp)
 
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='The Server has a Boo Boo.')
-
-
-@router.post('/load/tdcsfog/cnn', status_code=status.HTTP_200_OK)
-async def load_tdcsfog_cnn():
-    """
-    load_tdcsfog_cnn is api router path for loading tdcsfog data trained cnn model into memory.
-    """
-    try:
-        msg = infer.load_tdcsfog_cnn()
-
-        if msg:
-            return JSONResponse(status_code=status.HTTP_424_FAILED_DEPENDENCY, content={"details": msg})
-
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='The Server has a Boo Boo.')
-
-
-@router.post('/load/defog/rnn', status_code=status.HTTP_200_OK)
-async def load_defog_rnn():
-    """
-    load_defog_rnn is api router path for loading defog data trained rnn model into memory.
-    """
-    try:
-        msg = infer.load_defog_rnn()
-
-        if msg:
-            return JSONResponse(status_code=status.HTTP_424_FAILED_DEPENDENCY, content={"details": msg})
-
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='The Server has a Boo Boo.')
-
-
-@router.post('/load/defog/cnn', status_code=status.HTTP_200_OK)
-async def load_defog_cnn():
-    """
-    load_defog_rnn is api router path for loading defog data trained cnn model into memory.
-    """
-    try:
-        msg = infer.load_defog_cnn()
-
-        if msg:
-            return JSONResponse(status_code=status.HTTP_424_FAILED_DEPENDENCY, content={"details": msg})
+        else:
+            msg = f'{load.use_data} data trained {load.architecture} model has been loaded into memory.'
+            resp = {'detail': msg}
+            return JSONResponse(status_code=status.HTTP_200_OK, content=resp)
 
     except Exception:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='The Server has a Boo Boo.')
@@ -79,27 +53,23 @@ async def web_socket_stream(websocket: WebSocket):
     :param websocket:
     """
     await websocket.accept()
-    w_size = infer.window_size
+    w_size = controller.window_size
     buffer = deque(maxlen=w_size)
-    steps = infer.steps
+    steps = controller.steps
     count = 0
 
     try:
         while True:
             try:
-                if count < steps:
+                if count < steps or len(buffer) != w_size:
                     package = await asyncio.wait_for(websocket.receive_json(), timeout=60)
-                    buffer.append(package['data'])
-                    count += 1
-
-                elif len(buffer) != w_size:
-                    package = await asyncio.wait_for(websocket.receive_json(), timeout=60)
-                    buffer.append(package['data'])
+                    package = SocketPackageModel(**package)
+                    buffer.append([package.AccV, package.AccML, package.AccAP])
                     count += 1
 
                 else:
                     data = pd.DataFrame(buffer)
-                    pred = infer.predict(data)
+                    pred = controller.predict(data)
                     pred = pred[0].tolist()
 
                     if isinstance(pred, list):

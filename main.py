@@ -21,7 +21,7 @@ def main():
 
     calls = {
         "processes": "\nModeling Options:\n\t1. Preprocessing.\n\t2. Build Models.\n\t3. Train Models.\n\t4. "
-                     "Load Models.\n\t5. Test Models.\n\t6. Stream For Inference.\n\t7. Press any key to Exit.",
+                     "Load Models.\n\t5. Test Models.\n\t6. Stream For Inference Testing.\n\t7. Press any key to Exit.",
         "1": {
             "processes": "\nPre-Processing Options:\n\ta. TDCSFOG RNN Pre-Processing.\n\tb. TDCSFOG CNN Pre-Processing."
                          "\n\tc. DEFOG RNN Pre-Processing.\n\td. DEFOG CNN Pre-Processing.\n\te. "
@@ -65,30 +65,30 @@ def main():
             "c": metrics.test_defog_rnn_model,
             "d": metrics.test_defog_cnn_model
         },
-        "6": {
-            "processes": "\nInference Stream Options:\n\ta. WebSocket Stream.\n\tb. gRPC Stream.\n\te. "
-                         "Press any other key to go back.",
-            "a": print('sam'),
-            "b": _grpc_test
-        }
+        "6": _grpc_test
     }
 
     while True:
         try:
             print(calls['processes'])
             stage_1 = input('Enter the option number: ')
-            print(calls[stage_1]['processes'])
+            if stage_1 != '6':
+                print(calls[stage_1]['processes'])
 
-            try:
-                stage_2 = input('Enter the option alphabet: ')
-                if stage_1 != '6':
+                try:
+                    stage_2 = input('Enter the option alphabet: ')
                     calls[stage_1][stage_2]()
-                else:
-                    calls[stage_1][stage_2](infer)
 
-            except KeyError:
-                print('\nGoing back...')
-                continue
+                except KeyError:
+                    print('\nGoing back...')
+                    continue
+
+            else:
+                if infer.steps and infer.window_size:
+                    calls[stage_1](infer)
+
+                else:
+                    print('\nPlease First Load the model.')
 
         except (KeyboardInterrupt, KeyError):
             print('\nThank you for Using Parkinson\'s FOG Detection.')

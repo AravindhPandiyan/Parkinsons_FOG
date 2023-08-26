@@ -26,6 +26,7 @@ def fitting(model: Model, train_dataset: tf.Tensor, val_dataset: tf.Tensor, chec
         .TensorBoard(log_dir=config['log_loc'], histogram_freq=1, write_graph=True, write_images=True)
     time_stopping = TimeStopping(seconds=60 * 60 * 4)
     gpu_count = len(tf.config.list_logical_devices('GPU'))
+    gpu_count = gpu_count if gpu_count else 1
 
     model.fit(train_dataset.batch(config['batch_size'] * gpu_count),
               validation_data=val_dataset.batch(config['batch_size'] * gpu_count), epochs=config['epochs'], verbose=2,

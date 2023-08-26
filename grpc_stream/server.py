@@ -10,6 +10,7 @@ class GRPCServe:
     """
     GRPCServe class is used for hosting the gRPC services for sending data and receive packets of data.
     """
+
     def __init__(self, service: Jobs, host_address: str, threads: int = 10):
         """
         GRPCServe class is used for hosting the gRPC services for sending data and receive packets of data.
