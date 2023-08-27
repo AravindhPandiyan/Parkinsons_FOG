@@ -2,6 +2,7 @@
 
 ## Table of Contents
 
-- [docs](introduction.md)
-- [docs](installation-guide.md)
-- [docs](usage-guide.md)
+- [api](docs/api/app/index.md)
+- [grpc_stream](docs/grpc_stream/index.md)
+- [src](docs/src/index.md)
+- [tests](docs/tests/index.md)
