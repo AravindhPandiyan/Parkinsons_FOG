@@ -10,18 +10,23 @@ from api.app.dependencies import (
     ModelTypesModel,
     UsableData,
 )
-from api.app.models import MetricsModel
+from api.app.models import MetricsResponseModel
 
 router = APIRouter()
 controller = MetricsController()
 
 
-@router.get("/", response_model=Union[APIResponseModel, MetricsModel])
+@router.get("/", response_model=Union[APIResponseModel, MetricsResponseModel])
 async def test_model(test: ModelTypesModel):
     """
-    test_model is an API route for testing the different model's.
-    :param test: test is the data received from the user, containing request of specific model to be tested.
-    :return: The return values of the function is dependent on the state of API.
+    `test_model` is an API route for testing the different model's.
+
+    Params:
+        `test`: test is the data received from the user, containing request of specific model to
+        be **tested**.
+
+    Returns:
+        The return values of the function is dependent on the state of API.
     """
     try:
         msg = None

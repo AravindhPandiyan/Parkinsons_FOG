@@ -7,7 +7,7 @@ from scipy import signal as ss
 
 class WindowWriter:
     """
-    WindowWriter class is used for converting the data into tfrecords.
+    `WindowWriter` class creates **TFRecords**.
     """
 
     def __init__(
@@ -18,10 +18,17 @@ class WindowWriter:
         model_type: str = "CNN",
     ):
         """
-        :param model_type: model_type it is to mention the type of model to opt into a particular type of processing of data.
-        :param freq: freq is the frequency of the data captured.
-        :param window_size: window_size is the window size of the data frame
-        :param steps: steps is the step size of the rolling window.
+        `WindowWriter` class is used for converting the data into **tfrecords**.
+
+        Params:
+            `window_size`: window_size is the window size of the data frame.
+
+            `steps`: steps is the step size of the **rolling window**.
+
+            `freq`: freq is the **frequency** of the data captured.
+
+            `model_type`: model_type it is to mention the type of model to opt into a particular type of
+            processing of data.
         """
         self.wsize = window_size
         self.steps = steps
@@ -31,14 +38,19 @@ class WindowWriter:
 
     def _convert_to_power_spectrums(self, features: pd.DataFrame) -> np.ndarray:
         """
-        _convert_to_power_spectrums method is used to obtain the power spectrum of each columnar signal data in the
-        given dataframe. Initially, hamming window is applied on the data, to minimize the data's side lobe and
-        improve the quality of the data. Next, we make use of FFT to split the data into it's base frequencies.
-        Finally, the power spectrum is attained, by computing the portion of a data's power falling within given
-        frequency bins. This entire process is completed with the help of the welch method of Scipy's signal
-        processing capabilities.
-        :param features: features is the window of dataframe in which each column's power spectrum must be calculated.
-        :return: This function returns the calculated power spectrum's.
+        `_convert_to_power_spectrums` method is used to obtain the **power spectrum** of each **columnar signal data**
+        in the given dataframe. Initially, **hamming window** is applied on the data, to minimize the data's
+        **side lobe** and improve the quality of the data. Next, we make use of **FFT** to split the data into
+        it's base **frequencies**. Finally, the **power spectrum** is attained, by computing the portion of a
+        data's power falling within given **frequency bins**. This entire process is completed with the help of the
+        **welch** method of **Scipy's signal processing** capabilities.
+
+        Params:
+            `features`: features is the window of dataframe in which each column's **power spectrum** must
+            be calculated.
+
+        Returns:
+            This function returns the **calculated power spectrum's**.
         """
         pxxs = []
 
@@ -61,10 +73,16 @@ class WindowWriter:
         self, x_win: pd.DataFrame, y_win: pd.DataFrame = pd.DataFrame([[0, 0, 0]])
     ) -> tuple[np.ndarray, np.ndarray]:
         """
-        window_processing method is used for processing the feature and targets of a given window dataframe.
-        :param x_win: x_win is the window dataframe of features.
-        :param y_win: y_win is the window dataframe of targets.
-        :return: This function returns a tuple of flattened features and majority target.
+        `window_processing` method is used for **processing** the **feature and targets** of a given
+        **window dataframe**.
+
+        Params:
+            `x_win`: x_win is the window dataframe of features.
+
+            `y_win`: y_win is the window dataframe of targets.
+
+        Returns:
+            This function returns a tuple of **flattened features and majority target**.
         """
         if self.m_type == "RNN":
             x = self._convert_to_power_spectrums(x_win)
@@ -82,11 +100,17 @@ class WindowWriter:
 
     def tf_record_writer(self, data: dd.DataFrame, path: str):
         """
-        tf_record_writer method is used to create TFRecords from the given data. The TFRecords are used to improve the
-        performance of the model training and handle BIG DATA. This data is usually loaded directly to the GPU.
-        :param data: The DataFrame data to be converted to TFRecords.
-        :param path: The directory in which the TFRecords data must be stored.
-        :return: Finally, this function returns the length of the tfrecord dataset.
+        `tf_record_writer` method is used to create **TFRecords** from the given data. The **TFRecords** are used to
+        **improve the performance** of the model training and handle **BIG DATA**. This data is usually loaded
+        directly to the **GPU**.
+
+        Params:
+            `data`: The DataFrame data to be converted to **TFRecords**.
+
+            `path`: The **directory** in which the **TFRecords** data must be stored.
+
+        Returns:
+            Finally, this function returns the **length of the tfrecord dataset**.
         """
         data = data.fillna(0)
         size = 0
@@ -121,10 +145,15 @@ class WindowWriter:
     @staticmethod
     def load_csv_data(meta_path: str, data_path: str) -> dd.DataFrame:
         """
-        load_csv_data method is used to filter and fetch the required data from the unprocessed csv data.
-        :param meta_path: meta path is the directory in which the processed metadata is present.
-        :param data_path: data path is the directory in which all the data is present.
-        :return: Finally, this function returns the filtered data from all the data.
+        `load_csv_data` method is used to **filter and fetch** the required data from the **unprocessed csv data**.
+        Params:
+            `meta_path`: meta_path is the **directory** in which the **processed metadata** is present.
+
+            `data_path`: data_path is the **directory** in which all the data is present.
+
+        Returns:
+            Finally, this function returns the **filtered data** from all the data.
+
         """
         metadata = pd.read_csv(meta_path)
         dataset_path = list(

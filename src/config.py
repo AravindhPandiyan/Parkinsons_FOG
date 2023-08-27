@@ -21,8 +21,8 @@ tf.keras.backend.set_floatx("float64")
 
 class Preprocessing:
     """
-    Preprocessing is a configured class which bring together all the other functions and class and makes use of them to
-    process the data.
+    `Preprocessing` is a **configured** class which bring together all the other functions and class and makes use of
+    them to **process the data**.
     """
 
     _CONFIG_PATH = "../config/process/"
@@ -32,9 +32,12 @@ class Preprocessing:
     @classmethod
     def _len_writer(cls, type_d: str, data_len: int):
         """
-        _len_writer method is used to write the length of the dataset into the json config file.
-        :param type_d: type_d is used mention the type of data used.
-        :param data_len: data_len is used for mentioning the data's length after processing.
+        `_len_writer` method is used to write the **length** of the dataset into the json **config file**.
+
+        Args:
+            `type_d`: type_d is used mention the **type** of data used.
+
+            `data_len`: data_len is used for mentioning the data's **length** after **processing**.
         """
         with open(cls._JSON_CONFIG) as file:
             config = json.load(file)
@@ -51,9 +54,12 @@ class Preprocessing:
     )
     def tdcsfog_rnn_model_preprocessing(cfg: DictConfig):
         """
-        tdcsfog_rnn_model_preprocessing method is used to fetch and filter all the data that was tested in lab
-        conditions for rnn model.
-        :param cfg: cfg parameter is used for accessing the configurations for the specific process types processing.
+        `tdcsfog_rnn_model_preprocessing` method is used to **fetch** and **filter** all the data that was
+        tested in **lab conditions** for **rnn** model.
+
+        Args:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process types **processing**.
+
         """
         cfg_ps = cfg.power_spectrum
         current_path = utils.get_original_cwd() + "/"
@@ -74,9 +80,12 @@ class Preprocessing:
     )
     def tdcsfog_cnn_model_preprocessing(cfg: DictConfig):
         """
-        tdcsfog_cnn_model_preprocessing method is used to fetch and filter all the data that was tested in lab
-        conditions for cnn model.
-        :param cfg: cfg parameter is used for accessing the configurations for the specific process types processing.
+        `tdcsfog_cnn_model_preprocessing` method is used to **fetch** and **filter** all the data that was
+        tested in **lab conditions** for **cnn** model.
+
+        Args:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process types **processing**.
+
         """
         current_path = utils.get_original_cwd() + "/"
         ww = WindowWriter(cfg.window_size, cfg.steps)
@@ -96,9 +105,15 @@ class Preprocessing:
     )
     def defog_rnn_model_preprocessing(cfg: DictConfig):
         """
-        defog_rnn_model_preprocessing method is used to fetch and filter all the data that was obtained from the
-        subjects activities in their homes for rnn model.
-        :param cfg: cfg parameter is used for accessing the configurations for the specific process types processing.
+        `defog_rnn_model_preprocessing` method is used to **fetch** and **filter** all the data that was obtained
+        from the **subjects activities** in their **homes** for **rnn** model.
+
+        Args:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
+            types **processing**.
+
+        Returns:
+
         """
         cfg_ps = cfg.power_spectrum
         current_path = utils.get_original_cwd() + "/"
@@ -124,9 +139,12 @@ class Preprocessing:
     )
     def defog_cnn_model_preprocessing(cfg: DictConfig):
         """
-        defog_rnn_model_preprocessing method is used to fetch and filter all the data that was obtained from the
-        subjects activities in their homes for cnn model.
-        :param cfg: cfg parameter is used for accessing the configurations for the specific process types processing.
+        `defog_rnn_model_preprocessing` method is used to **fetch** and **filter** all the data that was obtained
+        from the **subjects activities** in their **homes** for **cnn** model.
+
+        Args:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process types **processing**.
+
         """
         current_path = utils.get_original_cwd() + "/"
         ww = WindowWriter(cfg.window_size, cfg.steps)
@@ -146,8 +164,8 @@ class Preprocessing:
 
 class Modeling:
     """
-    Modeling is a configured class which bring together all the other functions and class and makes use of them to
-    build amd train the model.
+    `Modeling` is a **configured** class which bring together all the other **functions** and **class** and makes
+    use of them to **build amd train the model**.
     """
 
     TRAIN_DATA = None
@@ -160,12 +178,17 @@ class Modeling:
     _JSON_CONFIG = "config/training.json"
 
     @staticmethod
-    def _custom_map_loss(y_true, y_pred):
+    def _custom_map_loss(y_true: tf.Tensor, y_pred: tf.Tensor):
         """
-        _custom_map_loss is used for calculating the mean Average Precision loss for the model.
-        :param y_true: y_true is the actual values.
-        :param y_pred: y_pred is the predicted values.
-        :return: Finally, the loss values is calculated and returned. The loss value will be in negative.
+        `_custom_map_loss` is used for calculating the **mean Average Precision loss** for the model.
+
+        Args:
+            `y_true`: y_true is the **actual values**.
+
+            `y_pred`: y_pred is the **predicted values**.
+
+        Returns:
+            Finally, the **loss** values is calculated and returned. The **loss** value will be in **negative**.
         """
         y_true_float = tf.cast(y_true, tf.float64)
         intersection = tf.reduce_sum(tf.minimum(y_true_float, y_pred))
@@ -179,10 +202,13 @@ class Modeling:
         cls, cfg: DictConfig, builder: ConstructCNN | ConstructRNN, type_d: str
     ):
         """
-        _build_model is a private method is meant to be only used withing the class for building models.
-        :param cfg: cfg is used to access the model configuration.
-        :param builder: builder is used to construct the model.
-        :param type_d: type_d is used for identifying the type of data.
+        `_build_model` is a **private method** meant to be only used withing the class for **building models**.
+        Args:
+            `cfg`: cfg is used to access the model **configuration**.
+
+            `builder`: builder is used to **construct the model**.
+
+            `type_d`: type_d is used for identifying the **type of data**.
         """
         try:
             with tf.device("/GPU:0"):
@@ -236,8 +262,10 @@ class Modeling:
     )
     def build_tdcsfog_rnn_model(cfg: DictConfig):
         """
-        build_tdcsfog_rnn_model method is used to construct a rnn model for training on the tdcsfog data.
-        :param cfg: cfg parameter is used for accessing the configurations for the specific model.
+        `build_tdcsfog_rnn_model` method is used to construct a **rnn model** for **training** on the **tdcsfog data**.
+
+        Args:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
         """
         cfg = cfg.tdcsfog
         builder = ConstructRNN()
@@ -250,8 +278,10 @@ class Modeling:
     )
     def build_tdcsfog_cnn_model(cfg: DictConfig):
         """
-        build_defog_rnn_model method is used to construct a rnn model for training on the defog data.
-        :param cfg: cfg parameter is used for accessing the configurations for the specific model.
+        `build_tdcsfog_cnn_model` method is used to construct a **cnn model** for **training** on the **tdcsfog data**.
+
+        Args:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
         """
         cfg = cfg.tdcsfog
         builder = ConstructCNN()
@@ -264,8 +294,10 @@ class Modeling:
     )
     def build_defog_rnn_model(cfg: DictConfig):
         """
-        build_tdcsfog_rnn_model method is used to construct a cnn model for training on the tdcsfog data.
-        :param cfg: cfg parameter is used for accessing the configurations for the specific model.
+        `build_defog_rnn_model` method is used to construct a **rnn model** for **training** on the **defog data**.
+
+        Args:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
         """
         cfg = cfg.defog
         builder = ConstructRNN()
@@ -278,8 +310,10 @@ class Modeling:
     )
     def build_defog_cnn_model(cfg: DictConfig):
         """
-        build_defog_cnn_model method is used to construct a cnn model for training on the defog data.
-        :param cfg: cfg parameter is used for accessing the configurations for the specific model.
+        `build_defog_cnn_model` method is used to construct a **cnn model** for **training** on the **defog data**.
+
+        Args:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
         """
         cfg = cfg.defog
         builder = ConstructCNN()
@@ -289,9 +323,11 @@ class Modeling:
     @classmethod
     def train_tdcsfog_rnn_model(cls) -> Model | str:
         """
-        train_tdcsfog_model method is used to train the TDCSFOG RNN model.
-        :return: It if the necessary components are present it trains the model and return's it, if not it will not
-        return anything.
+        `train_tdcsfog_rnn_model` method is used to train the **TDCSFOG RNN** model.
+
+        Returns:
+            It returns the **model** if the necessary **components** are present to **train** the **model** and
+            return's a **warning string**, if the model is not **constructed** first.
         """
         if (
             cls.TRAIN_DATA
@@ -310,9 +346,11 @@ class Modeling:
     @classmethod
     def train_tdcsfog_cnn_model(cls) -> Model | str:
         """
-        train_tdcsfog_model method is used to train the TDCSFOG CNN model.
-        :return: It if the necessary components are present it trains the model and return's it, if not it will return
-        a warning message.
+        `train_tdcsfog_cnn_model` method is used to train the **TDCSFOG CNN** model.
+
+        Returns:
+            It returns the **model** if the necessary **components** are present to **train** the **model** and
+            return's a **warning string**, if the model is not **constructed** first.
         """
         if (
             cls.TRAIN_DATA
@@ -331,9 +369,11 @@ class Modeling:
     @classmethod
     def train_defog_rnn_model(cls) -> Model | str:
         """
-        train_defog_model method is used to train the DEFOG RNN model.
-        :return: It if the necessary components are present it trains the model and return's it, if not it will return
-        a warning message.
+        `train_defog_rnn_model` method is used to train the **DEFOG RNN** model.
+
+        Returns:
+            It returns the **model** if the necessary **components** are present to **trains** the **model** and
+            return's a **warning string**, if the model is not **constructed** first.
         """
         if (
             cls.TRAIN_DATA
@@ -352,9 +392,11 @@ class Modeling:
     @classmethod
     def train_defog_cnn_model(cls) -> Model | str:
         """
-        train_defog_model method is used to train the DEFOG CNN model.
-        :return: It if the necessary components are present it trains the model and return's it, if not it will return
-        a warning message.
+        `train_defog_cnn_model` method is used to **train** the **DEFOG CNN** model.
+
+        Returns:
+            It returns the **model** if the necessary **components** are present to **trains** the **model** and
+            return's a **warning string**, if not it will return a **warning message**.
         """
         if (
             cls.TRAIN_DATA
@@ -373,7 +415,7 @@ class Modeling:
 
 class Inference(Modeling):
     """
-    Inference class inherits the Modeling class to allow for loading of model and prediction.
+    `Inference` class **inherits** the **Modeling** class to allow for **loading of model, and prediction**.
     """
 
     def __init__(self):
@@ -385,8 +427,11 @@ class Inference(Modeling):
 
     def load_tdcsfog_rnn_model(self) -> str | None:
         """
-        load_tdcsfog_rnn_model method is used to load the TDCSFOG RNN model.
-        :returns: If there is no checkpoints of the tdcsfog rnn model it will return a warning message, else nothing.
+        `load_tdcsfog_rnn_model` method is used to **load** the **TDCSFOG RNN** model.
+
+        Returns:
+            If there is **no checkpoints** of the **tdcsfog rnn model** it will return a **warning message**,
+            else nothing.
         """
         try:
             self._d_type = "tdcsfog"
@@ -407,8 +452,11 @@ class Inference(Modeling):
 
     def load_tdcsfog_cnn_model(self) -> str | None:
         """
-        load_tdcsfog_rnn_model method is used to load the TDCSFOG CNN model.
-        :returns: If there is no checkpoints of the tdcsfog cnn model it will return a warning message, else nothing.
+        `load_tdcsfog_rnn_model` method is used to **load** the **TDCSFOG CNN** model.
+
+        Returns:
+            If there is **no checkpoints** of the **tdcsfog cnn model** it will return a **warning message**,
+            else nothing.
         """
         try:
             self._d_type = "tdcsfog"
@@ -429,8 +477,11 @@ class Inference(Modeling):
 
     def load_defog_rnn_model(self) -> str | None:
         """
-        load_tdcsfog_rnn_model method is used to load the DEFOG RNN model.
-        :returns: If there is no checkpoints of the defog rnn model it will return a warning message, else nothing.
+        `load_tdcsfog_rnn_model` method is used to **load** the **DEFOG RNN** model.
+
+        Returns:
+            If there is **no checkpoints** of the **defog rnn model** it will return a **warning message**,
+            else nothing.
         """
         try:
             self._d_type = "defog"
@@ -451,8 +502,11 @@ class Inference(Modeling):
 
     def load_defog_cnn_model(self) -> str | None:
         """
-        load_tdcsfog_rnn_model method is used to load the DEFOG CNN model.
-        :returns: If there is no checkpoints of the defog cnn model it will return a warning message, else nothing.
+        `load_tdcsfog_rnn_model` method is used to load the **DEFOG CNN** model.
+
+        Returns:
+            If there is **no checkpoints** of the **defog cnn** model it will return a **warning message**,
+            else nothing.
         """
         try:
             self._d_type = "defog"
@@ -473,10 +527,19 @@ class Inference(Modeling):
 
     def predict_fog(self, data: pd.DataFrame) -> list | str:
         """
-        predict_fog method is used for performing prediction on the ML model that has been loaded into memory.
-        :param data: data is the series of data from accelerometer used for predicting if there is a fog detected.
-        :return: Finally, it returns the prediction list or if the model is not loaded it will return a warning string.
+        `predict_fog` method is used for **performing prediction** on the **ML model** that has been **loaded**
+        into memory.
+
+        Args:
+            `data`: data is the series of data from **accelerometer** used for **predicting** if there is a
+            **fog detected**.
+
+        Returns:
+            Finally, it returns the **prediction** list or if the model is **not loaded** it will return a
+            **warning string**.
+
         """
+
         if self.window_size and self.steps:
             if self._m_type == "RNN":
                 data, _ = self._processor.window_processing(data)

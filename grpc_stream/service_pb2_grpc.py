@@ -11,7 +11,7 @@ class PackageStub(object):
     def __init__(self, channel):
         """Constructor.
 
-        Args:
+        Params:
             channel: A grpc.Channel.
         """
         self.bidirectionalStream = channel.stream_stream(

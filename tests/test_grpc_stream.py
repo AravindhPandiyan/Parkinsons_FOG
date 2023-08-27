@@ -5,7 +5,7 @@ from grpc_stream import GRPCConnect, GRPCServe, PredictorJob
 
 def data_streamer():
     """
-    data_streamer method is used to test the client side streaming of the gRPC connection.
+    `data_streamer` method is used to **test** the client side streaming of the gRPC connection.
     """
     data = dd.read_parquet("data/raw/unlabeled")
     data[["AccV", "AccML", "AccAP"]] = data[["AccV", "AccML", "AccAP"]] * 9.80665
@@ -15,7 +15,13 @@ def data_streamer():
 
 def server(inference):
     """
-    server method is used to test the server side streaming of the gRPC connection.
+    `server` method is used to **test** the server side streaming of the gRPC connection.
+
+    Params:
+        `inference`: inference is the instance of a class used **servicing**.
+
+    Returns:
+
     """
     job = PredictorJob(inference)
     grpc_server = GRPCServe(job, "localhost:50051")

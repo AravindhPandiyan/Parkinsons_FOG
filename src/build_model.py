@@ -7,24 +7,32 @@ from tensorflow.keras import layers as tkl
 
 class ConstructRNN:
     """
-    ConstructRNN class is used for building RNN based model.
+    `ConstructRNN` is **constructs RNM model**.
     """
 
     def __init__(self, drop_rate: float = 0.2, fun_type: str = "tanh"):
         """
-        ConstructRNN class is used for building RNN based model.
-        :param drop_rate: drop_rate is used to mention the rate of dropout layer's.
-        :param fun_type: fun_type is the type of activation function.
+        `ConstructRNN` class is used for building **RNN** based model.
+
+        Params:
+            `drop_rate`: drop_rate is used to mention the **rate of dropout layer's**.
+
+            `fun_type`: fun_type is the type of **activation function**.
         """
         self.dp_rate = drop_rate
         self.act_type = fun_type
 
     def _lstm_layers(self, ly_in: KerasTensor, nodes: int) -> KerasTensor:
         """
-        _lstm_layers is a private method used to construct a 6 layered LSTM network with dropouts.
-        :param ly_in: ly_in is input for the first layer of the block.
-        :param nodes: nodes value is used for mentioning the number of neurons in each layer.
-        :returns: Finally, this method returns the output of the last layer of the block.
+        `_lstm_layers` is a private method used to construct a `6` layered LSTM network with dropouts.
+
+        Params:
+            `ly_in`: ly_in is input for the first layer of the block.
+
+            `nodes`: nodes value is used for mentioning the number of **neurons** in each layer.
+
+        Returns:
+            Finally, this method returns the output of the last layer of the block.
         """
         ll_in = tkl.LSTM(
             units=nodes, return_sequences=True, activation=self.act_type, name="LSTM-1"
@@ -52,11 +60,17 @@ class ConstructRNN:
 
     def build_model(self, data: tf.Tensor, size: tuple, nodes: int) -> Model:
         """
-        build_model method is uses the properties of the class to build the model.
-        :param data: data is used to find it's mean and variance to normalize it.
-        :param size: size is used to mention the input shape of the data.
-        :param nodes: nodes value is used for mentioning the number of neurons in each layer.
-        :return: Finally, this method returns the constructed model.
+        `build_model` method is uses the properties of the class to **build** the model.
+
+        Params:
+            `data`: data is used to find it's **mean and variance** to **normalize** it.
+
+            `size`: size is used to mention the **input shape** of the data.
+
+            `nodes`: nodes value is used for mentioning the number of **neurons** in each layer.
+
+        Returns:
+            Finally, this method returns the constructed model.
         """
         normalizer = tkl.Normalization()
         normalizer.adapt(data.map(lambda x, y: x))
@@ -69,24 +83,32 @@ class ConstructRNN:
 
 class ConstructCNN:
     """
-    ConstructCNN class is used for building CNN based model.
+    `ConstructCNN` is **constructs CNN model**.
     """
 
     def __init__(self, drop_rate: float = 0.2, fun_type: str = "relu"):
         """
-        ConstructCNN class is used for building CNN based model.
-        :param drop_rate: drop_rate is used to mention the rate of dropout layer's.
-        :param fun_type: fun_type is the type of activation function.
+        `ConstructCNN` class is used for building **CNN** based model.
+
+        Params:
+            `drop_rate`: drop_rate is used to mention the **rate of dropout layer's**.
+
+            `fun_type`: fun_type is the type of **activation function**.
         """
         self.dp_rate = drop_rate
         self.act_type = fun_type
 
     def _convo_layers(self, ly_in: KerasTensor, filters: list) -> KerasTensor:
         """
-        _convo_layers is a private method used to construct a 5 layered 1DConvo with AvgPooling.
-        :param ly_in: ly_in is input for the first layer of the block.
-        :param filters: filters value is used for mentioning the number of filters in each layer.
-        :return: Finally, this method returns the output of the last layer of the block.
+        `_convo_layers` is a private method used to **construct** a `5` layered **1DConvo** with **AvgPooling**.
+
+        Params:
+            `ly_in`: ly_in is input for the first layer of the block.
+
+            `filters`: filters value is used for mentioning the number of filters in each layer.
+
+        Returns:
+            Finally, this method returns the output of the last layer of the block.
         """
         cl_in = tkl.Conv1D(
             filters=filters[0],
@@ -134,10 +156,15 @@ class ConstructCNN:
 
     def _dense_layers(self, ly_in: KerasTensor, units: list) -> KerasTensor:
         """
-        _dense_layers is a private method used to construct a 6 layered ANN with Dropouts.
-        :param ly_in: ly_in is input for the first layer of the block.
-        :param units: units value is used for mentioning the number of neurons in each layer.
-        :return: Finally, this method returns the output of the last layer of the block.
+        `_dense_layers` is a private method used to construct a `6` layered **ANN** with **Dropouts**.
+
+        Params:
+            `ly_in`: ly_in is input for the first layer of the block.
+
+            `units`: units value is used for mentioning the number of **neurons** in each layer.
+
+        Returns:
+            Finally, this method returns the output of the last layer of the block.
         """
         dl_in = tkl.Dense(units=units[0], activation=self.act_type, name="Ann-in")(
             ly_in
@@ -157,11 +184,17 @@ class ConstructCNN:
 
     def build_model(self, data: tf.Tensor, size: tuple, nodes: DictConfig) -> Model:
         """
-        build_model method is uses the properties of the class to build the model.
-        :param data: data is used to find it's mean and variance to normalize it.
-        :param size: size is used to mention the input shape of the data.
-        :param nodes: nodes value is used for mentioning the number of neurons in each layer.
-        :return: Finally, this method returns the constructed model.
+        `build_model` method is uses the properties of the class to build the model.
+
+        Params:
+            `data`: data is used to find it's **mean and variance** to **normalize** it.
+
+            `size`: size is used to mention the **input shape** of the data.
+
+            `nodes`: nodes value is used for mentioning the number of **neurons** in each layer.
+
+        Returns:
+            Finally, this method returns the constructed model.
         """
         normalizer = tkl.Normalization()
         normalizer.adapt(data.map(lambda x, y: x))

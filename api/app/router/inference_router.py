@@ -35,11 +35,12 @@ controller = InferenceController()
 background_task_status = None
 
 
-def _background_streaming(address):
+def _background_streaming(address: str):
     """
-    _background_streaming is a private funtion used for setting up gRPC server-side session as a background task in an
-    API call.
-    :param address: address is the url path in which the gRPC server-side session will be made available.
+    `_background_streaming` Sets up a gRPC server-side session as a **background task** within an API call.
+
+    Params:
+        `address`: The URL path where the gRPC server-side session will be made available.
     """
     job = PredictorJob(controller)
     grpc_server = GRPCServe(job, address)
@@ -59,10 +60,13 @@ def _background_streaming(address):
 @router.post("/load", response_model=APIResponseModel)
 async def load_model(load: ModelTypesModel):
     """
-    load_model is an API route for loading the different model's into the system memory.
-    :param load: load is the data received from the user, containing request of a specific model to be loaded into
-    memory.
-    :return: The return values of the function is dependent on the state of API.
+    `load_model` is an API route for **loading** different models into the system memory.
+
+    Params:
+        `load`: Data received from the user, containing a request for a specific model to be loaded into memory.
+
+    Returns:
+        The return values of the function are dependent on the current state of the API.
     """
     try:
         msg = None
@@ -102,10 +106,12 @@ async def load_model(load: ModelTypesModel):
 @router.websocket("/predict/socket")
 async def web_socket_stream(websocket: WebSocket):
     """
-    web_socket_stream function is used for upgrading the http request responser link to a websocket for allowing
-    bidirectional data transfer for prediction using the model.
-    :param websocket: websocket is the parameter passed to the funtion by the decorator funtion, It is used for getting
-    the controlling the connection.
+    `web_socket_stream` Upgrades the HTTP request response link to a **websocket** for enabling bidirectional
+    data transfer for prediction using the model.
+
+    Params:
+        `websocket`: The **websocket** parameter passed to the function by the decorator function. It
+        is used to control the connection.
     """
     await websocket.accept()
     w_size = controller.window_size
@@ -153,13 +159,21 @@ async def prediction(
     choice: StreamingOptionModel, request: Request, background_tasks: BackgroundTasks
 ):
     """
-    prediction is an API route for loading the choices between Web Socket and gRPC connections for inference streaming.
-    :param choice: choice is the data received from the user, containing the type of streaming requested.
-    :param request: request is the parameter passed to the funtion by the decorator funtion, It is used for getting the
-    hosting url.
-    :param background_tasks: background_tasks is the parameter passed to the funtion by the decorator funtion, It is
-    used for running any long-running task or API freezing task to run in the background.
-    :return: The return values of the function is dependent on the state of API.
+    `prediction` is an API route for loading the choices between **Web Socket** and **gRPC** connections for
+    **inference streaming**.
+
+    Params:
+        `choice`: choice is the data received from the user, containing the type of
+        **streaming** requested.
+
+        `request`: request is the parameter passed to the funtion by the decorator funtion, It is used
+        for getting the hosting url.
+
+        `background_tasks`: background_tasks is the parameter passed to the funtion by the
+        decorator funtion, It is used for running any long-running task or API freezing task to run in the background.
+
+    Returns:
+        The return values of the function is dependent on the state of API.
     """
     global background_task_status
 

@@ -9,13 +9,20 @@ def fitting(
     model: Model, train_dataset: tf.Tensor, val_dataset: tf.Tensor, checkpoint_path: str
 ) -> Model:
     """
-    Fitting function is used to train the model with the given dataset.
-    :param model: model to be trained.
-    :param train_dataset: train dataset is used to train the model.
-    :param val_dataset: val dataset is used to validate the training of the model.
-    :param checkpoint_path: checkpoint_path is folders under ModelCheckpoint where the checkpoint of the model is  will
-    be stored.
-    :return: Finally, the function returns the trained model.
+    `fitting` function is used to **train** the model with the given dataset.
+
+    Params:
+        `model`: model to be **trained**.
+
+        `train_dataset`: train_dataset is used to **train** the model.
+
+        `val_dataset`: val_dataset is used to **validate** the **training** of the **model**.
+
+        `checkpoint_path`: **checkpoint_path** is folders under **ModelCheckpoint** where the **checkpoint**
+        of the **model** is will be **stored**.
+
+    Returns:
+        Finally, the function returns the **trained** model.
     """
     with open("config/training.json") as file:
         config = json.load(file)
@@ -41,4 +48,5 @@ def fitting(
         verbose=2,
         callbacks=[save_check_point, tensorboard_callback, time_stopping],
     )
+    model.load_weights(config["checkpoint_loc"] + "/" + checkpoint_path)
     return model

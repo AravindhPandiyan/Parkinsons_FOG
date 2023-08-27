@@ -16,9 +16,14 @@ controller = PreprocessorController()
 @router.post("/", response_model=APIResponseModel)
 async def process(digest: ModelTypesModel):
     """
-    process is an API route for preprocessing the different options of data in for each model architectures.
-    :param digest: digest is the data received from the user, containing the type of streaming requested.
-    :return: The return values of the function is dependent on the state of API.
+    `process` is an API route for **preprocessing** the different options of data in for each model architectures.
+
+    Params:
+        `digest`: digest is the data received from the user, containing the type of
+        streaming requested.
+
+    Returns:
+        The return values of the function is dependent on the state of API.
     """
     try:
         if digest.use_data == UsableData.TDCSFOG:

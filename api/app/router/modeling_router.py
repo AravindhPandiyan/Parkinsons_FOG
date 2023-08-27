@@ -17,11 +17,14 @@ executor = concurrent.futures.ThreadPoolExecutor()
 background_task_status = {}
 
 
-def _background_training(task_data):
+def _background_training(task_data: ModelTypesModel):
     """
-    _background_streaming is a private funtion used for setting up training of model ass a background task in an
-    API call.
-    :param task_data: task_data is used for beginning the training of a specific model mentioned in it.
+    `_background_streaming` is a private funtion used for setting up **training** of model as a background task in
+    an API call.
+
+    Params:
+        `task_data`: task_data is used for beginning the training of a specific model mentioned
+        in it.
     """
     if task_data.use_data == UsableData.TDCSFOG:
         if task_data.architecture == ArchitectureTypes.RNN:
@@ -47,10 +50,17 @@ def _background_training(task_data):
 @router.post("/build", response_model=APIResponseModel)
 async def build_model(build: ModelTypesModel):
     """
-    build_model is an API route for building different model's.
-    :param build: build is the data received from the user, containing the model requested by the user to be built.
-    :return: The return values of the function is dependent on the state of API.
+    `build_model` is an API route for **building** different model's.
+
+    Params:
+        `build`: build is the data received from the user, containing the model requested by
+        the user to be **constructed**.
+
+    Returns:
+        The return values of the function is dependent on the state of API.
+
     """
+
     try:
         if build.use_data == UsableData.TDCSFOG:
             if build.architecture == ArchitectureTypes.RNN:
@@ -80,12 +90,17 @@ async def build_model(build: ModelTypesModel):
 @router.post("/train", response_model=APIResponseModel)
 async def train_model(train: ModelTypesModel, background_tasks: BackgroundTasks):
     """
-    train_model is an API route for the training of different types model's.
-    :param train: train is the data received from the user, containing request of a specific model requested to be
-    trained.
-    :param background_tasks: background_tasks is the parameter passed to the funtion by the decorator funtion, It is
-    used for running any long-running task or API freezing task to run in the background.
-    :return: The return values of the function is dependent on the state of API.
+    `train_model` is an API route for the **training** of different types model's.
+
+    Params:
+        `train`: train is the data received from the user, containing request of a specific
+        model requested to be trained.
+
+        `background_tasks`: background_tasks is the parameter passed to the funtion by the
+        decorator funtion, It is used for running any long-running task or API freezing task to run in the background.
+
+    Returns:
+        The return values of the function is dependent on the state of API.
     """
     if (
         background_task_status.get(f"{train.use_data}_{train.architecture}")
