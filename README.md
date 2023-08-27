@@ -7,4 +7,4 @@
 - [src](docs/src/index.md)
 - [tests](docs/tests/index.md)
 
-<iframe src="https://cdn.rawgit.com/AravindhPandiyan/Parkinsons_FOG/master/docs/main.md"></iframe>
+<iframe src="docs/main.md"></iframe>
