@@ -6,9 +6,11 @@ from tests import ModelMetrics, data_streamer, server
 
 def _grpc_test(inference):
     """
-    _grpc_test is a private funtion to start simultaneous thread execution of the server-side and client-side code for
-    testing purpose
-    :param inference: inference is to make use of the existing inference instance in the server-side of the code.
+    `_grpc_test` is a **private funtion** to start **simultaneous thread execution** of the **server-side** and
+    **client-side** code for **testing** purpose.
+
+    Args:
+        inference: inference is to make use of the existing inference instance in the server-side of the code.
     """
     with concurrent.futures.ThreadPoolExecutor() as exe:
         exe.submit(server, inference)
@@ -17,7 +19,8 @@ def _grpc_test(inference):
 
 def main():
     """
-    The Main function is the initiating function that provides various options from processing to training the model.
+    `main` function is the **initiating function** that provides various options from **processing** to **training**
+    the model and for **inference**.
     """
     processing = Preprocessing()
     modeler = Modeling()
