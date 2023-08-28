@@ -1,5 +1,22 @@
 Module grpc_stream.server
 =========================
+gRPC Server Setup
+-----------------
+
+This module defines the `GRPCServe` class, which is used to create and manage a gRPC server for hosting gRPC services.
+The server can host various types of gRPC services (defined by 'JOB' classes) that allow communication between clients
+and the server using different types of gRPC interactions.
+
+Classes:
+- `GRPCServe`: A class used to create a gRPC server and host specified gRPC services.
+
+Usage:
+- Import the necessary modules and classes.
+- Create an instance of the `Jobs`-derived 'JOB' class that corresponds to the gRPC service you want to host.
+- Create an instance of the `GRPCServe` class, passing the 'JOB' class instance, the host IP and port, and optionally
+  the number of threads to use for handling requests.
+- Use the `open_line()` method to start the gRPC services and make them available for communication.
+- After you're done, use the `close_line()` method to stop the gRPC services and close the server.
 
 Classes
 -------
