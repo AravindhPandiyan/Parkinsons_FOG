@@ -1,88 +1,163 @@
 .
 ├── api
-│   ├── app
-│   │   ├── controller
-│   │   │   ├── __init__.py
-│   │   │   ├── inference_controller.py
-│   │   │   ├── modeling_controller.py
-│   │   │   └── preprocessing_controller.py
-│   │   └── router
-│   │       ├── __init__.py
-│   │       ├── inference_router.py
-│   │       ├── modeling_router.py
-│   │       └── preprocessing_router.py
-│   ├──__init__.py
-│   └── main.py
+│   └── app
+│       ├── controller
+│       │   ├── inference_controller.py
+│       │   ├── __init__.py
+│       │   ├── metrics_controller.py
+│       │   ├── modeling_controller.py
+│       │   └── preprocessing_controller.py
+│       ├── dependencies.py
+│       ├── __init__.py
+│       ├── models
+│       │   ├── inference_model.py
+│       │   ├── __init__.py
+│       │   └── metrics_model.py
+│       └── router
+│           ├── inference_router.py
+│           ├── __init__.py
+│           ├── metrics_router.py
+│           ├── modeling_router.py
+│           └── preprocessing_router.py
+├── api_main.py
 ├── config
-│   ├── model
-│   │   ├── __init__.py
-│   │   ├── cnn_model.yaml
-│   │   └── rnn_model.yaml
-│   ├── process
-│   │   ├── __init__.py
-│   │   ├── defog_process.yaml
-│   │   └── tdcsfog_process.yaml
-│   ├── __init__.py
-│   └── training.json
+│   ├── inference.json
+│   ├── __init__.py
+│   ├── model
+│   │   ├── cnn_model.yaml
+│   │   ├── __init__.py
+│   │   └── rnn_model.yaml
+│   ├── process
+│   │   ├── defog_process.yaml
+│   │   ├── __init__.py
+│   │   └── tdcsfog_process.yaml
+│   └── training.json
 ├── data
-│   ├── final
-│   ├── processed
-│   │   ├── defog
-│   │   │   ├── cnn.tfrecords
-│   │   │   ├── rnn.tfrecords
-│   │   │   └── processed_defog_metadata.csv
-│   │   └── tdcsfog
-│   │       ├── cnn.tfrecords
-│   │       ├── rnn.tfrecords
-│   │       └── processed_tdcsfog_metadata.csv
-│   └── raw
-│       ├── daily_metadata.csv
-│       ├── defog_metadata.csv
-│       ├── events.csv
-│       ├── sample_submission.csv
-│       ├── subjects.csv
-│       ├── tasks.csv
-│       ├── tdcsfog_metadata.csv
-│       ├── test
-│       │   ├── defog
-│       │   └── tdcsfog
-│       ├── train
-│       │   ├── defog
-│       │   ├── notype
-│       │   └── tdcsfog
-│	└── unlabeled
-│
+│   ├── final
+│   ├── processed
+│   │   ├── defog
+│   │   │   ├── cnn.tfrecords
+│   │   │   ├── processed_defog_metadata.csv
+│   │   │   └── rnn.tfrecords
+│   │   └── tdcsfog
+│   │       ├── cnn.tfrecords
+│   │       ├── processed_tdcsfog_metadata.csv
+│   │       └── rnn.tfrecords
+│   └── raw
+│       ├── daily_metadata.csv
+│       ├── defog_metadata.csv
+│       ├── events.csv
+│       ├── sample_submission.csv
+│       ├── subjects.csv
+│       ├── tasks.csv
+│       ├── tdcsfog_metadata.csv
+│       ├── test
+│       │   ├── defog
+│       │   │   └── 02ab235146.csv
+│       │   └── tdcsfog
+│       │       └── 003f117e14.csv
+│       ├── tlvmc-parkinsons-freezing-gait-prediction.zip
+│       ├── train
+│       │   ├── defog
+│       │   │   └── *.csv
+│       │   ├── notype
+│       │   │   └── *.csv
+│       │   └── tdcsfog
+│       │       └── *.csv
+│       └── unlabeled
+│           └── *.parquet
 ├── docs
+│   ├── api
+│   │   └── app
+│   │       ├── controller
+│   │       │   ├── index.md
+│   │       │   ├── inference_controller.md
+│   │       │   ├── metrics_controller.md
+│   │       │   ├── modeling_controller.md
+│   │       │   └── preprocessing_controller.md
+│   │       ├── dependencies.md
+│   │       ├── index.md
+│   │       ├── models
+│   │       │   ├── index.md
+│   │       │   ├── inference_model.md
+│   │       │   └── metrics_model.md
+│   │       └── router
+│   │           ├── index.md
+│   │           ├── inference_router.md
+│   │           ├── metrics_router.md
+│   │           ├── modeling_router.md
+│   │           └── preprocessing_router.md
+│   ├── api_main.md
+│   ├── grpc_stream
+│   │   ├── client.md
+│   │   ├── index.md
+│   │   ├── jobs.md
+│   │   ├── server.md
+│   │   ├── service_pb2_grpc.md
+│   │   └── service_pb2.md
+│   ├── main.md
+│   ├── src
+│   │   ├── build_model.md
+│   │   ├── config.md
+│   │   ├── index.md
+│   │   ├── load_data.md
+│   │   ├── preprocess.md
+│   │   └── train_model.md
+│   └── tests
+│       ├── index.md
+│       ├── test_grpc_stream.md
+│       └── test_model.md
+├── folder_structure.txt
+├── grpc_stream
+│   ├── client.py
+│   ├── __init__.py
+│   ├── jobs.py
+│   ├── server.py
+│   ├── service_pb2_grpc.py
+│   ├── service_pb2.py
+│   └── service.proto
 ├── images
+│   ├── processed_defog_metadata_plot_1.png
+│   ├── processed_defog_metadata_plot_2.png
+│   ├── processed_tdcsfog_metadata_plot_1.png
+│   └── processed_tdcsfog_metadata_plot_2.png
+├── LICENSE
 ├── logs
-│   └── training_logs
-│       ├── train
-│       └── validation
+│   └── training_logs
+│       ├── General Logs
+│       ├── MLFlow
+│       └── TensorBoard
+│           ├── train
+│           │   └── events.out.tfevents.*.Energizer.*.*.v2
+│           └── validation
+│               └── events.out.tfevents.*.Energizer.*.*.v2
+├── main.py
+├── Makefile
 ├── models
-│   ├── ModelCheckpoint
-│   │   ├── defog
-│   │   │   ├── CNN
-│   │   │   └── RNN
-│   │   └── tdcsfog
-│   │       ├── CNN
-│   │       └── RNN
+│   └── ModelCheckpoint
+│       ├── defog
+│       │   ├── CNN
+│       │   │   └── checkpoint
+│       │   └── RNN
+│       └── tdcsfog
+│           ├── CNN
+│           │   └── checkpoint
+│           └── RNN
+│               └── checkpoint
 ├── notebooks
-│   ├── analyze_results.ipynb
-│   ├── defog_metadata_processing.ipynb
-│   ├── Parkinsons_FOG_Prediction.ipynb
-│   └── tdcsfog_metadata_processing.ipynb
+│   ├── defog_metadata_processing.ipynb
+│   └── tdcsfog_metadata_processing.ipynb
 ├── README.md
 ├── src
-│   ├── __init__.py
-│   ├── build_model.py
-│   ├── config.py
-│   ├── load_data.py
-│   ├── preprocess.py
-│   └── train_model.py
-├── main.py
+│   ├── build_model.py
+│   ├── config.py
+│   ├── __init__.py
+│   ├── load_data.py
+│   ├── preprocess.py
+│   └── train_model.py
 └── tests
     ├── __init__.py
-    ├── test_process.py
-    └── test_train_model.py
+    ├── test_grpc_stream.py
+    └── test_model.py
 
-44 directories, 1133 files
+51 directories, 1212 files
