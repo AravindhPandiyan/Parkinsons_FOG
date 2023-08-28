@@ -1,6 +1,3 @@
-data/final/
-data/processed/*
-data/raw/*
 outputs/
 __pycache__/
 .idea
