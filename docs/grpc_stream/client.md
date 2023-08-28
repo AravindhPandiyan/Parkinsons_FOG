@@ -1,19 +1,5 @@
 Module grpc_stream.client
 =========================
-gRPC Connection and Data Streaming
-----------------------------------
-
-This module defines a class `GRPCConnect` that is used for connecting to a gRPC server and streaming data
-bidirectionally. The class provides methods to establish a connection, send data packets, and receive data packets.
-
-Classes:
-- `GRPCConnect`: Connects to a gRPC server servicer and streams data.
-
-Usage:
-- Import the necessary modules and classes.
-- Create an instance of the `GRPCConnect` class, providing the data generator, host address, and state.
-- Use the `connect_to_stream` method to establish a connection and start data streaming.
-- Depending on the state, receive data as a generator or print it to the console.
 
 Classes
 -------

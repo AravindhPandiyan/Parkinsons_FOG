@@ -1,21 +1,5 @@
 Module grpc_stream.jobs
 =======================
-gRPC Service Jobs
------------------
-
-This module defines classes for various jobs related to gRPC services. These jobs are used to set up and handle
-different types of gRPC service interactions, including Unary RPC, Server-side streaming RPC, Client-side streaming RPC,
-and Bi-directional streaming RPC.
-
-Classes:
-- `Jobs`: An empty class used for grouping classes of similar types together.
-- `PredictorJob`: A service class for servicing client connections using bidirectional streaming.
-
-Usage:
-- Import the necessary modules and classes.
-- Depending on the specific job, create an instance of the respective class, providing required parameters.
-- Use the methods provided by these classes to handle gRPC service interactions.
-- The methods provide specific functionality for the corresponding types of gRPC interactions.
 
 Classes
 -------
