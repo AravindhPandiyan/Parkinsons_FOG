@@ -4,6 +4,8 @@ import tensorflow as tf
 from keras.models import Model
 from tensorflow_addons.callbacks import TimeStopping
 
+from logger_config import logger as log
+
 
 def fitting(
     model: Model, train_dataset: tf.Tensor, val_dataset: tf.Tensor, checkpoint_path: str
@@ -24,6 +26,7 @@ def fitting(
     Returns:
         Finally, the function returns the **trained** model.
     """
+    log.info("Function Call")
     with open("config/training.json") as file:
         config = json.load(file)
 
@@ -35,7 +38,10 @@ def fitting(
         save_weights_only=True,
     )
     tensorboard_callback = tf.keras.callbacks.TensorBoard(
-        log_dir=config["log_loc"], histogram_freq=1, write_graph=True, write_images=True
+        log_dir=config["tensorBoard_logs"],
+        histogram_freq=1,
+        write_graph=True,
+        write_images=True,
     )
     time_stopping = TimeStopping(seconds=60 * 60 * 4)
     gpu_count = len(tf.config.list_logical_devices("GPU"))

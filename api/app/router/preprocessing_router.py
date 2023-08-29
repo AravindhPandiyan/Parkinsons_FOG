@@ -8,6 +8,7 @@ from api.app.dependencies import (
     ModelTypesModel,
     UsableData,
 )
+from logger_config import logger as log
 
 router = APIRouter()
 controller = PreprocessorController()
@@ -16,15 +17,17 @@ controller = PreprocessorController()
 @router.post("/", response_model=APIResponseModel)
 async def process(digest: ModelTypesModel):
     """
-    `process` is an API route for **preprocessing** the different options of data in for each model architectures.
+    `process` is an API route for **preprocessing** the different options of data in for each model architecture.
 
     Params:
         `digest`: digest is the data received from the user, containing the type of
         streaming requested.
 
     Returns:
-        The return values of the function is dependent on the state of API.
+        The return values of the function are dependent on the state of the API.
     """
+    log.info("API Call")
+
     try:
         if digest.use_data == UsableData.TDCSFOG:
             if digest.architecture == ArchitectureTypes.RNN:
@@ -44,10 +47,12 @@ async def process(digest: ModelTypesModel):
             f"{digest.use_data} for training the {digest.architecture} model has been processed and converted to "
             "TFRecords."
         )
+        log.info(msg)
         resp = {"detail": msg}
         return JSONResponse(status_code=status.HTTP_201_CREATED, content=resp)
 
-    except Exception:
+    except Exception as e:
+        log.error(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="The Server has a Boo Boo.",

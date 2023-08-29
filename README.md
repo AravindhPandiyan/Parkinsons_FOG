@@ -8,10 +8,12 @@ A comprehensive system for predicting freezing of gait (FoG) using machine learn
   - APIs
     - Explore the API documentation for detailed usage instructions:
       - [pdoc](docs/api/app/index.md)
-      - Swagger: run the **api_main.py** and access this is link (http://localhost:8000/docs).
+      - Swagger: run the **api_main.py** and access this is link: http://localhost:8000/docs.
+      - ReDoc: run the **api_main.py** and access this is link: http://localhost:8000/redocs.
   
   - [API Main file](docs/api_main.md)
   - [gRPC Stream](docs/grpc_stream/index.md)
+  - [Logger](docs/logger_config.md)
   - [Main file](docs/main.md)
   - [Source](docs/src/index.md)
   - [Testing](docs/tests/index.md)

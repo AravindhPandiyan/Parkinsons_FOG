@@ -5,6 +5,7 @@ from typing import Generator
 import grpc
 
 from grpc_stream import service_pb2, service_pb2_grpc
+from logger_config import logger as log
 
 
 class GRPCConnect:
@@ -25,6 +26,7 @@ class GRPCConnect:
             `state`: **{0 or ‘Test’, 1 or ‘Generator’}**, default `1`. This is for setting if the connect_to_stream
             method should act as normal **method** or return a **generator**.
         """
+        log.info("Class Initialization")
         self.address = host_address
         self.gen = data_generator
         self.method_state = state
@@ -50,8 +52,10 @@ class GRPCConnect:
         only for testing purpose. **Generator state**, where it will allow the user to receive the data continuously.
 
         Returns:
-            This method will return a **generator** if the state is `1` or above else it will act like a normal method.
+            This method will return a **generator** if the state is `1` or above else, it will act like a normal method.
         """
+        log.info("Method Call")
+
         with grpc.insecure_channel(self.address) as channel:
             stub = service_pb2_grpc.PackageStub(channel)
             predictions = stub.bidirectionalStream(self._client_data_stream())

@@ -11,6 +11,7 @@ from api.app.dependencies import (
     UsableData,
 )
 from api.app.models import MetricsResponseModel
+from logger_config import logger as log
 
 router = APIRouter()
 controller = MetricsController()
@@ -22,12 +23,14 @@ async def test_model(test: ModelTypesModel):
     `test_model` is an API route for testing the different model's.
 
     Params:
-        `test`: test is the data received from the user, containing request of specific model to
+        `test`: test is the data received from the user, containing request of a specific model to
         be **tested**.
 
     Returns:
-        The return values of the function is dependent on the state of API.
+        The return values of the function are dependent on the state of the API.
     """
+    log.info("API Call")
+
     try:
         msg = None
 
@@ -49,12 +52,14 @@ async def test_model(test: ModelTypesModel):
             return JSONResponse(status_code=status.HTTP_200_OK, content=msg)
 
         else:
+            log.warning(msg)
             resp = {"detail": msg}
             return JSONResponse(
                 status_code=status.HTTP_424_FAILED_DEPENDENCY, content=resp
             )
 
-    except Exception:
+    except Exception as e:
+        log.error(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="The Server has a Boo Boo.",

@@ -38,6 +38,7 @@ Functions:
 
 import concurrent.futures
 
+from logger_config import logger as log
 from src import Inference, Modeling, Preprocessing
 from tests import ModelMetrics, data_streamer, server
 
@@ -47,9 +48,10 @@ def _grpc_test(inference):
     `_grpc_test` is a **private funtion** to start **simultaneous thread execution** of the **server-side** and
     **client-side** code for **testing** purpose.
 
-    Args:
+    Params:
         inference: inference is to make use of the existing inference instance in the server-side of the code.
     """
+    log.info("Function Call")
 
     with concurrent.futures.ThreadPoolExecutor() as exe:
         exe.submit(server, inference)
@@ -61,7 +63,7 @@ def main():
     `main` function is the **initiating function** that provides various options from **processing** to **training**
     the model and for **inference**.
     """
-
+    log.info("Function Call")
     processing = Preprocessing()
     modeler = Modeling()
     infer = Inference()
@@ -127,8 +129,10 @@ def main():
                     stage_2 = input("Enter the option alphabet: ")
                     calls[stage_1][stage_2]()
 
-                except KeyError:
-                    print("\nGoing back...")
+                except KeyError as i:
+                    msg = "Going back..."
+                    log.info(msg + ": " + str(i))
+                    print(f"\n{msg}")
                     continue
 
             else:
@@ -136,10 +140,14 @@ def main():
                     calls[stage_1](infer)
 
                 else:
-                    print("\nPlease First Load the model.")
+                    msg = "Please First Load the model."
+                    log.warning(msg)
+                    print(f"\n{msg}")
 
-        except (KeyboardInterrupt, KeyError):
-            print("\nThank you for Using Parkinson's FOG Detection.")
+        except (KeyboardInterrupt, KeyError) as i:
+            msg = "Thank you for Using Parkinson's FOG Detection."
+            log.info(msg + ": " + str(i))
+            print(f"\n{msg}")
             break
 
 

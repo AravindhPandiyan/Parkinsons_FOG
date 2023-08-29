@@ -29,6 +29,7 @@ from api.app.models import (
     WebSocketResponseModel,
 )
 from grpc_stream import GRPCServe, PredictorJob
+from logger_config import logger as log
 
 router = APIRouter()
 controller = InferenceController()
@@ -42,18 +43,20 @@ def _background_streaming(address: str):
     Params:
         `address`: The URL path where the gRPC server-side session will be made available.
     """
+    log.info("Funtion Call")
     job = PredictorJob(controller)
     grpc_server = GRPCServe(job, address)
 
     try:
         grpc_server.open_line()
         global background_task_status
-        print(
-            "\nThere was a Connection Timeout as there was no data transfer for 60 seconds."
-        )
+        msg = "There was a Connection Timeout as there was no data transfer for 60 seconds."
+        log.warning(msg)
+        print(f"\n{msg}")
         background_task_status = "completed"
 
-    except Exception:
+    except Exception as e:
+        log.error(e)
         grpc_server.close_line()
 
 
@@ -68,6 +71,8 @@ async def load_model(load: ModelTypesModel):
     Returns:
         The return values of the function are dependent on the current state of the API.
     """
+    log.info("API Call")
+
     try:
         msg = None
 
@@ -86,17 +91,19 @@ async def load_model(load: ModelTypesModel):
                 msg = controller.load_defog_cnn()
 
         if msg:
-            resp = {"detail": msg}
-            return JSONResponse(
-                status_code=status.HTTP_424_FAILED_DEPENDENCY, content=resp
+            log.warning(msg)
+            raise HTTPException(
+                status_code=status.HTTP_424_FAILED_DEPENDENCY, detail=msg
             )
 
         else:
             msg = f"{load.use_data} data trained {load.architecture} model has been loaded into memory."
+            log.info(msg)
             resp = {"detail": msg}
             return JSONResponse(status_code=status.HTTP_200_OK, content=resp)
 
-    except Exception:
+    except Exception as e:
+        log.error(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="The Server has a Boo Boo.",
@@ -113,6 +120,8 @@ async def web_socket_stream(websocket: WebSocket):
         `websocket`: The **websocket** parameter passed to the function by the decorator function. It
         is used to control the connection.
     """
+    log.info("Web Socket start")
+
     await websocket.accept()
     w_size = controller.window_size
     buffer = deque(maxlen=w_size)
@@ -140,15 +149,17 @@ async def web_socket_stream(websocket: WebSocket):
 
                     count = 0
 
-            except asyncio.TimeoutError:
+            except asyncio.TimeoutError as w:
+                msg = "There was a Connection Timeout as there was no data transfer for 60 seconds."
+                log.warning(msg + ": " + str(w))
                 await websocket.close()
-                print(
-                    "\nThere was a Connection Timeout as there was no data transfer for 60 seconds."
-                )
+                print(f"\n{msg}")
                 break
 
-    except WebSocketDisconnect:
-        print("\nA Client just Disconnected.")
+    except WebSocketDisconnect as i:
+        msg = "A Client just Disconnected."
+        log.info(msg + ": " + str(i))
+        print(f"\n{msg}")
 
 
 @router.get(
@@ -170,11 +181,13 @@ async def prediction(
         for getting the hosting url.
 
         `background_tasks`: background_tasks is the parameter passed to the funtion by the
-        decorator funtion, It is used for running any long-running task or API freezing task to run in the background.
+        decorator funtion, It is used for running any long-running task or API-freezing task to run in the background.
 
     Returns:
-        The return values of the function is dependent on the state of API.
+        The return values of the function are dependent on the state of the API.
     """
+    log.info("API Call")
+
     global background_task_status
 
     if choice.option == Options.WebSocket:
@@ -185,6 +198,7 @@ async def prediction(
     else:
         if background_task_status == "running":
             msg = "The gRPC streaming connection is already running."
+            log.warning(msg)
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
 
     try:
@@ -195,7 +209,8 @@ async def prediction(
         resp = {"gRPC_stream_address": stream_address}
         return JSONResponse(status_code=status.HTTP_200_OK, content=resp)
 
-    except Exception:
+    except Exception as e:
+        log.error(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="The Server has a Boo Boo.",

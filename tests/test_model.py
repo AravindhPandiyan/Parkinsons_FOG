@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from logger_config import logger as log
 from src import Inference
 
 
@@ -15,6 +16,7 @@ class ModelMetrics(Inference):
         Returns:
             Finally, this method returns the calculated metrics in the form of a dictionary.
         """
+        log.info("Test - Method call")
         metrics = self.MODEL.evaluate(self.TEST_DATA.batch(1))
         metrics = dict(map=round(metrics[0] * -1, 4), auc=round(metrics[1], 4))
         print(f'Mean Average Precision(mAP): {metrics["map"]}')
@@ -26,8 +28,9 @@ class ModelMetrics(Inference):
         `test_tdcsfog_rnn_model` method is used to test the TDCSFOG RNN model.
 
         Returns:
-            Finally, this method returns the calculated metrics for TDCSFOG RNN model in the form of a dictionary.
+            Finally, this method returns the calculated metrics for a TDCSFOG RNN model in the form of a dictionary.
         """
+        log.info("Test - Method call")
         msg = self.load_tdcsfog_rnn_model()
 
         if msg:
@@ -40,8 +43,9 @@ class ModelMetrics(Inference):
         `test_tdcsfog_rnn_model` method is used to test the TDCSFOG CNN model.
 
         Returns:
-            Finally, this method returns the calculated metrics for TDCSFOG CNN model in the form of a dictionary.
+            Finally, this method returns the calculated metrics for a TDCSFOG CNN model in the form of a dictionary.
         """
+        log.info("Test - Method call")
         msg = self.load_tdcsfog_cnn_model()
 
         if msg:
@@ -54,8 +58,9 @@ class ModelMetrics(Inference):
         `test_tdcsfog_rnn_model` method is used to test the DEFOG RNN model.
 
         Returns:
-            Finally, this method returns the calculated metrics for DEFOG RNN model in the form of a dictionary.
+            Finally, this method returns the calculated metrics for a DEFOG RNN model in the form of a dictionary.
         """
+        log.info("Test - Method call")
         msg = self.load_defog_rnn_model()
 
         if msg:
@@ -68,8 +73,9 @@ class ModelMetrics(Inference):
         `test_tdcsfog_rnn_model` method is used to test the DEFOG CNN model.
 
         Returns:
-            Finally, this method returns the calculated metrics for DEFOG CNN model in the form of a dictionary.
+            Finally, this method returns the calculated metrics for a DEFOG CNN model in the form of a dictionary.
         """
+        log.info("Test - Method call")
         msg = self.load_defog_cnn_model()
 
         if msg:

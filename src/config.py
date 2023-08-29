@@ -11,6 +11,7 @@ from keras.models import Model
 from omegaconf import DictConfig
 from tensorflow.data.experimental import AUTOTUNE
 
+from logger_config import logger as log
 from src.build_model import ConstructCNN, ConstructRNN
 from src.load_data import TFRecordParsers
 from src.preprocess import WindowWriter
@@ -21,7 +22,7 @@ tf.keras.backend.set_floatx("float64")
 
 class Preprocessing:
     """
-    `Preprocessing` is a **configured** class which bring together all the other functions and class and makes use of
+    `Preprocessing` is a **configured** class that bring together all the other functions and class and makes use of
     them to **process the data**.
     """
 
@@ -34,11 +35,12 @@ class Preprocessing:
         """
         `_len_writer` method is used to write the **length** of the dataset into the json **config file**.
 
-        Args:
-            `type_d`: type_d is used mention the **type** of data used.
+        Params:
+            `type_d`: type_d is used to mention the **type** of data used.
 
             `data_len`: data_len is used for mentioning the data's **length** after **processing**.
         """
+        log.info("Method Call")
         with open(cls._JSON_CONFIG) as file:
             config = json.load(file)
 
@@ -57,10 +59,12 @@ class Preprocessing:
         `tdcsfog_rnn_model_preprocessing` method is used to **fetch** and **filter** all the data that was
         tested in **lab conditions** for **rnn** model.
 
-        Args:
-            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process types **processing**.
+        Params:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
+            types **processing**.
 
         """
+        log.info("Method Call")
         cfg_ps = cfg.power_spectrum
         current_path = utils.get_original_cwd() + "/"
         ww = WindowWriter(cfg.window_size, cfg.steps, cfg_ps.freq, cfg_ps.type)
@@ -81,12 +85,14 @@ class Preprocessing:
     def tdcsfog_cnn_model_preprocessing(cfg: DictConfig):
         """
         `tdcsfog_cnn_model_preprocessing` method is used to **fetch** and **filter** all the data that was
-        tested in **lab conditions** for **cnn** model.
+        tested in **lab conditions** for **cnn** a model.
 
-        Args:
-            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process types **processing**.
+        Params:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
+            types **processing**.
 
         """
+        log.info("Method Call")
         current_path = utils.get_original_cwd() + "/"
         ww = WindowWriter(cfg.window_size, cfg.steps)
         dataset = ww.load_csv_data(
@@ -106,15 +112,16 @@ class Preprocessing:
     def defog_rnn_model_preprocessing(cfg: DictConfig):
         """
         `defog_rnn_model_preprocessing` method is used to **fetch** and **filter** all the data that was obtained
-        from the **subjects activities** in their **homes** for **rnn** model.
+        from the **subjects activities** in their **homes** for **rnn** a model.
 
-        Args:
+        Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
             types **processing**.
 
         Returns:
 
         """
+        log.info("Method Call")
         cfg_ps = cfg.power_spectrum
         current_path = utils.get_original_cwd() + "/"
         ww = WindowWriter(cfg.window_size, cfg.steps, cfg_ps.freq, cfg_ps.type)
@@ -140,12 +147,14 @@ class Preprocessing:
     def defog_cnn_model_preprocessing(cfg: DictConfig):
         """
         `defog_rnn_model_preprocessing` method is used to **fetch** and **filter** all the data that was obtained
-        from the **subjects activities** in their **homes** for **cnn** model.
+        from the **subjects activities** in their **homes** for **cnn** a model.
 
-        Args:
-            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process types **processing**.
+        Params:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
+            types **processing**.
 
         """
+        log.info("Method Call")
         current_path = utils.get_original_cwd() + "/"
         ww = WindowWriter(cfg.window_size, cfg.steps)
         dataset = ww.load_csv_data(
@@ -182,13 +191,13 @@ class Modeling:
         """
         `_custom_map_loss` is used for calculating the **mean Average Precision loss** for the model.
 
-        Args:
+        Params:
             `y_true`: y_true is the **actual values**.
 
             `y_pred`: y_pred is the **predicted values**.
 
         Returns:
-            Finally, the **loss** values is calculated and returned. The **loss** value will be in **negative**.
+            Finally, the **loss** values are calculated and returned. The **loss** value will be in **negative**.
         """
         y_true_float = tf.cast(y_true, tf.float64)
         intersection = tf.reduce_sum(tf.minimum(y_true_float, y_pred))
@@ -203,13 +212,15 @@ class Modeling:
     ):
         """
         `_build_model` is a **private method** meant to be only used withing the class for **building models**.
-        Args:
+        Params:
             `cfg`: cfg is used to access the model **configuration**.
 
             `builder`: builder is used to **construct the model**.
 
             `type_d`: type_d is used for identifying the **type of data**.
         """
+        log.info("Method Call")
+
         try:
             with tf.device("/GPU:0"):
                 raw_dataset = tf.data.TFRecordDataset(cfg.tf_record_path)
@@ -253,8 +264,10 @@ class Modeling:
             )
             cls.MODEL.summary()
 
-        except tf.errors.NotFoundError:
-            print("\nData for training couldn't be found.")
+        except tf.errors.NotFoundError as e:
+            msg = "Data for training couldn't be found."
+            log.error(msg + ": " + str(e))
+            print(f"\n{msg}")
 
     @staticmethod
     @hydra.main(
@@ -264,9 +277,10 @@ class Modeling:
         """
         `build_tdcsfog_rnn_model` method is used to construct a **rnn model** for **training** on the **tdcsfog data**.
 
-        Args:
+        Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
         """
+        log.info("Method Call")
         cfg = cfg.tdcsfog
         builder = ConstructRNN()
         Modeling.MODEL_TYPE = "TDCSFOG_RNN"
@@ -280,9 +294,10 @@ class Modeling:
         """
         `build_tdcsfog_cnn_model` method is used to construct a **cnn model** for **training** on the **tdcsfog data**.
 
-        Args:
+        Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
         """
+        log.info("Method Call")
         cfg = cfg.tdcsfog
         builder = ConstructCNN()
         Modeling.MODEL_TYPE = "TDCSFOG_CNN"
@@ -296,9 +311,10 @@ class Modeling:
         """
         `build_defog_rnn_model` method is used to construct a **rnn model** for **training** on the **defog data**.
 
-        Args:
+        Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
         """
+        log.info("Method Call")
         cfg = cfg.defog
         builder = ConstructRNN()
         Modeling.MODEL_TYPE = "DEFOG_RNN"
@@ -312,9 +328,10 @@ class Modeling:
         """
         `build_defog_cnn_model` method is used to construct a **cnn model** for **training** on the **defog data**.
 
-        Args:
+        Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
         """
+        log.info("Method Call")
         cfg = cfg.defog
         builder = ConstructCNN()
         Modeling.MODEL_TYPE = "DEFOG_CNN"
@@ -329,6 +346,8 @@ class Modeling:
             It returns the **model** if the necessary **components** are present to **train** the **model** and
             return's a **warning string**, if the model is not **constructed** first.
         """
+        log.info("Method Call")
+
         if (
             cls.TRAIN_DATA
             and cls.VAL_DATA
@@ -340,6 +359,7 @@ class Modeling:
 
         else:
             msg = "Please First Build the TDCSFOG RNN model to train it."
+            log.warning(msg)
             print(f"\n{msg}")
             return msg
 
@@ -352,6 +372,8 @@ class Modeling:
             It returns the **model** if the necessary **components** are present to **train** the **model** and
             return's a **warning string**, if the model is not **constructed** first.
         """
+        log.info("Method Call")
+
         if (
             cls.TRAIN_DATA
             and cls.VAL_DATA
@@ -363,6 +385,7 @@ class Modeling:
 
         else:
             msg = "Please First Build the TDCSFOG CNN model to train it."
+            log.warning(msg)
             print(f"\n{msg}")
             return msg
 
@@ -375,6 +398,8 @@ class Modeling:
             It returns the **model** if the necessary **components** are present to **trains** the **model** and
             return's a **warning string**, if the model is not **constructed** first.
         """
+        log.info("Method Call")
+
         if (
             cls.TRAIN_DATA
             and cls.VAL_DATA
@@ -386,6 +411,7 @@ class Modeling:
 
         else:
             msg = "Please First Build the DEFOG RNN model to train it."
+            log.warning(msg)
             print(f"\n{msg}")
             return msg
 
@@ -398,6 +424,7 @@ class Modeling:
             It returns the **model** if the necessary **components** are present to **trains** the **model** and
             return's a **warning string**, if not it will return a **warning message**.
         """
+        log.info("Method Call")
         if (
             cls.TRAIN_DATA
             and cls.VAL_DATA
@@ -409,6 +436,7 @@ class Modeling:
 
         else:
             msg = "Please First Build the DEFOG CNN model to train it."
+            log.warning(msg)
             print(f"\n{msg}")
             return msg
 
@@ -419,6 +447,7 @@ class Inference(Modeling):
     """
 
     def __init__(self):
+        log.info("class Initialization")
         self.window_size = None
         self.steps = None
         self._m_type = None
@@ -430,17 +459,20 @@ class Inference(Modeling):
         `load_tdcsfog_rnn_model` method is used to **load** the **TDCSFOG RNN** model.
 
         Returns:
-            If there is **no checkpoints** of the **tdcsfog rnn model** it will return a **warning message**,
+            If there are **no checkpoints** of the **tdcsfog rnn model** it will return a **warning message**,
             else nothing.
         """
+        log.info("Method Call")
+
         try:
             self._d_type = "tdcsfog"
             self._m_type = "RNN"
             self.build_tdcsfog_rnn_model()
             self.MODEL.load_weights("models/ModelCheckpoint/tdcsfog/RNN/")
 
-        except IsADirectoryError:
+        except IsADirectoryError as w:
             msg = "Please First Train the TDCSFOG RNN model."
+            log.warning(msg + ": " + str(w))
             print(f"\n{msg}")
             return msg
 
@@ -455,17 +487,20 @@ class Inference(Modeling):
         `load_tdcsfog_rnn_model` method is used to **load** the **TDCSFOG CNN** model.
 
         Returns:
-            If there is **no checkpoints** of the **tdcsfog cnn model** it will return a **warning message**,
+            If there are **no checkpoints** of the **tdcsfog cnn model** it will return a **warning message**,
             else nothing.
         """
+        log.info("Method Call")
+
         try:
             self._d_type = "tdcsfog"
             self._m_type = "CNN"
             self.build_tdcsfog_cnn_model()
             self.MODEL.load_weights("models/ModelCheckpoint/tdcsfog/CNN/")
 
-        except IsADirectoryError:
+        except IsADirectoryError as w:
             msg = "Please First Train the TDCSFOG CNN model."
+            log.warning(msg + ": " + str(w))
             print(f"\n{msg}")
             return msg
 
@@ -480,17 +515,20 @@ class Inference(Modeling):
         `load_tdcsfog_rnn_model` method is used to **load** the **DEFOG RNN** model.
 
         Returns:
-            If there is **no checkpoints** of the **defog rnn model** it will return a **warning message**,
+            If there are **no checkpoints** of the **defog rnn model** it will return a **warning message**,
             else nothing.
         """
+        log.info("Method Call")
+
         try:
             self._d_type = "defog"
             self._m_type = "RNN"
             self.build_defog_rnn_model()
             self.MODEL.load_weights("models/ModelCheckpoint/defog/RNN/")
 
-        except IsADirectoryError:
+        except IsADirectoryError as w:
             msg = "Please First Train the DEFOG RNN model."
+            log.warning(msg + ": " + str(w))
             print(f"\n{msg}")
             return msg
 
@@ -505,17 +543,20 @@ class Inference(Modeling):
         `load_tdcsfog_rnn_model` method is used to load the **DEFOG CNN** model.
 
         Returns:
-            If there is **no checkpoints** of the **defog cnn** model it will return a **warning message**,
+            If there are **no checkpoints** of the **defog cnn** model it will return a **warning message**,
             else nothing.
         """
+        log.info("Method Call")
+
         try:
             self._d_type = "defog"
             self._m_type = "CNN"
             self.build_defog_cnn_model()
             self.MODEL.load_weights("models/ModelCheckpoint/defog/CNN/")
 
-        except IsADirectoryError:
+        except IsADirectoryError as w:
             msg = "Please First Train the DEFOG CNN model."
+            log.warning(msg + ": " + str(w))
             print(f"\n{msg}")
             return msg
 
@@ -530,15 +571,16 @@ class Inference(Modeling):
         `predict_fog` method is used for **performing prediction** on the **ML model** that has been **loaded**
         into memory.
 
-        Args:
+        Params:
             `data`: data is the series of data from **accelerometer** used for **predicting** if there is a
             **fog detected**.
 
         Returns:
-            Finally, it returns the **prediction** list or if the model is **not loaded** it will return a
+            Finally, it returns the **prediction** list, or if the model is **not loaded** it will return a
             **warning string**.
 
         """
+        log.info("Method Call")
 
         if self.window_size and self.steps:
             if self._m_type == "RNN":
@@ -553,5 +595,6 @@ class Inference(Modeling):
 
         else:
             msg = "Please First Load the model."
+            log.warning(msg)
             print(f"\n{msg}")
             return msg

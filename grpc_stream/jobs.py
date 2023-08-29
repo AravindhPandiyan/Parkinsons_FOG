@@ -4,6 +4,7 @@ from collections import deque
 import pandas as pd
 
 from grpc_stream import service_pb2, service_pb2_grpc
+from logger_config import logger as log
 
 
 class Jobs:
@@ -33,6 +34,7 @@ class PredictorJob(Jobs, service_pb2_grpc.PackageServicer):
         Params:
             `inference`: inference is expecting the inference class of the model.
         """
+        log.info("Class Initialization")
         self.infer = inference
         self.w_size = self.infer.window_size
         self.buffer = deque(maxlen=self.w_size)

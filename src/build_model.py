@@ -4,6 +4,8 @@ from keras.models import Model
 from omegaconf import DictConfig
 from tensorflow.keras import layers as tkl
 
+from logger_config import logger as log
+
 
 class ConstructRNN:
     """
@@ -19,6 +21,7 @@ class ConstructRNN:
 
             `fun_type`: fun_type is the type of **activation function**.
         """
+        log.info("Class Initialization")
         self.dp_rate = drop_rate
         self.act_type = fun_type
 
@@ -34,6 +37,7 @@ class ConstructRNN:
         Returns:
             Finally, this method returns the output of the last layer of the block.
         """
+        log.info("Method Call")
         ll_in = tkl.LSTM(
             units=nodes, return_sequences=True, activation=self.act_type, name="LSTM-1"
         )(ly_in)
@@ -72,6 +76,7 @@ class ConstructRNN:
         Returns:
             Finally, this method returns the constructed model.
         """
+        log.info("Method Call")
         normalizer = tkl.Normalization()
         normalizer.adapt(data.map(lambda x, y: x))
         in_ly = tf.keras.Input(shape=size)
@@ -88,13 +93,14 @@ class ConstructCNN:
 
     def __init__(self, drop_rate: float = 0.2, fun_type: str = "relu"):
         """
-        `ConstructCNN` class is used for building **CNN** based model.
+        `ConstructCNN` class is used for building **CNN** a based model.
 
         Params:
             `drop_rate`: drop_rate is used to mention the **rate of dropout layer's**.
 
             `fun_type`: fun_type is the type of **activation function**.
         """
+        log.info("Class Initialization")
         self.dp_rate = drop_rate
         self.act_type = fun_type
 
@@ -110,6 +116,7 @@ class ConstructCNN:
         Returns:
             Finally, this method returns the output of the last layer of the block.
         """
+        log.info("Method Call")
         cl_in = tkl.Conv1D(
             filters=filters[0],
             kernel_size=3,
@@ -166,6 +173,7 @@ class ConstructCNN:
         Returns:
             Finally, this method returns the output of the last layer of the block.
         """
+        log.info("Method Call")
         dl_in = tkl.Dense(units=units[0], activation=self.act_type, name="Ann-in")(
             ly_in
         )
@@ -184,7 +192,7 @@ class ConstructCNN:
 
     def build_model(self, data: tf.Tensor, size: tuple, nodes: DictConfig) -> Model:
         """
-        `build_model` method is uses the properties of the class to build the model.
+        `build_model` method is using the properties of the class to build the model.
 
         Params:
             `data`: data is used to find it's **mean and variance** to **normalize** it.
@@ -196,6 +204,7 @@ class ConstructCNN:
         Returns:
             Finally, this method returns the constructed model.
         """
+        log.info("Method Call")
         normalizer = tkl.Normalization()
         normalizer.adapt(data.map(lambda x, y: x))
         in_ly = tf.keras.Input(shape=size)

@@ -1,5 +1,7 @@
 import tensorflow as tf
 
+from logger_config import logger as log
+
 
 class TFRecordParsers:
     """
@@ -17,18 +19,19 @@ class TFRecordParsers:
             `y_shape`: y_shape is the **shape** to which the **targets** should be restored from the
             **tfrecords** file.
         """
+        log.info("Class Initialization")
         self.x_shape = list(x_shape)
         self.y_shape = list(y_shape)
 
     def tfrecord_parser(self, example_proto: tf.Tensor) -> tuple:
         """
-        `tfrecord_parser` methods is used to **parse** each **record** of the **tfrecord**.
+        `tfrecord_parser` method is used to **parse** each **record** of the **tfrecord**.
 
         Params:
             `example_proto`: example_proto is the **record** to be parsed.
 
         Returns:
-            Finally, the parsed record is divided as feature amd target and returned as a tuple.
+            Finally, the parsed record is divided as feature and target and returned as a tuple.
         """
         feature_description = {
             "x": tf.io.FixedLenFeature(self.x_shape, tf.float32),

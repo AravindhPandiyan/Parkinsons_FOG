@@ -19,8 +19,8 @@ setup: initialize_git install download_data
 
 docs_view:
 	@echo View API documentation... 
-	PYTHONPATH=. pdoc api.app grpc_stream src tests api_main.py main.py --http localhost:8080
+	PYTHONPATH=. pdoc api.app api_main.py grpc_stream logger_config.py main.py src tests --http localhost:8080
 
 docs_save:
 	@echo Save documentation to docs... 
-	PYTHONPATH=. pdoc api.app grpc_stream src tests api_main.py main.py -o docs
+	PYTHONPATH=. pdoc api.app api_main.py grpc_stream logger_config.py main.py src tests -o docs

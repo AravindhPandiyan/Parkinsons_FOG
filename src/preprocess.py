@@ -4,6 +4,8 @@ import pandas as pd
 import tensorflow as tf
 from scipy import signal as ss
 
+from logger_config import logger as log
+
 
 class WindowWriter:
     """
@@ -30,6 +32,7 @@ class WindowWriter:
             `model_type`: model_type it is to mention the type of model to opt into a particular type of
             processing of data.
         """
+        log.info("Class Initialization")
         self.wsize = window_size
         self.steps = steps
         self.freq = freq
@@ -39,9 +42,9 @@ class WindowWriter:
     def _convert_to_power_spectrums(self, features: pd.DataFrame) -> np.ndarray:
         """
         `_convert_to_power_spectrums` method is used to obtain the **power spectrum** of each **columnar signal data**
-        in the given dataframe. Initially, **hamming window** is applied on the data, to minimize the data's
+        in the given dataframe. Initially, **hamming window** is applied on the data to minimize the data's
         **side lobe** and improve the quality of the data. Next, we make use of **FFT** to split the data into
-        it's base **frequencies**. Finally, the **power spectrum** is attained, by computing the portion of a
+         its base **frequencies**. Finally, the **power spectrum** is attained by computing the portion of
         data's power falling within given **frequency bins**. This entire process is completed with the help of the
         **welch** method of **Scipy's signal processing** capabilities.
 
@@ -112,6 +115,7 @@ class WindowWriter:
         Returns:
             Finally, this function returns the **length of the tfrecord dataset**.
         """
+        log.info("Method Call")
         data = data.fillna(0)
         size = 0
         with tf.io.TFRecordWriter(path) as writer:
@@ -155,6 +159,7 @@ class WindowWriter:
             Finally, this function returns the **filtered data** from all the data.
 
         """
+        log.info("Method Call")
         metadata = pd.read_csv(meta_path)
         dataset_path = list(
             map(lambda id_: data_path + id_ + ".csv", metadata.Id.unique())

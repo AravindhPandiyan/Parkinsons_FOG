@@ -10,6 +10,7 @@ from api.app.dependencies import (
     ModelTypesModel,
     UsableData,
 )
+from logger_config import logger as log
 
 router = APIRouter()
 controller = ModelingController()
@@ -26,6 +27,8 @@ def _background_training(task_data: ModelTypesModel):
         `task_data`: task_data is used for beginning the training of a specific model mentioned
         in it.
     """
+    log.info("Funtion Call")
+
     if task_data.use_data == UsableData.TDCSFOG:
         if task_data.architecture == ArchitectureTypes.RNN:
             controller.train_tdcsfog_rnn()
@@ -40,26 +43,28 @@ def _background_training(task_data: ModelTypesModel):
         else:
             controller.train_defog_cnn()
 
-    result = f"\n{task_data.architecture} model training using {task_data.use_data} data has been completed."
+    result = f"x{task_data.architecture} model training using {task_data.use_data} data has been completed."
     background_task_status[
         f"{task_data.use_data}_{task_data.architecture}"
     ] = "completed"
-    print(result)
+    log.info(result)
+    print(f"\n{result}")
 
 
 @router.post("/build", response_model=APIResponseModel)
 async def build_model(build: ModelTypesModel):
     """
-    `build_model` is an API route for **building** different model's.
+    `build_model` is an API route for **building** the different model's.
 
     Params:
         `build`: build is the data received from the user, containing the model requested by
         the user to be **constructed**.
 
     Returns:
-        The return values of the function is dependent on the state of API.
+        The return values of the function are dependent on the state of the API.
 
     """
+    log.info("API Call")
 
     try:
         if build.use_data == UsableData.TDCSFOG:
@@ -78,9 +83,11 @@ async def build_model(build: ModelTypesModel):
 
         msg = f"{build.architecture} model has been constructed to train on {build.use_data} data."
         resp = {"detail": msg}
+        log.info(msg)
         return JSONResponse(status_code=status.HTTP_201_CREATED, content=resp)
 
-    except Exception:
+    except Exception as e:
+        log.error(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="The Server has a Boo Boo.",
@@ -90,27 +97,31 @@ async def build_model(build: ModelTypesModel):
 @router.post("/train", response_model=APIResponseModel)
 async def train_model(train: ModelTypesModel, background_tasks: BackgroundTasks):
     """
-    `train_model` is an API route for the **training** of different types model's.
+    `train_model` is an API route for the **training** of the different model's.
 
     Params:
         `train`: train is the data received from the user, containing request of a specific
         model requested to be trained.
 
         `background_tasks`: background_tasks is the parameter passed to the funtion by the
-        decorator funtion, It is used for running any long-running task or API freezing task to run in the background.
+        decorator funtion, It is used for running any long-running task or API-freezing task to run in the background.
 
     Returns:
-        The return values of the function is dependent on the state of API.
+        The return values of the function are dependent on the state of the API.
     """
+    log.info("API Call")
+
     if (
         background_task_status.get(f"{train.use_data}_{train.architecture}")
         == "running"
     ):
         msg = f"Training of {train.architecture} model using {train.use_data} data is already running."
+        log.warning(msg)
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
 
     elif controller.MODEL_TYPE != f"{train.use_data}_{train.architecture}":
         msg = f"Please First Build the {train.use_data} {train.architecture} model to train it."
+        log.warning(msg)
         raise HTTPException(status_code=status.HTTP_424_FAILED_DEPENDENCY, detail=msg)
 
     else:
@@ -121,10 +132,12 @@ async def train_model(train: ModelTypesModel, background_tasks: BackgroundTasks)
                 f"Training of {train.architecture} model using {train.use_data} data has been enqueued for "
                 "background execution."
             )
+            log.warning(msg)
             resp = {"detail": msg}
             return JSONResponse(status_code=status.HTTP_200_OK, content=resp)
 
-        except Exception:
+        except Exception as e:
+            log.error(e)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="The Server has a Boo Boo.",
