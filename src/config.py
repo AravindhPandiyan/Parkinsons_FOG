@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import json
+import os
 
 import hydra
+import mlflow.tensorflow
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -17,6 +19,13 @@ from src.load_data import TFRecordParsers
 from src.preprocess import WindowWriter
 from src.train_model import fitting
 
+with open("config/mlflow.json") as file:
+    mlflow_cfg = json.load(file)
+    mlflow.set_tracking_uri(mlflow_cfg["tracking_uri"])
+    os.environ["MLFLOW_TRACKING_USERNAME"] = mlflow_cfg["tracking_username"]
+    os.environ["MLFLOW_TRACKING_PASSWORD"] = mlflow_cfg["tracking_password"]
+
+mlflow.tensorflow.autolog()
 tf.keras.backend.set_floatx("float64")
 
 
