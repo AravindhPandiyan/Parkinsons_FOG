@@ -62,7 +62,6 @@ class Preprocessing:
         Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
             types **processing**.
-
         """
         log.info("Method Call")
         cfg_ps = cfg.power_spectrum
@@ -90,7 +89,6 @@ class Preprocessing:
         Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
             types **processing**.
-
         """
         log.info("Method Call")
         current_path = utils.get_original_cwd() + "/"
@@ -117,9 +115,6 @@ class Preprocessing:
         Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
             types **processing**.
-
-        Returns:
-
         """
         log.info("Method Call")
         cfg_ps = cfg.power_spectrum
@@ -578,7 +573,6 @@ class Inference(Modeling):
         Returns:
             Finally, it returns the **prediction** list, or if the model is **not loaded** it will return a
             **warning string**.
-
         """
         log.info("Method Call")
 
