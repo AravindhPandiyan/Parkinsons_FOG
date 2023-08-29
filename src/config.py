@@ -463,7 +463,10 @@ class Inference(Modeling):
             self._d_type = "tdcsfog"
             self._m_type = "RNN"
             self.build_tdcsfog_rnn_model()
-            self.MODEL.load_weights("models/ModelCheckpoint/tdcsfog/RNN/")
+
+            with open(self._JSON_CONFIG) as file:
+                cfg = json.load(file)
+                self.MODEL.load_weights(f"{cfg['checkpoint_loc']}tdcsfog/RNN/")
 
         except IsADirectoryError as w:
             msg = "Please First Train the TDCSFOG RNN model."
@@ -491,7 +494,10 @@ class Inference(Modeling):
             self._d_type = "tdcsfog"
             self._m_type = "CNN"
             self.build_tdcsfog_cnn_model()
-            self.MODEL.load_weights("models/ModelCheckpoint/tdcsfog/CNN/")
+
+            with open(self._JSON_CONFIG) as file:
+                cfg = json.load(file)
+                self.MODEL.load_weights(f"{cfg['checkpoint_loc']}tdcsfog/RNN/")
 
         except IsADirectoryError as w:
             msg = "Please First Train the TDCSFOG CNN model."
@@ -519,7 +525,10 @@ class Inference(Modeling):
             self._d_type = "defog"
             self._m_type = "RNN"
             self.build_defog_rnn_model()
-            self.MODEL.load_weights("models/ModelCheckpoint/defog/RNN/")
+
+            with open(self._JSON_CONFIG) as file:
+                cfg = json.load(file)
+                self.MODEL.load_weights(f"{cfg['checkpoint_loc']}tdcsfog/RNN/")
 
         except IsADirectoryError as w:
             msg = "Please First Train the DEFOG RNN model."
@@ -547,7 +556,10 @@ class Inference(Modeling):
             self._d_type = "defog"
             self._m_type = "CNN"
             self.build_defog_cnn_model()
-            self.MODEL.load_weights("models/ModelCheckpoint/defog/CNN/")
+
+            with open(self._JSON_CONFIG) as file:
+                cfg = json.load(file)
+                self.MODEL.load_weights(f"{cfg['checkpoint_loc']}tdcsfog/RNN/")
 
         except IsADirectoryError as w:
             msg = "Please First Train the DEFOG CNN model."
