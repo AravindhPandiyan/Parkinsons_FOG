@@ -26,4 +26,4 @@ Classes
         only for testing purpose. **Generator state**, where it will allow the user to receive the data continuously.
         
         Returns:
-            This method will return a **generator** if the state is `1` or above else it will act like a normal method.
+            This method will return a **generator** if the state is `1` or above else, it will act like a normal method.

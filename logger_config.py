@@ -35,10 +35,13 @@ Log Rotation:
 - Maximum log file size is set to 1 MB.
 
 """
-
+import json
 import logging
 import os
 import time
+
+with open("config/logging.json") as file:
+    config = json.load(file)
 
 
 class MaxSizeRotatingFileHandler(logging.FileHandler):
@@ -60,7 +63,7 @@ class MaxSizeRotatingFileHandler(logging.FileHandler):
         super().__init__(filename, "a", delay=delay)
         self.maxBytes = maxBytes
         self.current_size = os.path.getsize(filename) if os.path.exists(filename) else 0
-        self.creation_time = time.strftime("%Y-%m-%d_%H-%M-%S.log", time.localtime())
+        self.creation_time = time.strftime(config["dt_format"], time.localtime())
 
     def shouldRollover(self, _):
         """
@@ -87,11 +90,11 @@ class MaxSizeRotatingFileHandler(logging.FileHandler):
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-log_format = "%(asctime)s %(levelname)s %(name)s %(threadName)s %(filename)s %(funcName)s : %(message)s"
+log_format = config["l_format"]
 formatter = logging.Formatter(log_format)
 
-log_path = "logs/General"
-max_log_size = 10 * 1024 * 1024
+log_path = config["path"]
+max_log_size = config["bytes"]
 log_file = os.path.join(log_path, "log.log")
 file_handler = MaxSizeRotatingFileHandler(log_file, maxBytes=max_log_size)
 file_handler.setFormatter(formatter)

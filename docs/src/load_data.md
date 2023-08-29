@@ -19,10 +19,10 @@ Classes
     ### Methods
 
     `tfrecord_parser(self, example_proto: tensorflow.python.framework.ops.Tensor) ‑> tuple`
-    :   `tfrecord_parser` methods is used to **parse** each **record** of the **tfrecord**.
+    :   `tfrecord_parser` method is used to **parse** each **record** of the **tfrecord**.
         
         Params:
             `example_proto`: example_proto is the **record** to be parsed.
         
         Returns:
-            Finally, the parsed record is divided as feature amd target and returned as a tuple.
+            Finally, the parsed record is divided as feature and target and returned as a tuple.

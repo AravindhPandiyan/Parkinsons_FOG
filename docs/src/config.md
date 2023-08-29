@@ -22,40 +22,40 @@ Classes
     :   `load_tdcsfog_rnn_model` method is used to load the **DEFOG CNN** model.
         
         Returns:
-            If there is **no checkpoints** of the **defog cnn** model it will return a **warning message**,
+            If there are **no checkpoints** of the **defog cnn** model it will return a **warning message**,
             else nothing.
 
     `load_defog_rnn_model(self) ‑> str | None`
     :   `load_tdcsfog_rnn_model` method is used to **load** the **DEFOG RNN** model.
         
         Returns:
-            If there is **no checkpoints** of the **defog rnn model** it will return a **warning message**,
+            If there are **no checkpoints** of the **defog rnn model** it will return a **warning message**,
             else nothing.
 
     `load_tdcsfog_cnn_model(self) ‑> str | None`
     :   `load_tdcsfog_rnn_model` method is used to **load** the **TDCSFOG CNN** model.
         
         Returns:
-            If there is **no checkpoints** of the **tdcsfog cnn model** it will return a **warning message**,
+            If there are **no checkpoints** of the **tdcsfog cnn model** it will return a **warning message**,
             else nothing.
 
     `load_tdcsfog_rnn_model(self) ‑> str | None`
     :   `load_tdcsfog_rnn_model` method is used to **load** the **TDCSFOG RNN** model.
         
         Returns:
-            If there is **no checkpoints** of the **tdcsfog rnn model** it will return a **warning message**,
+            If there are **no checkpoints** of the **tdcsfog rnn model** it will return a **warning message**,
             else nothing.
 
     `predict_fog(self, data: pd.DataFrame) ‑> list | str`
     :   `predict_fog` method is used for **performing prediction** on the **ML model** that has been **loaded**
         into memory.
         
-        Args:
+        Params:
             `data`: data is the series of data from **accelerometer** used for **predicting** if there is a
             **fog detected**.
         
         Returns:
-            Finally, it returns the **prediction** list or if the model is **not loaded** it will return a
+            Finally, it returns the **prediction** list, or if the model is **not loaded** it will return a
             **warning string**.
 
 `Modeling()`
@@ -89,25 +89,25 @@ Classes
     `build_defog_cnn_model(cfg: DictConfig)`
     :   `build_defog_cnn_model` method is used to construct a **cnn model** for **training** on the **defog data**.
         
-        Args:
+        Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
 
     `build_defog_rnn_model(cfg: DictConfig)`
     :   `build_defog_rnn_model` method is used to construct a **rnn model** for **training** on the **defog data**.
         
-        Args:
+        Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
 
     `build_tdcsfog_cnn_model(cfg: DictConfig)`
     :   `build_tdcsfog_cnn_model` method is used to construct a **cnn model** for **training** on the **tdcsfog data**.
         
-        Args:
+        Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
 
     `build_tdcsfog_rnn_model(cfg: DictConfig)`
     :   `build_tdcsfog_rnn_model` method is used to construct a **rnn model** for **training** on the **tdcsfog data**.
         
-        Args:
+        Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
 
     `train_defog_cnn_model() ‑> Model | str`
@@ -139,7 +139,7 @@ Classes
             return's a **warning string**, if the model is not **constructed** first.
 
 `Preprocessing()`
-:   `Preprocessing` is a **configured** class which bring together all the other functions and class and makes use of
+:   `Preprocessing` is a **configured** class that bring together all the other functions and class and makes use of
     them to **process the data**.
 
     ### Descendants
@@ -150,16 +150,17 @@ Classes
 
     `defog_cnn_model_preprocessing(cfg: DictConfig)`
     :   `defog_rnn_model_preprocessing` method is used to **fetch** and **filter** all the data that was obtained
-        from the **subjects activities** in their **homes** for **cnn** model.
+        from the **subjects activities** in their **homes** for **cnn** a model.
         
-        Args:
-            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process types **processing**.
+        Params:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
+            types **processing**.
 
     `defog_rnn_model_preprocessing(cfg: DictConfig)`
     :   `defog_rnn_model_preprocessing` method is used to **fetch** and **filter** all the data that was obtained
-        from the **subjects activities** in their **homes** for **rnn** model.
+        from the **subjects activities** in their **homes** for **rnn** a model.
         
-        Args:
+        Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
             types **processing**.
         
@@ -167,14 +168,16 @@ Classes
 
     `tdcsfog_cnn_model_preprocessing(cfg: DictConfig)`
     :   `tdcsfog_cnn_model_preprocessing` method is used to **fetch** and **filter** all the data that was
-        tested in **lab conditions** for **cnn** model.
+        tested in **lab conditions** for **cnn** a model.
         
-        Args:
-            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process types **processing**.
+        Params:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
+            types **processing**.
 
     `tdcsfog_rnn_model_preprocessing(cfg: DictConfig)`
     :   `tdcsfog_rnn_model_preprocessing` method is used to **fetch** and **filter** all the data that was
         tested in **lab conditions** for **rnn** model.
         
-        Args:
-            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process types **processing**.
+        Params:
+            `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
+            types **processing**.

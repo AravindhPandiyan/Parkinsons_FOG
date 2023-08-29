@@ -16,7 +16,7 @@ Example:
 
     To start the server:
     ```
-    python api_main.py
+    python main.py
     ```
 
 Modules:

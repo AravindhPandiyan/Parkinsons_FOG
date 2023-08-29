@@ -1,0 +1,6 @@
+{
+  "l_format": "%(asctime)s %(levelname)s %(name)s %(threadName)s %(filename)s %(funcName)s : %(message)s",
+  "path": "logs/General",
+  "bytes": 10485760,
+  "dt_format": "%Y-%m-%d_%H-%M-%S.log"
+}

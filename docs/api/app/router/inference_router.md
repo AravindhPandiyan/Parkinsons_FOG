@@ -27,10 +27,10 @@ Functions
         for getting the hosting url.
     
         `background_tasks`: background_tasks is the parameter passed to the funtion by the
-        decorator funtion, It is used for running any long-running task or API freezing task to run in the background.
+        decorator funtion, It is used for running any long-running task or API-freezing task to run in the background.
     
     Returns:
-        The return values of the function is dependent on the state of API.
+        The return values of the function are dependent on the state of the API.
 
     
 `web_socket_stream(websocket: starlette.websockets.WebSocket)`

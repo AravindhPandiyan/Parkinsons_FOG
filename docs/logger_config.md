@@ -10,6 +10,7 @@ Classes:
 - `MaxSizeRotatingFileHandler`: A custom file handler class that supports log rotation based on the size of log files.
 
     Methods:
+
     - `__init__(self, filename: str, maxBytes: int, delay: int = 0)`: Initializes the handler.
 
     - `shouldRollover(self, _)`: Checks if the log file should be rotated based on size.
@@ -32,20 +33,22 @@ Log Rotation:
 
 - The rotated files are stored in the "logs" directory.
 
-- Maximum log file size is set to 10 MB.
+- Maximum log file size is set to 1 MB.
 
 Classes
 -------
 
 `MaxSizeRotatingFileHandler(filename: str, maxBytes: int, delay: int = 0)`
-:   MaxSizeRotatingFileHandler a custom file handler that rotates log files based on their size.
+:   MaxSizeRotatingFileHandler is a custom file handler that rotates log files based on their size.
     
     Initializes the MaxSizeRotatingFileHandler.
     
-    Args:
-        filename: The path to the log file.
-        maxBytes: The maximum size of each log file in bytes.
-        delay: A delay in seconds for file opening.
+    Params:
+        `filename`: The path to the log file.
+    
+        `maxBytes`: The maximum size of each log file in bytes.
+    
+        `delay`: A delay in seconds for file opening.
 
     ### Ancestors (in MRO)
 
@@ -62,7 +65,7 @@ Classes
     `shouldRollover(self, _)`
     :   shouldRollover checks if the log file should be rotated based on size.
         
-        Args:
+        Params:
             `_`: Placeholder for the log record (not used).
         
         Returns:
