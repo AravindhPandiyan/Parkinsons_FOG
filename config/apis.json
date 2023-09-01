@@ -1,0 +1,11 @@
+{
+  "paths": {
+    "PREPROCESSING": ["post", "/preprocessing"],
+    "BUILD_MODEL": ["post","/modeling/build"],
+    "TRAIN_MODEL": ["post","/modeling/train"],
+    "LOAD_MODEL": ["post","/inference/load"],
+    "TEST_MODEL": ["get", "/metrics"],
+    "STREAMERS": ["get","/inference/predict"]
+  },
+  "DOMAIN" : "http://localhost:8080"
+}

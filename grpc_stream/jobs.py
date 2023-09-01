@@ -3,13 +3,13 @@ from collections import deque
 
 import pandas as pd
 
-from grpc_stream import service_pb2, service_pb2_grpc
+from grpc_stream import rpc_service_pb2, rpc_service_pb2_grpc
 from logger_config import logger as log
 
 
 class Jobs:
     """
-    `Jobs` is an empty class used for **grouping classes** of similar type under one. This class is **inherited**
+    `Jobs` is an empty class used for **grouping classes** of a similar type under one. This class is **inherited**
     by the similar classes to become part of the same **group**. The work of any **'JOB'** class is for setting
     up services like **Unary RPC, Server-side streaming RPC, Client-side streaming RPC and Bi-directional streaming
     RPC**. The 'JOB' classes will be specific to their work. There can exist multiple **'JOB'** of same **service**.
@@ -18,7 +18,7 @@ class Jobs:
     NAME = "JOB"
 
 
-class PredictorJob(Jobs, service_pb2_grpc.PackageServicer):
+class PredictorJob(Jobs, rpc_service_pb2_grpc.PackageServicer):
     """
     `PredictorJob` is a **service** for the servicing the **client connections**.
     """
@@ -70,7 +70,7 @@ class PredictorJob(Jobs, service_pb2_grpc.PackageServicer):
                 pred = self.infer.predict_fog(df)
                 pred = pred.astype(int)
                 pred = pred[0].tolist()
-                pred = service_pb2.Prediction(
+                pred = rpc_service_pb2.Prediction(
                     StartHesitation=pred[0], Turn=pred[1], Walking=pred[2]
                 )
                 yield pred

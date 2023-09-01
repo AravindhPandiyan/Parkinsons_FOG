@@ -4,7 +4,7 @@ from typing import Generator
 
 import grpc
 
-from grpc_stream import service_pb2, service_pb2_grpc
+from grpc_stream import rpc_service_pb2, rpc_service_pb2_grpc
 from logger_config import logger as log
 
 
@@ -40,7 +40,7 @@ class GRPCConnect:
             Every time this method is called the next **data packet** in the generator is returned.
         """
         for row in self.gen:
-            service_request = service_pb2.Data(
+            service_request = rpc_service_pb2.Data(
                 AccV=row.AccV, AccML=row.AccML, AccAP=row.AccAP
             )
             yield service_request
@@ -57,7 +57,7 @@ class GRPCConnect:
         log.info("Method Call")
 
         with grpc.insecure_channel(self.address) as channel:
-            stub = service_pb2_grpc.PackageStub(channel)
+            stub = rpc_service_pb2_grpc.PackageStub(channel)
             predictions = stub.bidirectionalStream(self._client_data_stream())
 
             if self.method_state:

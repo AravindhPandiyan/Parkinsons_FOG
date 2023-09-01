@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from grpc_stream import service_pb2 as service__pb2
+import grpc_stream.rpc_service_pb2 as rpc__service__pb2
 
 
 class PackageStub(object):
@@ -11,13 +11,13 @@ class PackageStub(object):
     def __init__(self, channel):
         """Constructor.
 
-        Params:
+        Args:
             channel: A grpc.Channel.
         """
         self.bidirectionalStream = channel.stream_stream(
             "/biStream.Package/bidirectionalStream",
-            request_serializer=service__pb2.Data.SerializeToString,
-            response_deserializer=service__pb2.Prediction.FromString,
+            request_serializer=rpc__service__pb2.Data.SerializeToString,
+            response_deserializer=rpc__service__pb2.Prediction.FromString,
         )
 
 
@@ -32,12 +32,11 @@ class PackageServicer(object):
 
 
 def add_PackageServicer_to_server(servicer, server):
-    """This method adds a gRPC service to a server"""
     rpc_method_handlers = {
         "bidirectionalStream": grpc.stream_stream_rpc_method_handler(
             servicer.bidirectionalStream,
-            request_deserializer=service__pb2.Data.FromString,
-            response_serializer=service__pb2.Prediction.SerializeToString,
+            request_deserializer=rpc__service__pb2.Data.FromString,
+            response_serializer=rpc__service__pb2.Prediction.SerializeToString,
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -67,8 +66,8 @@ class Package(object):
             request_iterator,
             target,
             "/biStream.Package/bidirectionalStream",
-            service__pb2.Data.SerializeToString,
-            service__pb2.Prediction.FromString,
+            rpc__service__pb2.Data.SerializeToString,
+            rpc__service__pb2.Prediction.FromString,
             options,
             channel_credentials,
             insecure,

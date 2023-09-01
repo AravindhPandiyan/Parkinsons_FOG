@@ -1,101 +1,44 @@
 """
-Custom Logging Configuration
----------------------------
+This script demonstrates setting up a logging configuration that outputs log messages to a file. The logs are formatted
+with a custom format that includes timestamp, log level, thread name, filename, function name, and log message. The log
+file names are dynamically generated based on the current date in the format 'YYYY-MM-DD.log'.
 
-This module defines a custom logging configuration with a `MaxSizeRotatingFileHandler` class that facilitates log rotation based on file size. The configuration establishes loggers and handlers to manage different log levels and file rotation.
+Usage:
 
-Classes:
+- The script configures a logger to write log messages to a file named after the current date.
 
-- `MaxSizeRotatingFileHandler`: A custom file handler class that supports log rotation based on the size of log files.
+- Log messages of varying severity levels (debug, info, warning, error, and critical) are provided as examples.
 
-    Methods:
+Note:
 
-    - `__init__(self, filename: str, maxBytes: int, delay: int = 0)`: Initializes the handler.
+- To include this logging functionality in your module or application, you can import the `logger` object and use its
+  methods to log messages at different levels.
 
-    - `shouldRollover(self, _)`: Checks if the log file should be rotated based on size.
+Example output:
 
-    - `doRollover(self)`: Performs log file rotation by closing the current stream and opening a new file.
+2023-08-28 10:15:30,123 DEBUG root MainThread example.py <module> : This is a debug message.
 
-Logger Configuration:
+2023-08-28 10:15:30,124 INFO root MainThread example.py <module> : This is an info message.
 
-- `logger`: The main logger instance with the name of the current module.
+2023-08-28 10:15:30,124 WARNING root MainThread example.py <module> : This is a warning message.
 
-- Logging level is set to `DEBUG`.
+2023-08-28 10:15:30,124 ERROR root MainThread example.py <module> : This is an error message.
 
-Log Formatting:
-
-- Log format includes timestamp, log level, thread name, source filename, function name, and message.
-
-Log Rotation:
-
-- Log files are rotated when their size exceeds the specified `max_log_size`.
-
-- The rotated files are stored in the "logs" directory.
-
-- Maximum log file size is set to 1 MB.
-
+2023-08-28 10:15:30,124 CRITICAL root MainThread example.py <module> : This is a critical message.
 """
-import json
+
 import logging
 import os
-import time
+from datetime import datetime
 
-with open("config/logging.json") as file:
-    config = json.load(file)
+log_format = "%(asctime)s %(levelname)s %(name)s %(threadName)s %(filename)s %(funcName)s : %(message)s"
+log_directory = "logs/General"
+log_file_name = os.path.join(log_directory, datetime.now().strftime("%Y-%m-%d.log"))
 
-
-class MaxSizeRotatingFileHandler(logging.FileHandler):
-    """
-    MaxSizeRotatingFileHandler is a custom file handler that rotates log files based on their size.
-    """
-
-    def __init__(self, filename: str, maxBytes: int, delay: int = 0):
-        """
-        Initializes the MaxSizeRotatingFileHandler.
-
-        Params:
-            `filename`: The path to the log file.
-
-            `maxBytes`: The maximum size of each log file in bytes.
-
-            `delay`: A delay in seconds for file opening.
-        """
-        super().__init__(filename, "a", delay=delay)
-        self.maxBytes = maxBytes
-        self.current_size = os.path.getsize(filename) if os.path.exists(filename) else 0
-        self.creation_time = time.strftime(config["dt_format"], time.localtime())
-
-    def shouldRollover(self, _):
-        """
-        shouldRollover checks if the log file should be rotated based on size.
-
-        Params:
-            `_`: Placeholder for the log record (not used).
-
-        Returns:
-            True if the log file should be rotated, False otherwise.
-        """
-        return self.current_size >= self.maxBytes
-
-    def doRollover(self):
-        """
-        doRollover performs log file rotation by closing the current stream and opening a new file.
-        """
-        self.stream.close()
-        self.stream = None
-        self.baseFilename = self.creation_time
-        self.stream = self._open()
-
-
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
-log_format = config["l_format"]
-formatter = logging.Formatter(log_format)
+handler = logging.FileHandler(log_file_name, mode="a")
+handler.setFormatter(logging.Formatter(log_format))
 
-log_path = config["path"]
-max_log_size = config["bytes"]
-log_file = os.path.join(log_path, "log.log")
-file_handler = MaxSizeRotatingFileHandler(log_file, maxBytes=max_log_size)
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
+logger.addHandler(handler)

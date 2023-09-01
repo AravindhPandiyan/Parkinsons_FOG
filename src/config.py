@@ -4,7 +4,7 @@ import json
 import os
 
 import hydra
-import mlflow.tensorflow
+import mlflow
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -506,7 +506,7 @@ class Inference(Modeling):
 
             with open(self._JSON_CONFIG) as file:
                 cfg = json.load(file)
-                self.MODEL.load_weights(f"{cfg['checkpoint_loc']}tdcsfog/RNN/")
+                self.MODEL.load_weights(f"{cfg['checkpoint_loc']}tdcsfog/CNN/")
 
         except IsADirectoryError as w:
             msg = "Please First Train the TDCSFOG CNN model."
@@ -537,7 +537,7 @@ class Inference(Modeling):
 
             with open(self._JSON_CONFIG) as file:
                 cfg = json.load(file)
-                self.MODEL.load_weights(f"{cfg['checkpoint_loc']}tdcsfog/RNN/")
+                self.MODEL.load_weights(f"{cfg['checkpoint_loc']}defog/RNN/")
 
         except IsADirectoryError as w:
             msg = "Please First Train the DEFOG RNN model."
@@ -568,7 +568,7 @@ class Inference(Modeling):
 
             with open(self._JSON_CONFIG) as file:
                 cfg = json.load(file)
-                self.MODEL.load_weights(f"{cfg['checkpoint_loc']}tdcsfog/RNN/")
+                self.MODEL.load_weights(f"{cfg['checkpoint_loc']}defog/CNN/")
 
         except IsADirectoryError as w:
             msg = "Please First Train the DEFOG CNN model."

@@ -2,7 +2,7 @@ from concurrent import futures
 
 import grpc
 
-from grpc_stream import service_pb2_grpc
+from grpc_stream import rpc_service_pb2_grpc
 from grpc_stream.jobs import Jobs
 from logger_config import logger as log
 
@@ -34,7 +34,7 @@ class GRPCServe:
         `open_line` method is used for starting **gRPC services**, and availing their access.
         """
         log.info("gRPC Server Start")
-        service_pb2_grpc.add_PackageServicer_to_server(self.services, self._server)
+        rpc_service_pb2_grpc.add_PackageServicer_to_server(self.services, self._server)
         self._server.add_insecure_port(self.address)
         self._server.start()
         self._server.wait_for_termination(timeout=60.0)

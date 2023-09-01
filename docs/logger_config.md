@@ -1,72 +1,28 @@
 Module logger_config
 ====================
-Custom Logging Configuration
----------------------------
+This script demonstrates setting up a logging configuration that outputs log messages to a file. The logs are formatted
+with a custom format that includes timestamp, log level, thread name, filename, function name, and log message. The log
+file names are dynamically generated based on the current date in the format 'YYYY-MM-DD.log'.
 
-This module defines a custom logging configuration with a `MaxSizeRotatingFileHandler` class that facilitates log rotation based on file size. The configuration establishes loggers and handlers to manage different log levels and file rotation.
+Usage:
 
-Classes:
+- The script configures a logger to write log messages to a file named after the current date.
 
-- `MaxSizeRotatingFileHandler`: A custom file handler class that supports log rotation based on the size of log files.
+- Log messages of varying severity levels (debug, info, warning, error, and critical) are provided as examples.
 
-    Methods:
+Note:
 
-    - `__init__(self, filename: str, maxBytes: int, delay: int = 0)`: Initializes the handler.
+- To include this logging functionality in your module or application, you can import the `logger` object and use its
+  methods to log messages at different levels.
 
-    - `shouldRollover(self, _)`: Checks if the log file should be rotated based on size.
+Example output:
 
-    - `doRollover(self)`: Performs log file rotation by closing the current stream and opening a new file.
+2023-08-28 10:15:30,123 DEBUG root MainThread example.py <module> : This is a debug message.
 
-Logger Configuration:
+2023-08-28 10:15:30,124 INFO root MainThread example.py <module> : This is an info message.
 
-- `logger`: The main logger instance with the name of the current module.
+2023-08-28 10:15:30,124 WARNING root MainThread example.py <module> : This is a warning message.
 
-- Logging level is set to `DEBUG`.
+2023-08-28 10:15:30,124 ERROR root MainThread example.py <module> : This is an error message.
 
-Log Formatting:
-
-- Log format includes timestamp, log level, thread name, source filename, function name, and message.
-
-Log Rotation:
-
-- Log files are rotated when their size exceeds the specified `max_log_size`.
-
-- The rotated files are stored in the "logs" directory.
-
-- Maximum log file size is set to 1 MB.
-
-Classes
--------
-
-`MaxSizeRotatingFileHandler(filename: str, maxBytes: int, delay: int = 0)`
-:   MaxSizeRotatingFileHandler is a custom file handler that rotates log files based on their size.
-    
-    Initializes the MaxSizeRotatingFileHandler.
-    
-    Params:
-        `filename`: The path to the log file.
-    
-        `maxBytes`: The maximum size of each log file in bytes.
-    
-        `delay`: A delay in seconds for file opening.
-
-    ### Ancestors (in MRO)
-
-    * logging.FileHandler
-    * logging.StreamHandler
-    * logging.Handler
-    * logging.Filterer
-
-    ### Methods
-
-    `doRollover(self)`
-    :   doRollover performs log file rotation by closing the current stream and opening a new file.
-
-    `shouldRollover(self, _)`
-    :   shouldRollover checks if the log file should be rotated based on size.
-        
-        Params:
-            `_`: Placeholder for the log record (not used).
-        
-        Returns:
-            True if the log file should be rotated, False otherwise.
+2023-08-28 10:15:30,124 CRITICAL root MainThread example.py <module> : This is a critical message.

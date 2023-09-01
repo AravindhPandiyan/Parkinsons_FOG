@@ -189,29 +189,33 @@ async def prediction(
     log.info("API Call")
 
     global background_task_status
+    if controller.window_size and controller.steps:
+        if choice.option == Options.WS:
+            msg = str(request.url).replace("http://", "ws://") + "/socket"
+            resp = {"WebSocket_streaming_address": msg}
+            return JSONResponse(status_code=status.HTTP_200_OK, content=resp)
 
-    if choice.option == Options.WebSocket:
-        msg = str(request.url).replace("http://", "ws://") + "/socket"
-        resp = {"web_socket_address": msg}
-        return JSONResponse(status_code=status.HTTP_200_OK, content=resp)
+        else:
+            if background_task_status == "running":
+                msg = "The gRPC streaming connection is already running."
+                log.warning(msg)
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
+
+        try:
+            domain = request.headers.get("Host").split(":")[0]
+            stream_address = domain + ":50051"
+            background_task_status = "running"
+            background_tasks.add_task(_background_streaming, stream_address)
+            resp = {"gRPC_streaming_address": stream_address}
+            return JSONResponse(status_code=status.HTTP_200_OK, content=resp)
+
+        except Exception as e:
+            log.error(e)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="The Server has a Boo Boo.",
+            )
 
     else:
-        if background_task_status == "running":
-            msg = "The gRPC streaming connection is already running."
-            log.warning(msg)
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=msg)
-
-    try:
-        domain = request.headers.get("Host").split(":")[0]
-        stream_address = domain + ":50051"
-        background_task_status = "running"
-        background_tasks.add_task(_background_streaming, stream_address)
-        resp = {"gRPC_stream_address": stream_address}
-        return JSONResponse(status_code=status.HTTP_200_OK, content=resp)
-
-    except Exception as e:
-        log.error(e)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="The Server has a Boo Boo.",
-        )
+        msg = "Please First Load the model."
+        raise HTTPException(status_code=status.HTTP_424_FAILED_DEPENDENCY, detail=msg)

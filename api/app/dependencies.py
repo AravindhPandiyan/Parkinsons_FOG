@@ -29,7 +29,7 @@ class APIResponseModel(BaseModel):
     of an API.
     """
 
-    details: str
+    detail: str
 
 
 class ModelTypesModel(BaseModel):
