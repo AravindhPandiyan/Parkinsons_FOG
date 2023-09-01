@@ -9,13 +9,13 @@ Usage:
 
 - Run this script directly to start the FastAPI application using Uvicorn.
 
-- The API will be available at http://0.0.0.0:8000.
+- The API will be available at http://0.0.0.0:8080.
 
 Example:
 
-    To start the server:
+    To start the server, run the below command from the root folder of the project:
     ```
-    python main.py
+    uvicorn api.main:app --host localhost --port 8080 --reload
     ```
 
 Modules:
@@ -52,6 +52,3 @@ app.include_router(inference_router.router, prefix="/inference")
 app.include_router(metrics_router.router, prefix="/metrics")
 app.include_router(modeling_router.router, prefix="/modeling")
 app.include_router(preprocessing_router.router, prefix="/preprocessing")
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8080)

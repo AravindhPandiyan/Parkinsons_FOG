@@ -36,10 +36,10 @@ Usage:
 
 """
 import streamlit as st
-from api_client import make_api_call
-from style_utils import set_custom_style
 
 from logger_config import logger as log
+from streamlit_app.api_client import make_api_call
+from streamlit_app.style_utils import set_custom_style
 
 
 def landing_page():

@@ -1,9 +1,9 @@
 import json
 
 import requests
-from data_processing import process_get
 
 from logger_config import logger as log
+from streamlit_app.data_processing import process_get
 
 
 def make_api_call(payload: dict, api_type: str) -> str:

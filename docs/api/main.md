@@ -1,4 +1,4 @@
-Module api_main
+Module api.main
 ===============
 Main FastAPI Application
 ------------------------
@@ -10,13 +10,13 @@ Usage:
 
 - Run this script directly to start the FastAPI application using Uvicorn.
 
-- The API will be available at http://0.0.0.0:8000.
+- The API will be available at http://localhost:8080.
 
 Example:
 
-    To start the server:
+    To start the server, run the below command from the root folder of the project:
     ```
-    python main.py
+    uvicorn api.main:app --host localhost --port 8080 --reload
     ```
 
 Modules:

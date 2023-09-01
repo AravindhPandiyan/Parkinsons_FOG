@@ -21,8 +21,10 @@
 │           └── preprocessing_router.py
 ├── api_main.py
 ├── config
+│   ├── apis.json
 │   ├── inference.json
 │   ├── __init__.py
+│   ├── mlflow.json
 │   ├── model
 │   │   ├── cnn_model.yaml
 │   │   ├── __init__.py
@@ -77,10 +79,6 @@
 │   │       │   └── preprocessing_controller.md
 │   │       ├── dependencies.md
 │   │       ├── index.md
-│   │       ├── models
-│   │       │   ├── index.md
-│   │       │   ├── inference_model.md
-│   │       │   └── metrics_model.md
 │   │       └── router
 │   │           ├── index.md
 │   │           ├── inference_router.md
@@ -95,6 +93,7 @@
 │   │   ├── server.md
 │   │   ├── service_pb2_grpc.md
 │   │   └── service_pb2.md
+│   ├── logger_config.md
 │   ├── main.md
 │   ├── src
 │   │   ├── build_model.md
@@ -103,6 +102,12 @@
 │   │   ├── load_data.md
 │   │   ├── preprocess.md
 │   │   └── train_model.md
+│   ├── streamlit_app
+│   │   ├── api_client.md
+│   │   ├── app.md
+│   │   ├── data_processing.md
+│   │   ├── index.md
+│   │   └── style_utils.md
 │   └── tests
 │       ├── index.md
 │       ├── test_grpc_stream.md
@@ -112,38 +117,39 @@
 │   ├── client.py
 │   ├── __init__.py
 │   ├── jobs.py
-│   ├── server.py
-│   ├── service_pb2_grpc.py
-│   ├── service_pb2.py
-│   └── service.proto
+│   ├── rpc_service_pb2_grpc.py
+│   ├── rpc_service_pb2.py
+│   ├── rpc_service.proto
+│   └── server.py
 ├── images
+│   ├── defog_rnn_training_system_performance.png
 │   ├── processed_defog_metadata_plot_1.png
 │   ├── processed_defog_metadata_plot_2.png
 │   ├── processed_tdcsfog_metadata_plot_1.png
-│   └── processed_tdcsfog_metadata_plot_2.png
+│   ├── processed_tdcsfog_metadata_plot_2.png
+│   └── tdcsfog_cnn_training_system_performance.png
 ├── LICENSE
+├── logger_config.py
 ├── logs
-│   └── training_logs
-│       ├── General Logs
-│       ├── MLFlow
-│       └── TensorBoard
-│           ├── train
-│           │   └── events.out.tfevents.*.Energizer.*.*.v2
-│           └── validation
-│               └── events.out.tfevents.*.Energizer.*.*.v2
+│   ├── General
+│   │   └── *.log
+│   └── TensorBoard
+│       ├── train
+│       │   └── events.out.tfevents.*.Energizer.*.*.v2
+│       └── validation
+│           └── events.out.tfevents.*.Energizer.*.*.v2
 ├── main.py
 ├── Makefile
 ├── models
 │   └── ModelCheckpoint
 │       ├── defog
 │       │   ├── CNN
-│       │   │   └── checkpoint
 │       │   └── RNN
+│       │       └── checkpoint
 │       └── tdcsfog
 │           ├── CNN
 │           │   └── checkpoint
 │           └── RNN
-│               └── checkpoint
 ├── notebooks
 │   ├── defog_metadata_processing.ipynb
 │   └── tdcsfog_metadata_processing.ipynb
@@ -155,9 +161,14 @@
 │   ├── load_data.py
 │   ├── preprocess.py
 │   └── train_model.py
+├── streamlit_app
+│   ├── api_client.py
+│   ├── app.py
+│   ├── data_processing.py
+│   └── style_utils.py
 └── tests
     ├── __init__.py
     ├── test_grpc_stream.py
     └── test_model.py
 
-51 directories, 1212 files
+101 directories, 1204 files
