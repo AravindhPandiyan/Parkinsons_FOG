@@ -9,9 +9,10 @@ stages:
     outs:
     - data/processed/tdcsfog/processed_tdcsfog_metadata.csv
   process_tdcsfog_train_data:
-    cmd: -0 data/processed/tdcsfog/rnn.tfrecords python main.py
+    cmd: python main.py
     deps:
     - data/processed/tdcsfog/processed_tdcsfog_metadata.csv
     - src/config.py
     outs:
     - data/processed/tdcsfog/cnn.tfrecords
+    - data/processed/tdcsfog/rnn.tfrecords

@@ -25,7 +25,7 @@ stages:
       md5: 34f4cb940d59eae1321dca29cd15cb09
       size: 6246
   process_tdcsfog_train_data:
-    cmd: -0 data/processed/tdcsfog/rnn.tfrecords python main.py
+    cmd: python main.py
     deps:
     - path: data/processed/tdcsfog/processed_tdcsfog_metadata.csv
       hash: md5
@@ -40,3 +40,7 @@ stages:
       hash: md5
       md5: f524604fd11dcba2a320deb8c2ce70d4
       size: 22222752
+    - path: data/processed/tdcsfog/rnn.tfrecords
+      hash: md5
+      md5: 9bf9b5c89d44ca772f9cafcb58042592
+      size: 11312184
