@@ -41,3 +41,39 @@ Clone the repository:
    ```bash
    git clone https://github.com/AravindhPandiyan/Parkinsons_FOG.git
    cd Parkinsons_FOG
+   ```
+
+Project Setup:
+
+   ```bash
+   make setup
+   ```
+
+## Running Project
+
+
+Activate Poetry:
+
+   ```bash
+   make activate
+   ```
+
+Running Project from the Main file:
+
+   ```bash
+   pythom main.py
+   ```
+
+## View Model Logs:
+
+Activate Poetry:
+
+   ```bash
+   make activate
+   ```
+
+Activate Poetry:
+
+   ```bash
+   tensorboard --logdir logs/TensorBoard
+   ```
