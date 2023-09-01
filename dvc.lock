@@ -44,3 +44,31 @@ stages:
       hash: md5
       md5: 9bf9b5c89d44ca772f9cafcb58042592
       size: 11312184
+  process_defog_metadata:
+    cmd: jupyter notebook
+    deps:
+    - path: data/raw/defog_metadata.csv
+      hash: md5
+      md5: 14f8774cac488bf2f3011f3f15f304f8
+      size: 3247
+    - path: data/raw/events.csv
+      hash: md5
+      md5: dd27193bbefb7fa3469bef806d1ef984
+      size: 118501
+    - path: data/raw/subjects.csv
+      hash: md5
+      md5: a0588f22327768d56860d89673194c91
+      size: 4654
+    - path: data/raw/tasks.csv
+      hash: md5
+      md5: 81f791aa7eb2520f39a9a2b78d817a52
+      size: 92231
+    - path: notebooks/defog_metadata_processing.ipynb
+      hash: md5
+      md5: 73836408aa17d2c71a479b1626482955
+      size: 7984332
+    outs:
+    - path: data/processed/defog/processed_defog_metadata.csv
+      hash: md5
+      md5: e975a64d9c06edd60a8a80df2db823db
+      size: 4151237

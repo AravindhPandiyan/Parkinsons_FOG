@@ -16,3 +16,13 @@ stages:
     outs:
     - data/processed/tdcsfog/cnn.tfrecords
     - data/processed/tdcsfog/rnn.tfrecords
+  process_defog_metadata:
+    cmd: jupyter notebook
+    deps:
+    - data/raw/defog_metadata.csv
+    - data/raw/events.csv
+    - data/raw/subjects.csv
+    - data/raw/tasks.csv
+    - notebooks/defog_metadata_processing.ipynb
+    outs:
+    - data/processed/defog/processed_defog_metadata.csv

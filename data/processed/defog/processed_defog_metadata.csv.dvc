@@ -1,5 +1,0 @@
-outs:
-- md5: e975a64d9c06edd60a8a80df2db823db
-  size: 4151237
-  hash: md5
-  path: processed_defog_metadata.csv
