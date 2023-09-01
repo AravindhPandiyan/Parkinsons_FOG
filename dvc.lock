@@ -72,3 +72,23 @@ stages:
       hash: md5
       md5: e975a64d9c06edd60a8a80df2db823db
       size: 4151237
+  process_defog_train_data:
+    cmd: python main.py
+    deps:
+    - path: data/processed/defog/processed_defog_metadata.csv
+      hash: md5
+      md5: e975a64d9c06edd60a8a80df2db823db
+      size: 4151237
+    - path: src/config.py
+      hash: md5
+      md5: 224de059d060125a3caea78cd200c5be
+      size: 21779
+    outs:
+    - path: data/processed/defog/cnn.tfrecords
+      hash: md5
+      md5: 4a6b0dd3489beebc70d186d4df20f86e
+      size: 221679120
+    - path: data/processed/defog/rnn.tfrecords
+      hash: md5
+      md5: e086574faa2114e644f250b3272bc2c4
+      size: 113397396

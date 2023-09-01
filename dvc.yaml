@@ -26,3 +26,11 @@ stages:
     - notebooks/defog_metadata_processing.ipynb
     outs:
     - data/processed/defog/processed_defog_metadata.csv
+  process_defog_train_data:
+    cmd: python main.py
+    deps:
+    - data/processed/defog/processed_defog_metadata.csv
+    - src/config.py
+    outs:
+    - data/processed/defog/cnn.tfrecords
+    - data/processed/defog/rnn.tfrecords
