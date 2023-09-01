@@ -1,0 +1,5 @@
+outs:
+- md5: e086574faa2114e644f250b3272bc2c4
+  size: 113397396
+  hash: md5
+  path: rnn.tfrecords

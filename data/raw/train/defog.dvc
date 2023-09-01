@@ -1,0 +1,6 @@
+outs:
+- md5: 5101b0545e49bef3a0b5288876bfb413.dir
+  size: 998899978
+  nfiles: 91
+  hash: md5
+  path: defog

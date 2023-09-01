@@ -1,0 +1,5 @@
+outs:
+- md5: 4a6b0dd3489beebc70d186d4df20f86e
+  size: 221679120
+  hash: md5
+  path: cnn.tfrecords

@@ -1,0 +1,5 @@
+outs:
+- md5: 12fdcf70b8655a63653c3449a22e1fb0
+  size: 21359
+  hash: md5
+  path: tdcsfog_metadata.csv

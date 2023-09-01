@@ -1,0 +1,5 @@
+outs:
+- md5: 81f791aa7eb2520f39a9a2b78d817a52
+  size: 92231
+  hash: md5
+  path: tasks.csv

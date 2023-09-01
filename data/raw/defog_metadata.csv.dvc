@@ -1,0 +1,5 @@
+outs:
+- md5: 14f8774cac488bf2f3011f3f15f304f8
+  size: 3247
+  hash: md5
+  path: defog_metadata.csv

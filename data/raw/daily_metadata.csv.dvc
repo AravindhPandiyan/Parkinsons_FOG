@@ -1,0 +1,5 @@
+outs:
+- md5: 283eb5d006b2e2c11c87b3dcf8bd9ef4
+  size: 1744
+  hash: md5
+  path: daily_metadata.csv
