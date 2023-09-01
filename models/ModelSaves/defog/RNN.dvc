@@ -1,0 +1,6 @@
+outs:
+- md5: 9dbd68f81f86d0bbf67854fc08f8b365.dir
+  size: 5343912
+  nfiles: 5
+  hash: md5
+  path: RNN

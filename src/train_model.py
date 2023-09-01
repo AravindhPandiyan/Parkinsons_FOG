@@ -8,7 +8,7 @@ from logger_config import logger as log
 
 
 def fitting(
-    model: Model, train_dataset: tf.Tensor, val_dataset: tf.Tensor, checkpoint_path: str
+    model: Model, train_dataset: tf.Tensor, val_dataset: tf.Tensor, model_path: str
 ) -> Model:
     """
     `fitting` function is used to **train** the model with the given dataset.
@@ -31,7 +31,7 @@ def fitting(
         config = json.load(file)
 
     save_check_point = tf.keras.callbacks.ModelCheckpoint(
-        config["checkpoint_loc"] + "/" + checkpoint_path,
+        config["checkpoint_loc"] + model_path,
         monitor="val_loss",
         save_best_only=True,
         mode="min",
@@ -54,5 +54,6 @@ def fitting(
         verbose=2,
         callbacks=[save_check_point, tensorboard_callback, time_stopping],
     )
-    model.load_weights(config["checkpoint_loc"] + "/" + checkpoint_path)
+    model.load_weights(config["checkpoint_loc"] + model_path)
+    model.save(config["saveModel_loc"] + model_path)
     return model

@@ -1,0 +1,6 @@
+outs:
+- md5: 49c396c97e546659f982bbeb9581c83d.dir
+  size: 19754571
+  nfiles: 3
+  hash: md5
+  path: CNN
