@@ -1,0 +1,26 @@
+schema: '2.0'
+stages:
+  process_tdcsfog_metadata:
+    cmd: jupyter notebook
+    deps:
+    - path: data/raw/events.csv
+      hash: md5
+      md5: dd27193bbefb7fa3469bef806d1ef984
+      size: 118501
+    - path: data/raw/subjects.csv
+      hash: md5
+      md5: a0588f22327768d56860d89673194c91
+      size: 4654
+    - path: data/raw/tdcsfog_metadata.csv
+      hash: md5
+      md5: 12fdcf70b8655a63653c3449a22e1fb0
+      size: 21359
+    - path: notebooks/tdcsfog_metadata_processing.ipynb
+      hash: md5
+      md5: 39aa6a5025447f7cf6c821f11cfe07f7
+      size: 2153015
+    outs:
+    - path: data/processed/tdcsfog/processed_tdcsfog_metadata.csv
+      hash: md5
+      md5: 34f4cb940d59eae1321dca29cd15cb09
+      size: 6246

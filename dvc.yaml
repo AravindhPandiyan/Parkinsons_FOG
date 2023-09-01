@@ -1,0 +1,10 @@
+stages:
+  process_tdcsfog_metadata:
+    cmd: jupyter notebook
+    deps:
+    - data/raw/events.csv
+    - data/raw/subjects.csv
+    - data/raw/tdcsfog_metadata.csv
+    - notebooks/tdcsfog_metadata_processing.ipynb
+    outs:
+    - data/processed/tdcsfog/processed_tdcsfog_metadata.csv
