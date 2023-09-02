@@ -1,0 +1,5 @@
+outs:
+- md5: 167c24d8b7bc04eab838cabbcba40f87
+  size: 5322864
+  hash: md5
+  path: CNN.h5
