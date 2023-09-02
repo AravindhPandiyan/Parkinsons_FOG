@@ -34,3 +34,35 @@ stages:
     outs:
     - data/processed/defog/cnn.tfrecords
     - data/processed/defog/rnn.tfrecords
+  tdcsfog_rnn_model_training:
+    cmd: python main.py
+    deps:
+    - data/processed/tdcsfog/rnn.tfrecords
+    - src/config.py
+    outs:
+    - models/ModelCheckpoint/tdcsfog/RNN
+    - models/ModelSaves/tdcsfog/RNN.h5
+  tdcsfog_cnn_model_training:
+    cmd: python main.py
+    deps:
+    - data/processed/tdcsfog/cnn.tfrecords
+    - src/config.py
+    outs:
+    - models/ModelCheckpoint/tdcsfog/CNN
+    - models/ModelSaves/tdcsfog/CNN.h5
+  defog_rnn_model_training:
+    cmd: python main.py
+    deps:
+    - data/processed/defog/rnn.tfrecords
+    - src/config.py
+    outs:
+    - models/ModelCheckpoint/defog/RNN
+    - models/ModelSaves/defog/RNN.h5
+  defog_cnn_model_training:
+    cmd: python main.py
+    deps:
+    - data/processed/defog/cnn.tfrecords
+    - src/config.py
+    outs:
+    - models/ModelCheckpoint/defog/CNN
+    - models/ModelSaves/defog/CNN.h5

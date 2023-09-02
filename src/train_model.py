@@ -55,5 +55,5 @@ def fitting(
         callbacks=[save_check_point, tensorboard_callback, time_stopping],
     )
     model.load_weights(config["checkpoint_loc"] + model_path)
-    model.save(config["saveModel_loc"] + model_path)
+    model.save(config["saveModel_loc"] + model_path + ".h5", save_format="h5")
     return model

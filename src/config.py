@@ -358,7 +358,7 @@ class Modeling:
             and cls.MODEL
             and cls.MODEL_TYPE == "TDCSFOG_RNN"
         ):
-            cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA, "tdcsfog/RNN/")
+            cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA, "tdcsfog/RNN")
             return cls.MODEL
 
         else:
@@ -384,7 +384,7 @@ class Modeling:
             and cls.MODEL
             and cls.MODEL_TYPE == "TDCSFOG_CNN"
         ):
-            cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA, "tdcsfog/CNN/")
+            cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA, "tdcsfog/CNN")
             return cls.MODEL
 
         else:
@@ -410,7 +410,7 @@ class Modeling:
             and cls.MODEL
             and cls.MODEL_TYPE == "DEFOG_RNN"
         ):
-            cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA, "defog/RNN/")
+            cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA, "defog/RNN")
             return cls.MODEL
 
         else:
@@ -435,7 +435,7 @@ class Modeling:
             and cls.MODEL
             and cls.MODEL_TYPE == "DEFOG_CNN"
         ):
-            cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA, "defog/CNN/")
+            cls.MODEL = fitting(cls.MODEL, cls.TRAIN_DATA, cls.VAL_DATA, "defog/CNN")
             return cls.MODEL
 
         else:

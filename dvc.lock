@@ -92,3 +92,87 @@ stages:
       hash: md5
       md5: e086574faa2114e644f250b3272bc2c4
       size: 113397396
+  tdcsfog_rnn_model_training:
+    cmd: python main.py
+    deps:
+    - path: data/processed/tdcsfog/rnn.tfrecords
+      hash: md5
+      md5: 9bf9b5c89d44ca772f9cafcb58042592
+      size: 11312184
+    - path: src/config.py
+      hash: md5
+      md5: 650c639df48359ffbcbab9b46710285b
+      size: 21775
+    outs:
+    - path: models/ModelCheckpoint/tdcsfog/RNN
+      hash: md5
+      md5: 98748c428879f71848b8c2e952acaf22.dir
+      size: 4960204
+      nfiles: 3
+    - path: models/ModelSaves/tdcsfog/RNN.h5
+      hash: md5
+      md5: 9a9160e5ab0af17965e36263a57695c3
+      size: 1706944
+  tdcsfog_cnn_model_training:
+    cmd: python main.py
+    deps:
+    - path: data/processed/tdcsfog/cnn.tfrecords
+      hash: md5
+      md5: f524604fd11dcba2a320deb8c2ce70d4
+      size: 22222752
+    - path: src/config.py
+      hash: md5
+      md5: 650c639df48359ffbcbab9b46710285b
+      size: 21775
+    outs:
+    - path: models/ModelCheckpoint/tdcsfog/CNN
+      hash: md5
+      md5: 49c396c97e546659f982bbeb9581c83d.dir
+      size: 19754571
+      nfiles: 3
+    - path: models/ModelSaves/tdcsfog/CNN.h5
+      hash: md5
+      md5: 31cccf7a285540a4b10f5335f66e466e
+      size: 6654576
+  defog_rnn_model_training:
+    cmd: python main.py
+    deps:
+    - path: data/processed/defog/rnn.tfrecords
+      hash: md5
+      md5: e086574faa2114e644f250b3272bc2c4
+      size: 113397396
+    - path: src/config.py
+      hash: md5
+      md5: 650c639df48359ffbcbab9b46710285b
+      size: 21775
+    outs:
+    - path: models/ModelCheckpoint/defog/RNN
+      hash: md5
+      md5: 3a44ed3f3649786b06a48322c9b73266.dir
+      size: 3029511
+      nfiles: 3
+    - path: models/ModelSaves/defog/RNN.h5
+      hash: md5
+      md5: 60c3a11908b2fa93b8b093b19036f536
+      size: 1065856
+  defog_cnn_model_training:
+    cmd: python main.py
+    deps:
+    - path: data/processed/defog/cnn.tfrecords
+      hash: md5
+      md5: 4a6b0dd3489beebc70d186d4df20f86e
+      size: 221679120
+    - path: src/config.py
+      hash: md5
+      md5: 650c639df48359ffbcbab9b46710285b
+      size: 21775
+    outs:
+    - path: models/ModelCheckpoint/defog/CNN
+      hash: md5
+      md5: 5a816f400f32ae26350587933d31eb81.dir
+      size: 15759435
+      nfiles: 3
+    - path: models/ModelSaves/defog/CNN.h5
+      hash: md5
+      md5: 167c24d8b7bc04eab838cabbcba40f87
+      size: 5322864
