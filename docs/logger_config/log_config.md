@@ -1,5 +1,5 @@
-Module logger_config
-====================
+Module logger_config.log_config
+===============================
 This script demonstrates setting up a logging configuration that outputs log messages to a file. The logs are formatted
 with a custom format that includes timestamp, log level, thread name, filename, function name, and log message. The log
 file names are dynamically generated based on the current date in the format 'YYYY-MM-DD.log'.

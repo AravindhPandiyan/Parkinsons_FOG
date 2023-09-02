@@ -1,0 +1,36 @@
+[Unit]
+# Illustration Reagarding the service, It is usually printed into the system when the service starts.
+# To view the last 100 lines of system logs of any service use "journalctl -u <name>.service -n 100".
+Description=The Uvicorn ASGI API server.
+
+[Service]
+# It is used for configuring the start-up of process.
+Type=simple
+
+# It is the Directory from which the code/command from ExecStart will be run.
+WorkingDirectory=/home/<user>/Documents/data_science/Parkinsons_FOG
+
+# This is the 'virtual environment' under which execution of the code/command will happen.
+Environment="PATH=/home/<user>/miniconda3/envs/<env_name>/bin"
+
+# This is used to pointing to the library directory from which packages will be imported.
+# But In this case as the cude is installed only on the 'virtual environment', it is used for pointing to that.
+# So this is Optional.
+Environment="LD_LIBRARY_PATH=/home/<user>/miniconda3/envs/<env_name>/lib"
+
+# This is the code or command expected to be executed as a linux service.
+# In this I have set it to execute the
+ExecStart=/bin/bash -c 'exec python api_main.py'
+
+# This is to mention the different instances in which, when the service fails should restart.
+# In this case I have set it to all instances.
+Restart=always
+
+# This is the Time Interval for how long the service should wait for before restarting the itself.
+RestartSec=5
+
+[Install]
+# This is to mention the service after which it should start the current service.
+# In its current state I have set that the system should have started all its network services, and
+# the system should have started to accept user logins.
+WantedBy=multi-user.target

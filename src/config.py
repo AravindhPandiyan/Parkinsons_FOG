@@ -35,7 +35,7 @@ class Preprocessing:
     them to **process the data**.
     """
 
-    _CONFIG_PATH = "../config/process/"
+    _CONFIG_PATH = os.getcwd() + "/config/process/"
     _VERSION = "1.3"
     _JSON_CONFIG = "config/training.json"
 
@@ -186,7 +186,7 @@ class Modeling:
     TEST_DATA = None
     MODEL = None
     MODEL_TYPE = None
-    _CONFIG_PATH = "../config/model/"
+    _CONFIG_PATH = os.getcwd() + "/config/model/"
     _VERSION = "1.3"
     _JSON_CONFIG = "config/training.json"
 

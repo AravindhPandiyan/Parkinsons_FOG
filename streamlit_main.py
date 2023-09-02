@@ -32,7 +32,7 @@ Modules and utilities used:
 
 Usage:
 
-  streamlit run streamlit_app/app.py
+  streamlit run streamlit_app/streamlit_main.py
 
 """
 import streamlit as st

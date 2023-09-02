@@ -33,7 +33,7 @@ Modules and utilities used:
 
 Usage:
 
-  streamlit run streamlit_app/app.py
+    streamlit run streamlit_main.py
 
 Functions
 ---------
