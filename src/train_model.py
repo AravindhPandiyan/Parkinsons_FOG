@@ -26,7 +26,7 @@ def fitting(
     Returns:
         Finally, the function returns the **trained** model.
     """
-    log.info("Function Call")
+
     with open("config/training.json") as file:
         config = json.load(file)
 

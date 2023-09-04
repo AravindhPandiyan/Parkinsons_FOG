@@ -1,11 +1,29 @@
 {
   "paths": {
-    "PREPROCESSING": ["post", "/preprocessing"],
-    "BUILD_MODEL": ["post","/modeling/build"],
-    "TRAIN_MODEL": ["post","/modeling/train"],
-    "LOAD_MODEL": ["post","/inference/load"],
-    "TEST_MODEL": ["get", "/metrics"],
-    "STREAMERS": ["get","/inference/predict"]
+    "LOAD_MODEL": [
+      "POST",
+      "/inference/load"
+    ],
+    "PREDICTION": [
+      "GET",
+      "/inference/predict"
+    ],
+    "TEST_MODEL": [
+      "GET",
+      "/metrics/"
+    ],
+    "BUILD_MODEL": [
+      "POST",
+      "/modeling/build"
+    ],
+    "TRAIN_MODEL": [
+      "POST",
+      "/modeling/train"
+    ],
+    "STREAMERS": [
+      "POST",
+      "/preprocessing/"
+    ]
   },
-  "DOMAIN" : "http://localhost:8080"
+  "DOMAIN": "http://Energizer:8080"
 }

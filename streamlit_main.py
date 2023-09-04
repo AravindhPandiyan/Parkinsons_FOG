@@ -46,7 +46,7 @@ def landing_page():
     """
     `landing_page` is used as the initialization funtion for the streamlit web app.
     """
-    log.info("Funtion Call")
+
     set_custom_style()
     st.title("Deep Learning on Parkinson's Freezing of Gait Data.")
 

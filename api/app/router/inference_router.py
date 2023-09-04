@@ -43,7 +43,7 @@ def _background_streaming(address: str):
     Params:
         `address`: The URL path where the gRPC server-side session will be made available.
     """
-    log.info("Funtion Call")
+
     job = PredictorJob(controller)
     grpc_server = GRPCServe(job, address)
 
@@ -71,7 +71,6 @@ async def load_model(load: ModelTypesModel):
     Returns:
         The return values of the function are dependent on the current state of the API.
     """
-    log.info("API Call")
 
     try:
         msg = None
@@ -98,7 +97,7 @@ async def load_model(load: ModelTypesModel):
 
         else:
             msg = f"{load.use_data} data trained {load.architecture} model has been loaded into memory."
-            log.info(msg)
+
             resp = {"detail": msg}
             return JSONResponse(status_code=status.HTTP_200_OK, content=resp)
 
@@ -120,7 +119,6 @@ async def web_socket_stream(websocket: WebSocket):
         `websocket`: The **websocket** parameter passed to the function by the decorator function. It
         is used to control the connection.
     """
-    log.info("Web Socket start")
 
     await websocket.accept()
     w_size = controller.window_size
@@ -156,9 +154,8 @@ async def web_socket_stream(websocket: WebSocket):
                 print(f"\n{msg}")
                 break
 
-    except WebSocketDisconnect as i:
+    except WebSocketDisconnect:
         msg = "A Client just Disconnected."
-        log.info(msg + ": " + str(i))
         print(f"\n{msg}")
 
 
@@ -186,7 +183,6 @@ async def prediction(
     Returns:
         The return values of the function are dependent on the state of the API.
     """
-    log.info("API Call")
 
     global background_task_status
     if controller.window_size and controller.steps:

@@ -19,7 +19,7 @@ from src.load_data import TFRecordParsers
 from src.preprocess import WindowWriter
 from src.train_model import fitting
 
-with open("config/mlflow.json") as file:
+with open("config/mlflow_dagshub_tracking_cred.json") as file:
     mlflow_cfg = json.load(file)
     mlflow.set_tracking_uri(mlflow_cfg["tracking_uri"])
     os.environ["MLFLOW_TRACKING_USERNAME"] = mlflow_cfg["tracking_username"]
@@ -49,7 +49,7 @@ class Preprocessing:
 
             `data_len`: data_len is used for mentioning the data's **length** after **processing**.
         """
-        log.info("Method Call")
+
         with open(cls._JSON_CONFIG) as file:
             config = json.load(file)
 
@@ -72,7 +72,7 @@ class Preprocessing:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
             types **processing**.
         """
-        log.info("Method Call")
+
         cfg_ps = cfg.power_spectrum
         current_path = utils.get_original_cwd() + "/"
         ww = WindowWriter(cfg.window_size, cfg.steps, cfg_ps.freq, cfg_ps.type)
@@ -99,7 +99,7 @@ class Preprocessing:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
             types **processing**.
         """
-        log.info("Method Call")
+
         current_path = utils.get_original_cwd() + "/"
         ww = WindowWriter(cfg.window_size, cfg.steps)
         dataset = ww.load_csv_data(
@@ -125,7 +125,7 @@ class Preprocessing:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific process
             types **processing**.
         """
-        log.info("Method Call")
+
         cfg_ps = cfg.power_spectrum
         current_path = utils.get_original_cwd() + "/"
         ww = WindowWriter(cfg.window_size, cfg.steps, cfg_ps.freq, cfg_ps.type)
@@ -158,7 +158,7 @@ class Preprocessing:
             types **processing**.
 
         """
-        log.info("Method Call")
+
         current_path = utils.get_original_cwd() + "/"
         ww = WindowWriter(cfg.window_size, cfg.steps)
         dataset = ww.load_csv_data(
@@ -223,7 +223,6 @@ class Modeling:
 
             `type_d`: type_d is used for identifying the **type of data**.
         """
-        log.info("Method Call")
 
         try:
             with tf.device("/GPU:0"):
@@ -284,7 +283,7 @@ class Modeling:
         Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
         """
-        log.info("Method Call")
+
         cfg = cfg.tdcsfog
         builder = ConstructRNN()
         Modeling.MODEL_TYPE = "TDCSFOG_RNN"
@@ -301,7 +300,7 @@ class Modeling:
         Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
         """
-        log.info("Method Call")
+
         cfg = cfg.tdcsfog
         builder = ConstructCNN()
         Modeling.MODEL_TYPE = "TDCSFOG_CNN"
@@ -318,7 +317,7 @@ class Modeling:
         Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
         """
-        log.info("Method Call")
+
         cfg = cfg.defog
         builder = ConstructRNN()
         Modeling.MODEL_TYPE = "DEFOG_RNN"
@@ -335,7 +334,7 @@ class Modeling:
         Params:
             `cfg`: cfg parameter is used for accessing the **configurations** for the specific model.
         """
-        log.info("Method Call")
+
         cfg = cfg.defog
         builder = ConstructCNN()
         Modeling.MODEL_TYPE = "DEFOG_CNN"
@@ -350,7 +349,6 @@ class Modeling:
             It returns the **model** if the necessary **components** are present to **train** the **model** and
             return's a **warning string**, if the model is not **constructed** first.
         """
-        log.info("Method Call")
 
         if (
             cls.TRAIN_DATA
@@ -376,7 +374,6 @@ class Modeling:
             It returns the **model** if the necessary **components** are present to **train** the **model** and
             return's a **warning string**, if the model is not **constructed** first.
         """
-        log.info("Method Call")
 
         if (
             cls.TRAIN_DATA
@@ -402,7 +399,6 @@ class Modeling:
             It returns the **model** if the necessary **components** are present to **trains** the **model** and
             return's a **warning string**, if the model is not **constructed** first.
         """
-        log.info("Method Call")
 
         if (
             cls.TRAIN_DATA
@@ -428,7 +424,7 @@ class Modeling:
             It returns the **model** if the necessary **components** are present to **trains** the **model** and
             return's a **warning string**, if not it will return a **warning message**.
         """
-        log.info("Method Call")
+
         if (
             cls.TRAIN_DATA
             and cls.VAL_DATA
@@ -451,7 +447,6 @@ class Inference(Modeling):
     """
 
     def __init__(self):
-        log.info("class Initialization")
         self.window_size = None
         self.steps = None
         self._m_type = None
@@ -466,7 +461,6 @@ class Inference(Modeling):
             If there are **no checkpoints** of the **tdcsfog rnn model** it will return a **warning message**,
             else nothing.
         """
-        log.info("Method Call")
 
         try:
             self._d_type = "tdcsfog"
@@ -497,7 +491,6 @@ class Inference(Modeling):
             If there are **no checkpoints** of the **tdcsfog cnn model** it will return a **warning message**,
             else nothing.
         """
-        log.info("Method Call")
 
         try:
             self._d_type = "tdcsfog"
@@ -528,7 +521,6 @@ class Inference(Modeling):
             If there are **no checkpoints** of the **defog rnn model** it will return a **warning message**,
             else nothing.
         """
-        log.info("Method Call")
 
         try:
             self._d_type = "defog"
@@ -559,7 +551,6 @@ class Inference(Modeling):
             If there are **no checkpoints** of the **defog cnn** model it will return a **warning message**,
             else nothing.
         """
-        log.info("Method Call")
 
         try:
             self._d_type = "defog"
@@ -595,7 +586,6 @@ class Inference(Modeling):
             Finally, it returns the **prediction** list, or if the model is **not loaded** it will return a
             **warning string**.
         """
-        log.info("Method Call")
 
         if self.window_size and self.steps:
             if self._m_type == "RNN":

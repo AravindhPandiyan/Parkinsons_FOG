@@ -26,7 +26,7 @@ class GRPCConnect:
             `state`: **{0 or ‘Test’, 1 or ‘Generator’}**, default `1`. This is for setting if the connect_to_stream
             method should act as normal **method** or return a **generator**.
         """
-        log.info("Class Initialization")
+
         self.address = host_address
         self.gen = data_generator
         self.method_state = state
@@ -54,7 +54,6 @@ class GRPCConnect:
         Returns:
             This method will return a **generator** if the state is `1` or above else, it will act like a normal method.
         """
-        log.info("Method Call")
 
         with grpc.insecure_channel(self.address) as channel:
             stub = rpc_service_pb2_grpc.PackageStub(channel)

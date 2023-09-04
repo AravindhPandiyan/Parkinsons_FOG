@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import dask.dataframe as dd
 import numpy as np
 import pandas as pd
@@ -32,7 +34,7 @@ class WindowWriter:
             `model_type`: model_type it is to mention the type of model to opt into a particular type of
             processing of data.
         """
-        log.info("Class Initialization")
+
         self.wsize = window_size
         self.steps = steps
         self.freq = freq
@@ -74,7 +76,7 @@ class WindowWriter:
 
     def window_processing(
         self, x_win: pd.DataFrame, y_win: pd.DataFrame = pd.DataFrame([[0, 0, 0]])
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """
         `window_processing` method is used for **processing** the **feature and targets** of a given
         **window dataframe**.
@@ -115,7 +117,7 @@ class WindowWriter:
         Returns:
             Finally, this function returns the **length of the tfrecord dataset**.
         """
-        log.info("Method Call")
+
         data = data.fillna(0)
         size = 0
         with tf.io.TFRecordWriter(path) as writer:
@@ -159,7 +161,7 @@ class WindowWriter:
             Finally, this function returns the **filtered data** from all the data.
 
         """
-        log.info("Method Call")
+
         metadata = pd.read_csv(meta_path)
         dataset_path = list(
             map(lambda id_: data_path + id_ + ".csv", metadata.Id.unique())

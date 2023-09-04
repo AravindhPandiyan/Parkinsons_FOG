@@ -15,7 +15,7 @@ def process_get(data: dict, payload: dict, api_type: str) -> str:
     Returns:
         Finally, this function returns the processes the APIs' response and returns them.
     """
-    log.info("Funtion Call")
+
     if api_type == "TEST_MODEL":
         return f'Mean Average Precision(mAP): {data["map"]}\nArea Under the Curve(AUC): {data["auc"]}'
     else:

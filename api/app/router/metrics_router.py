@@ -29,7 +29,6 @@ async def test_model(test: ModelTypesModel):
     Returns:
         The return values of the function are dependent on the state of the API.
     """
-    log.info("API Call")
 
     try:
         msg = None

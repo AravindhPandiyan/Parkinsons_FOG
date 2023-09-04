@@ -26,7 +26,6 @@ async def streamers(digest: ModelTypesModel):
     Returns:
         The return values of the function are dependent on the state of the API.
     """
-    log.info("API Call")
 
     try:
         if digest.use_data == UsableData.TDCSFOG:
@@ -47,7 +46,7 @@ async def streamers(digest: ModelTypesModel):
             f"{digest.use_data} for training the {digest.architecture} model has been processed and converted to "
             "TFRecords."
         )
-        log.info(msg)
+
         resp = {"detail": msg}
         return JSONResponse(status_code=status.HTTP_201_CREATED, content=resp)
 

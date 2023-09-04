@@ -18,14 +18,14 @@ def make_api_call(payload: dict, api_type: str) -> str:
     Returns:
         Finally, this function returns the APIs' response.
     """
-    log.info("Function Call")
+
     try:
         with open("config/apis.json") as file:
             apis = json.load(file)
 
         api = apis["DOMAIN"] + apis["paths"][api_type][1]
 
-        if apis["paths"][api_type][0] == "post":
+        if apis["paths"][api_type][0] == "POST":
             response = requests.post(url=api, json=payload)
             response_text = response.json()["detail"]
 

@@ -24,7 +24,7 @@ class GRPCServe:
             `threads`: threads is the total number of threads the service can handel at the same time. By Default, it
             is `10` threads.
         """
-        log.info("Class Initialization")
+
         self.services = service
         self.address = host_address
         self._server = grpc.server(futures.ThreadPoolExecutor(max_workers=threads))
@@ -33,7 +33,6 @@ class GRPCServe:
         """
         `open_line` method is used for starting **gRPC services**, and availing their access.
         """
-        log.info("gRPC Server Start")
         rpc_service_pb2_grpc.add_PackageServicer_to_server(self.services, self._server)
         self._server.add_insecure_port(self.address)
         self._server.start()
@@ -43,5 +42,4 @@ class GRPCServe:
         """
         `close_line` method is used for closing **gRPC services**.
         """
-        log.info("gRPC Server Stop")
         self._server.stop()

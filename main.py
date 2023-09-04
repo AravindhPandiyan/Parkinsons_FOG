@@ -51,7 +51,6 @@ def _grpc_test(inference):
     Params:
         inference: inference is to make use of the existing inference instance in the server-side of the code.
     """
-    log.info("Function Call")
 
     with concurrent.futures.ThreadPoolExecutor() as exe:
         exe.submit(server, inference)
@@ -63,7 +62,7 @@ def main():
     `main` function is the **initiating function** that provides various options from **processing** to **training**
     the model and for **inference**.
     """
-    log.info("Function Call")
+
     processing = Preprocessing()
     modeler = Modeling()
     infer = Inference()
@@ -129,9 +128,8 @@ def main():
                     stage_2 = input("Enter the option alphabet: ")
                     calls[stage_1][stage_2]()
 
-                except KeyError as i:
+                except KeyError:
                     msg = "Going back..."
-                    log.info(msg + ": " + str(i))
                     print(f"\n{msg}")
                     continue
 
@@ -144,9 +142,8 @@ def main():
                     log.warning(msg)
                     print(f"\n{msg}")
 
-        except (KeyboardInterrupt, KeyError) as i:
+        except (KeyboardInterrupt, KeyError):
             msg = "Thank you for Using Parkinson's FOG Detection."
-            log.info(msg + ": " + str(i))
             print(f"\n{msg}")
             break
 

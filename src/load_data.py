@@ -19,7 +19,7 @@ class TFRecordParsers:
             `y_shape`: y_shape is the **shape** to which the **targets** should be restored from the
             **tfrecords** file.
         """
-        log.info("Class Initialization")
+
         self.x_shape = list(x_shape)
         self.y_shape = list(y_shape)
 

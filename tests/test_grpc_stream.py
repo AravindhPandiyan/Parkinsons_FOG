@@ -8,7 +8,7 @@ def data_streamer():
     """
     `data_streamer` method is used to **test** the client side streaming of the gRPC connection.
     """
-    log.info("Test - Function Call")
+
     data = dd.read_parquet("data/raw/unlabeled")
     data[["AccV", "AccML", "AccAP"]] = data[["AccV", "AccML", "AccAP"]] * 9.80665
     grpc_client = GRPCConnect(data.itertuples(), "localhost:50051", 0)
@@ -25,7 +25,7 @@ def server(inference):
     Returns:
 
     """
-    log.info("Test - Function Call")
+
     job = PredictorJob(inference)
     grpc_server = GRPCServe(job, "localhost:50051")
 

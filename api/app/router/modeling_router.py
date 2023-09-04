@@ -27,7 +27,6 @@ def _background_training(task_data: ModelTypesModel):
         `task_data`: task_data is used for beginning the training of a specific model mentioned
         in it.
     """
-    log.info("Funtion Call")
 
     if task_data.use_data == UsableData.TDCSFOG:
         if task_data.architecture == ArchitectureTypes.RNN:
@@ -47,7 +46,6 @@ def _background_training(task_data: ModelTypesModel):
     background_task_status[
         f"{task_data.use_data}_{task_data.architecture}"
     ] = "completed"
-    log.info(result)
     print(f"\n{result}")
 
 
@@ -64,7 +62,6 @@ async def build_model(build: ModelTypesModel):
         The return values of the function are dependent on the state of the API.
 
     """
-    log.info("API Call")
 
     try:
         if build.use_data == UsableData.TDCSFOG:
@@ -83,7 +80,7 @@ async def build_model(build: ModelTypesModel):
 
         msg = f"{build.architecture} model has been constructed to train on {build.use_data} data."
         resp = {"detail": msg}
-        log.info(msg)
+
         return JSONResponse(status_code=status.HTTP_201_CREATED, content=resp)
 
     except Exception as e:
@@ -109,7 +106,6 @@ async def train_model(train: ModelTypesModel, background_tasks: BackgroundTasks)
     Returns:
         The return values of the function are dependent on the state of the API.
     """
-    log.info("API Call")
 
     if (
         background_task_status.get(f"{train.use_data}_{train.architecture}")

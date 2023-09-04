@@ -34,7 +34,7 @@ class PredictorJob(Jobs, rpc_service_pb2_grpc.PackageServicer):
         Params:
             `inference`: inference is expecting the inference class of the model.
         """
-        log.info("Class Initialization")
+
         self.infer = inference
         self.w_size = self.infer.window_size
         self.buffer = deque(maxlen=self.w_size)

@@ -35,9 +35,12 @@ Routes:
 - `/preprocessing`: API route for preprocessing related operations.
 
 """
+import json
+import socket
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.routing import APIRoute
 
 from api.app.router import (
     inference_router,
@@ -54,4 +57,14 @@ app.include_router(modeling_router.router, prefix="/modeling")
 app.include_router(preprocessing_router.router, prefix="/preprocessing")
 
 if __name__ == "__main__":
-    uvicorn.run("api_main:app", host="localhost", port=8080, reload=True)
+    host_name = socket.gethostname()
+    apis = dict(paths=dict(), DOMAIN="http://" + host_name + ":8080")
+
+    for route in app.routes:
+        if isinstance(route, APIRoute):
+            apis["paths"][route.name.upper()] = [list(route.methods)[0], route.path]
+
+    with open("config/apis.json", "w") as file:
+        json.dump(apis, file)
+
+    uvicorn.run("api_main:app", host=socket.gethostname(), port=8080, reload=True)

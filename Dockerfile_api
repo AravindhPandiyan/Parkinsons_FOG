@@ -1,0 +1,34 @@
+# To get the tensorflow with cuda drivers pre installed.
+FROM tensorflow/tensorflow:2.12.0-gpu
+
+# Creating the necessary directoris for the code executiobn.
+RUN mkdir -p /root/Parkinsons_FOG
+
+# Changing the working directory from root to Parkinsons_FOG
+WORKDIR /root/Parkinsons_FOG
+
+# Copying the files from host machine to the docker image.
+COPY api_main.py requirements.txt ./
+
+# Installing the necessary libraries for python form the requirements.txt file.
+RUN pip install -r requirements.txt
+
+# Copying the folders with their contents from host machine to Docker Image.
+COPY api api
+COPY grpc_stream grpc_stream
+COPY logger_config logger_config
+COPY src src
+COPY tests tests
+
+## PERSISTANT DATA SPACES WITHIN THE IMAGE
+# These are expected to be mounts form the host machine.
+VOLUME /root/Parkinsons_FOG/config
+VOLUME /root/Parkinsons_FOG/data
+VOLUME /root/Parkinsons_FOG/logs
+VOLUME /root/Parkinsons_FOG/models/ModelSaves
+
+# This is expected to be a docker volume.
+VOLUME /root/Parkinsons_FOG/models/ModelCheckpoint
+
+# The First Command to be executed when a Docker Contaner is created, here it is to run the APIs.
+CMD ["python", "run", "api_main.py;"]
