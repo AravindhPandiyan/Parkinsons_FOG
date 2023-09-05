@@ -57,8 +57,9 @@ app.include_router(modeling_router.router, prefix="/modeling")
 app.include_router(preprocessing_router.router, prefix="/preprocessing")
 
 if __name__ == "__main__":
-    host_name = socket.gethostname().lower()
-    apis = dict(paths=dict(), DOMAIN="http://" + host_name + ":8080")
+    host_name = socket.gethostname()
+    ip_addr = socket.gethostbyname(host_name)
+    apis = dict(paths=dict(), DOMAIN="http://" + ip_addr + ":8080")
 
     for route in app.routes:
         if isinstance(route, APIRoute):
@@ -67,4 +68,4 @@ if __name__ == "__main__":
     with open("config/apis.json", "w") as file:
         json.dump(apis, file)
 
-    uvicorn.run("api_main:app", host=socket.gethostname(), port=8080, reload=True)
+    uvicorn.run("api_main:app", host=ip_addr, port=8080, reload=True)

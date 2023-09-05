@@ -1,32 +1,37 @@
 # Freezing of Gait Prediction System
 
-A comprehensive system for predicting freezing of gait (FoG) using machine learning models and enabling real-time predictions through gRPC and WebSocket streaming.
+A comprehensive system for predicting freezing of gait (FoG) using machine learning models and enabling real-time
+predictions through gRPC and WebSocket streaming.
 
 ## Table of Contents
 
 - Documentation
-  - APIs
-    - Explore the API documentation for detailed usage instructions:
-      - [pdoc](docs/api/app/index.md)
-      - Swagger: run the **api/main.py** using uvicorn from the project root folder and access this link: http://localhost:8080/docs.
-      - ReDoc: run the **api/main.py** using uvicorn from the project root folder and access this link: http://localhost:8080/redocs.
-  
-  - [API Main file](docs/api_main.md)
-  - [gRPC Stream](docs/grpc_stream/index.md)
-  - [Logger](docs/logger_config/log_config.md)
-  - [Main file](docs/main.md)
-  - [Source](docs/src/index.md)
-  - [Streamlit APP](docs/streamlit_app/index.md)
-  - [Streamlit Main file](docs/streamlit_main.md)
-  - [Testing](docs/tests/index.md)
+    - APIs
+        - Explore the API documentation for detailed usage instructions:
+            - [pdoc](docs/api/app/index.md)
+            - Swagger: run the **api/main.py** using uvicorn from the project root folder and access this
+              link: http://localhost:8080/docs.
+            - ReDoc: run the **api/main.py** using uvicorn from the project root folder and access this
+              link: http://localhost:8080/redocs.
+
+    - [API Main file](docs/api_main.md)
+    - [gRPC Stream](docs/grpc_stream/index.md)
+    - [Logger](docs/logger_config/log_config.md)
+    - [Main file](docs/main.md)
+    - [Source](docs/src/index.md)
+    - [Streamlit APP](docs/streamlit_app/index.md)
+    - [Streamlit Main file](docs/streamlit_main.md)
+    - [Testing](docs/tests/index.md)
 - [License](LICENSE)
 - Contact
-  - [Email](mailto:aravindh.p201.741@gmail.com).
-  - [LinkedIn](https://www.linkedin.com/in/aravindh-pandiyan-80b983145)
+    - [Email](mailto:aravindh.p201.741@gmail.com).
+    - [LinkedIn](https://www.linkedin.com/in/aravindh-pandiyan-80b983145)
 
 ## Introduction
 
-The Freezing of Gait Prediction System is designed to predict the occurrence of freezing of gait (FoG) using machine learning models. It provides different components for model construction, training, testing, preprocessing, and real-time streaming of predictions using gRPC and WebSocket.
+The Freezing of Gait Prediction System is designed to predict the occurrence of freezing of gait (FoG) using machine
+learning models. It provides different components for model construction, training, testing, preprocessing, and
+real-time streaming of predictions using gRPC and WebSocket.
 
 ## Features
 
@@ -53,7 +58,6 @@ Project Setup:
    ```
 
 ## Running Project
-
 
 Activate Poetry:
 

@@ -7,7 +7,7 @@ Functions
     
 `load_model(load: api.app.dependencies.ModelTypesModel)`
 :   `load_model` is an API route for **loading** different models into the system memory.
-    
+
     Params:
         `load`: Data received from the user, containing a request for a specific model to be loaded into memory.
     
@@ -17,8 +17,8 @@ Functions
     
 `prediction(choice: api.app.models.inference_model.StreamingOptionModel, request: starlette.requests.Request, background_tasks: starlette.background.BackgroundTasks)`
 :   `prediction` is an API route for loading the choices between **Web Socket** and **gRPC** connections for
-    **inference streaming**.
-    
+**inference streaming**.
+
     Params:
         `choice`: choice is the data received from the user, containing the type of
         **streaming** requested.
@@ -35,8 +35,8 @@ Functions
     
 `web_socket_stream(websocket: starlette.websockets.WebSocket)`
 :   `web_socket_stream` Upgrades the HTTP request response link to a **websocket** for enabling bidirectional
-    data transfer for prediction using the model.
-    
+data transfer for prediction using the model.
+
     Params:
         `websocket`: The **websocket** parameter passed to the function by the decorator function. It
         is used to control the connection.

@@ -1,7 +1,5 @@
 import streamlit as st
 
-from logger_config import logger as log
-
 
 def set_custom_style():
     """

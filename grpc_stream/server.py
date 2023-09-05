@@ -4,7 +4,6 @@ import grpc
 
 from grpc_stream import rpc_service_pb2_grpc
 from grpc_stream.jobs import Jobs
-from logger_config import logger as log
 
 
 class GRPCServe:

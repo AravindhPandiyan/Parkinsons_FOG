@@ -6,8 +6,8 @@ Classes
 
 `GRPCResponseModel(**data: Any)`
 :   `GRPCResponseModel` is a validation class used for checking the **datatype** and **structuring** the output
-    of an API.
-    
+of an API.
+
     Create a new model by parsing and validating input data from keyword arguments.
     
     Raises ValidationError if the input data cannot be parsed to form a valid model.
@@ -28,7 +28,7 @@ Classes
 
 `Options(value, names=None, *, module=None, qualname=None, type=None, start=1)`
 :   `Options` is an Enum class that provides the options for **Bi-directional Streaming** of data that the user
-    can select during API request.
+can select during API request.
 
     ### Ancestors (in MRO)
 
@@ -45,8 +45,8 @@ Classes
 
 `SocketPackageModel(**data: Any)`
 :   `SocketPackageModel` is a validation class for checking the **datatype** and structure of the data received from
-    the user in an API call. This class is used for the checking the data packet received on the Web-Socker.
-    
+the user in an API call. This class is used for the checking the data packet received on the Web-Socker.
+
     Create a new model by parsing and validating input data from keyword arguments.
     
     Raises ValidationError if the input data cannot be parsed to form a valid model.
@@ -69,9 +69,9 @@ Classes
 
 `StreamingOptionModel(**data: Any)`
 :   `StreamingOptionModel` is a validation class that uses the above Enums for validating the **datatype**
-    and **structure** of the data received from the user in an API call. This Class is used for providing the
-    user to choose between the **Web-Socket** and **gRPC** for **streaming** data.
-    
+and **structure** of the data received from the user in an API call. This Class is used for providing the
+user to choose between the **Web-Socket** and **gRPC** for **streaming** data.
+
     Create a new model by parsing and validating input data from keyword arguments.
     
     Raises ValidationError if the input data cannot be parsed to form a valid model.
@@ -88,8 +88,8 @@ Classes
 
 `WebSocketResponseModel(**data: Any)`
 :   `WebSocketResponseModel` is a validation class used for checking the **datatype** and **structuring** the
-    output of an API.
-    
+output of an API.
+
     Create a new model by parsing and validating input data from keyword arguments.
     
     Raises ValidationError if the input data cannot be parsed to form a valid model.

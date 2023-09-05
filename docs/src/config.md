@@ -60,7 +60,7 @@ Classes
 
 `Modeling()`
 :   `Modeling` is a **configured** class which bring together all the other **functions** and **class** and makes
-    use of them to **build amd train the model**.
+use of them to **build amd train the model**.
 
     ### Descendants
 
@@ -140,7 +140,7 @@ Classes
 
 `Preprocessing()`
 :   `Preprocessing` is a **configured** class that bring together all the other functions and class and makes use of
-    them to **process the data**.
+them to **process the data**.
 
     ### Descendants
 

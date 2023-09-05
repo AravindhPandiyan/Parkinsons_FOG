@@ -1,7 +1,6 @@
 import dask.dataframe as dd
 
 from grpc_stream import GRPCConnect, GRPCServe, PredictorJob
-from logger_config import logger as log
 
 
 def data_streamer():

@@ -1,14 +1,15 @@
-# Making use of the slim version of python as it is light compared to the normal version.
+# Making use of the slim version of python as it is a light compared to the normal version. This version of python
+# is used as there isn't a lot of requremnt for using the streamlit app.
 FROM python:3.8-slim
 
 # Changing the working directory from root to Parkinsons_FOG
 WORKDIR /root/Parkinsons_FOG
 
-# Copying the streamlit main app script from host machine to the docker image.
+# Copying the streamlit main app script and the shell script from host machine to the docker image.
 COPY streamlit_main.py ui_entrypoint.sh ./
 
-# Upgrading the pip and installing streamlit library as it is used for running the streamlit ui app,
-# and also to create the dirctory in which the code will be copied and run.
+# Granting permission to execute the shell script, installing additional linux dependencies for testing the routing
+# and upgrading the pip and installing streamlit library as it is used for running the streamlit ui app,
 RUN chmod +x ui_entrypoint.sh \
     && apt-get update \
     && apt-get install iproute2 -y \
@@ -16,8 +17,8 @@ RUN chmod +x ui_entrypoint.sh \
     && apt-get install traceroute \
     && apt-get install nano \
     && pip install --upgrade pip \
-    && pip install streamlit==1.26.0
-
+    && pip install streamlit==1.26.0 \
+    && pip install fastapi==0.101.1
 
 # Copying the folders with their contents from host machine to Docker Image.
 COPY streamlit_app streamlit_app
@@ -30,7 +31,7 @@ VOLUME /root/Parkinsons_FOG/config
 VOLUME /root/Parkinsons_FOG/logs
 
 # Exposing the port 8501, as by default it is the port on which the streamlit app is hosted.
-EXPOSE 8502
+EXPOSE 8501
 
-# The command to run the streamlit APP.
+# This is the first command to be executed when a Docker Container is started, here it is to run the a shell script.
 ENTRYPOINT ["sh", "ui_entrypoint.sh"]

@@ -4,8 +4,6 @@ from keras.models import Model
 from omegaconf import DictConfig
 from tensorflow.keras import layers as tkl
 
-from logger_config import logger as log
-
 
 class ConstructRNN:
     """

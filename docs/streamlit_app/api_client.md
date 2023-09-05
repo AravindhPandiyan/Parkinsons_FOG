@@ -7,7 +7,7 @@ Functions
     
 `make_api_call(payload: dict, api_type: str) ‑> str`
 :   `make_api_call` function is used make a call to the APIs for executing processes.
-    
+
     Params:
         `payload`: payload is the expected data to be sent to the API.
     

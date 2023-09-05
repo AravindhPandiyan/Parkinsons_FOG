@@ -7,9 +7,9 @@ Functions
     
 `process_get(data: dict, payload: dict, api_type: str) ‑> str`
 :   `process_get` function is used processes the response data received from the particular API.
-    
+
     Params:
-        `data`: data is the response data of the API.
+        `resp`: resp is the response from the API.
     
         `payload`: payload is the expected data to be sent to the API.
     

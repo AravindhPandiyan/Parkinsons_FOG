@@ -6,7 +6,7 @@ Classes
 
 `TFRecordParsers(x_shape, y_shape)`
 :   `TFRecordParsers` iterate the content of **TFRecords**.
-    
+
     `TFRecordParsers` class is used to parse the **tfrecords** file.
     
     Params:

@@ -1,7 +1,5 @@
 import tensorflow as tf
 
-from logger_config import logger as log
-
 
 class TFRecordParsers:
     """

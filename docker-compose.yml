@@ -1,20 +1,43 @@
 version: "3.1"
 
 services:
+
+  # Gateway container
+  gateway:
+    build:
+      dockerfile: Dockerfile_gateway
+      context: .
+
+    image: stazvlight/parkinsons_fog:gateway
+
+    container_name: gateway
+
+    hostname: gateway
+
+    networks:
+      frontend:
+        ipv4_address: 10.0.0.2  # IP address of the container within the frontend network.
+
+      backend:
+        ipv4_address: 10.0.1.2  # IP address of the container within the backend network.
+
+  # APIs container
   apis:
     build:
       dockerfile: Dockerfile_api
       context: .
 
-    image: parkinsons_fog:apis
+    image: stazvlight/parkinsons_fog:apis
 
     container_name: apis
 
-    #    ports:
-    #      - "8080:8080"
+    ports:
+      - "8080:8080"
+      - "50051:50051"
 
     hostname: apis
 
+    # Mounts and Volume Connectors
     volumes:
       - ./config:/root/Parkinsons_FOG/config
       - ./data:/root/Parkinsons_FOG/data
@@ -23,71 +46,64 @@ services:
       - model_checkpoints:/root/Parkinsons_FOG/models/ModelCheckpoint
 
     networks:
-      - backend
+      backend:
+        ipv4_address: 10.0.1.3  # IP address of the containers within the backend network.
 
     cap_add:
-      - NET_ADMIN
+      - NET_ADMIN  # Network Administration
+
+    depends_on:
+      - gateway  # Depends on the gateway container.
+
+  # UI container
   ui:
     build:
       dockerfile: Dockerfile_ui
       context: .
 
-    image: parkinsons_fog:ui
+    image: stazvlight/parkinsons_fog:ui
 
     container_name: ui
 
     hostname: ui
 
     ports:
-      - "8000:8501"
+      - "8000:8501"  # Mapped port 8000 of host to port 8501 of container.
 
+    # Mounts Connectors
     volumes:
       - ./config:/root/Parkinsons_FOG/config
       - ./logs:/root/Parkinsons_FOG/logs
 
     networks:
-      - frontend
+      frontend:
+        ipv4_address: 10.0.0.3  # IP address of the container within the frontend network
 
     cap_add:
-      - NET_ADMIN
+      - NET_ADMIN  # Network Administration
 
     depends_on:
-      - apis
+      - gateway  # Depends on the gateway container.
+      - apis  # Depends on the apis container.
 
-  gateway:
-    build:
-      dockerfile: Dockerfile_gateway
-      context: .
-
-    image: parkinsons_fog:gateway
-
-    container_name: gateway
-
-    hostname: gateway
-
-    networks:
-      - frontend
-      - backend
-
-    depends_on:
-      - apis
-      - ui
-
-
+# Volume Creation
 volumes:
   model_checkpoints:
 
+# Network Creation
 networks:
   frontend:
     ipam:
       driver: default
 
       config:
-        - subnet: "10.0.0.0/24"
+        - subnet: 10.0.0.0/24
+          gateway: 10.0.0.1  # Gateway IP address for the frontend network.
 
   backend:
     ipam:
       driver: default
 
       config:
-        - subnet: "10.0.1.0/24"
+        - subnet: 10.0.1.0/24
+          gateway: 10.0.1.1  # Gateway IP address for the backend network.

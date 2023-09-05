@@ -4,8 +4,6 @@ import tensorflow as tf
 from keras.models import Model
 from tensorflow_addons.callbacks import TimeStopping
 
-from logger_config import logger as log
-
 
 def fitting(
     model: Model, train_dataset: tf.Tensor, val_dataset: tf.Tensor, model_path: str

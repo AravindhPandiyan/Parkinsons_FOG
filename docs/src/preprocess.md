@@ -6,7 +6,7 @@ Classes
 
 `WindowWriter(window_size: int = 10, steps: int = 1, freq: int = 100, model_type: str = 'CNN')`
 :   `WindowWriter` class creates **TFRecords**.
-    
+
     `WindowWriter` class is used for converting the data into **tfrecords**.
     
     Params:

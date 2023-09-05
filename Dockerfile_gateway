@@ -1,7 +1,11 @@
+# This is the lightest container available, its size is only 5MB. This version of linux is choosen as, this is
+# contaner will only be used as gateway between the 2 networks.
 FROM alpine
 
+# These packages are installed for the purpose of testing the routing.
 RUN apk add iputils \
     && apk add iproute2 \
     && apk add traceroute
 
+# This command allows to run a contaner without any script indefinitely.
 ENTRYPOINT ["tail", "-f", "/dev/null"]

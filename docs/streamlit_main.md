@@ -10,26 +10,26 @@ calls and display corresponding responses.
 
 The app consists of the following main components:
 
-  - Importing necessary modules
+- Importing necessary modules
 
-  - Definition of the `landing_page()` function
+- Definition of the `landing_page()` function
 
-  - Looping through expandable sections for user interactions
+- Looping through expandable sections for user interactions
 
-  - Displaying API response messages
+- Displaying API response messages
 
 To run the web app, execute this script. The `landing_page()` function serves
 as the entry point for initializing and rendering the Streamlit application.
 
 Modules and utilities used:
 
-  - streamlit: For creating interactive web applications
+- streamlit: For creating interactive web applications
 
-  - api_client: For making API calls to backend services
+- api_client: For making API calls to backend services
 
-  - style_utils: For applying custom styling to the app
+- style_utils: For applying custom styling to the app
 
-  - logger_config: For configuring and using logging functionality
+- logger_config: For configuring and using logging functionality
 
 Usage:
 

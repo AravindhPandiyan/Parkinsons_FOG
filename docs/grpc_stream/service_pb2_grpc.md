@@ -34,7 +34,7 @@ Classes
 
 `PackageStub(channel)`
 :   Missing associated documentation comment in .proto file.
-    
+
     Constructor.
     
     Params:

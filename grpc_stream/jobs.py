@@ -4,7 +4,6 @@ from collections import deque
 import pandas as pd
 
 from grpc_stream import rpc_service_pb2, rpc_service_pb2_grpc
-from logger_config import logger as log
 
 
 class Jobs:

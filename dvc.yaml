@@ -2,67 +2,67 @@ stages:
   process_tdcsfog_metadata:
     cmd: jupyter notebook
     deps:
-    - data/raw/events.csv
-    - data/raw/subjects.csv
-    - data/raw/tdcsfog_metadata.csv
-    - notebooks/tdcsfog_metadata_processing.ipynb
+      - data/raw/events.csv
+      - data/raw/subjects.csv
+      - data/raw/tdcsfog_metadata.csv
+      - notebooks/tdcsfog_metadata_processing.ipynb
     outs:
-    - data/processed/tdcsfog/processed_tdcsfog_metadata.csv
+      - data/processed/tdcsfog/processed_tdcsfog_metadata.csv
   process_tdcsfog_train_data:
     cmd: python main.py
     deps:
-    - data/processed/tdcsfog/processed_tdcsfog_metadata.csv
-    - src/config.py
+      - data/processed/tdcsfog/processed_tdcsfog_metadata.csv
+      - src/config.py
     outs:
-    - data/processed/tdcsfog/cnn.tfrecords
-    - data/processed/tdcsfog/rnn.tfrecords
+      - data/processed/tdcsfog/cnn.tfrecords
+      - data/processed/tdcsfog/rnn.tfrecords
   process_defog_metadata:
     cmd: jupyter notebook
     deps:
-    - data/raw/defog_metadata.csv
-    - data/raw/events.csv
-    - data/raw/subjects.csv
-    - data/raw/tasks.csv
-    - notebooks/defog_metadata_processing.ipynb
+      - data/raw/defog_metadata.csv
+      - data/raw/events.csv
+      - data/raw/subjects.csv
+      - data/raw/tasks.csv
+      - notebooks/defog_metadata_processing.ipynb
     outs:
-    - data/processed/defog/processed_defog_metadata.csv
+      - data/processed/defog/processed_defog_metadata.csv
   process_defog_train_data:
     cmd: python main.py
     deps:
-    - data/processed/defog/processed_defog_metadata.csv
-    - src/config.py
+      - data/processed/defog/processed_defog_metadata.csv
+      - src/config.py
     outs:
-    - data/processed/defog/cnn.tfrecords
-    - data/processed/defog/rnn.tfrecords
+      - data/processed/defog/cnn.tfrecords
+      - data/processed/defog/rnn.tfrecords
   tdcsfog_rnn_model_training:
     cmd: python main.py
     deps:
-    - data/processed/tdcsfog/rnn.tfrecords
-    - src/config.py
+      - data/processed/tdcsfog/rnn.tfrecords
+      - src/config.py
     outs:
-    - models/ModelCheckpoint/tdcsfog/RNN
-    - models/ModelSaves/tdcsfog/RNN.h5
+      - models/ModelCheckpoint/tdcsfog/RNN
+      - models/ModelSaves/tdcsfog/RNN.h5
   tdcsfog_cnn_model_training:
     cmd: python main.py
     deps:
-    - data/processed/tdcsfog/cnn.tfrecords
-    - src/config.py
+      - data/processed/tdcsfog/cnn.tfrecords
+      - src/config.py
     outs:
-    - models/ModelCheckpoint/tdcsfog/CNN
-    - models/ModelSaves/tdcsfog/CNN.h5
+      - models/ModelCheckpoint/tdcsfog/CNN
+      - models/ModelSaves/tdcsfog/CNN.h5
   defog_rnn_model_training:
     cmd: python main.py
     deps:
-    - data/processed/defog/rnn.tfrecords
-    - src/config.py
+      - data/processed/defog/rnn.tfrecords
+      - src/config.py
     outs:
-    - models/ModelCheckpoint/defog/RNN
-    - models/ModelSaves/defog/RNN.h5
+      - models/ModelCheckpoint/defog/RNN
+      - models/ModelSaves/defog/RNN.h5
   defog_cnn_model_training:
     cmd: python main.py
     deps:
-    - data/processed/defog/cnn.tfrecords
-    - src/config.py
+      - data/processed/defog/cnn.tfrecords
+      - src/config.py
     outs:
-    - models/ModelCheckpoint/defog/CNN
-    - models/ModelSaves/defog/CNN.h5
+      - models/ModelCheckpoint/defog/CNN
+      - models/ModelSaves/defog/CNN.h5

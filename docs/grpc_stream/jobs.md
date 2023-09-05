@@ -6,9 +6,9 @@ Classes
 
 `Jobs()`
 :   `Jobs` is an empty class used for **grouping classes** of similar type under one. This class is **inherited**
-    by the similar classes to become part of the same **group**. The work of any **'JOB'** class is for setting
-    up services like **Unary RPC, Server-side streaming RPC, Client-side streaming RPC and Bi-directional streaming
-    RPC**. The 'JOB' classes will be specific to their work. There can exist multiple **'JOB'** of same **service**.
+by the similar classes to become part of the same **group**. The work of any **'JOB'** class is for setting
+up services like **Unary RPC, Server-side streaming RPC, Client-side streaming RPC and Bi-directional streaming
+RPC**. The 'JOB' classes will be specific to their work. There can exist multiple **'JOB'** of same **service**.
 
     ### Descendants
 
@@ -21,7 +21,7 @@ Classes
 
 `PredictorJob(inference)`
 :   `PredictorJob` is a **service** for the servicing the **client connections**.
-    
+
     `PredictorJob` class is part of the main **'JOB'** group of classes. This **'JOB'** is used for
     **Bi-directional streaming** of data and predictions between **client** and **server** respectively. This
     class also **inherits the Servicer** class from `pb2_grpc.py` file.

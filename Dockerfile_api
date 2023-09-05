@@ -7,7 +7,8 @@ WORKDIR /root/Parkinsons_FOG
 # Copying the files from host machine to the docker image.
 COPY api_main.py api_entrypoint.sh requirements.txt ./
 
-# Installing the necessary libraries for python form the requirements.txt file.
+# Granting permission to execute the shell script, installing additional linux dependencies for testing the routing,
+# and installing the necessary libraries for python from the requirements.txt file to run the API.
 RUN chmod +x api_entrypoint.sh \
     && apt-get update \
     && apt-get install iproute2 -y \
@@ -33,7 +34,8 @@ VOLUME /root/Parkinsons_FOG/models/ModelSaves
 # This is expected to be a docker volume.
 VOLUME /root/Parkinsons_FOG/models/ModelCheckpoint
 
-EXPOSE 8080
+# Exposing the port 8080 and 50051, as the APIs and gRPC stream will be hosted on both the ports.
+EXPOSE 8080 50051
 
-# The First Command to be executed when a Docker Contaner is created, here it is to run the APIs.
+# This is the first command to be executed when a Docker Container is started, here it is to run the a shell script.
 ENTRYPOINT ["sh", "api_entrypoint.sh"]

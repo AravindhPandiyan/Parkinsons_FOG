@@ -23,7 +23,6 @@ def make_api_call(payload: dict, api_type: str) -> str:
         with open("config/apis.json") as file:
             apis = json.load(file)
 
-        print(payload)
         api = apis["DOMAIN"] + apis["paths"][api_type][1]
 
         if "POST" in apis["paths"][api_type][0]:
@@ -32,7 +31,7 @@ def make_api_call(payload: dict, api_type: str) -> str:
 
         else:
             response = requests.get(url=api, json=payload)
-            response_text = process_get(response.json(), payload, api_type)
+            response_text = process_get(response, payload, api_type)
 
     except requests.exceptions.RequestException as e:
         response_text = f"Error making API call: {e}"

@@ -6,7 +6,7 @@ Classes
 
 `ConstructCNN(drop_rate: float = 0.2, fun_type: str = 'relu')`
 :   `ConstructCNN` is **constructs CNN model**.
-    
+
     `ConstructCNN` class is used for building **CNN** a based model.
     
     Params:
@@ -31,7 +31,7 @@ Classes
 
 `ConstructRNN(drop_rate: float = 0.2, fun_type: str = 'tanh')`
 :   `ConstructRNN` is **constructs RNM model**.
-    
+
     `ConstructRNN` class is used for building **RNN** based model.
     
     Params:

@@ -7,7 +7,7 @@ Functions
     
 `fitting(model: keras.engine.training.Model, train_dataset: tensorflow.python.framework.ops.Tensor, val_dataset: tensorflow.python.framework.ops.Tensor, checkpoint_path: str) ‑> keras.engine.training.Model`
 :   `fitting` function is used to **train** the model with the given dataset.
-    
+
     Params:
         `model`: model to be **trained**.
     

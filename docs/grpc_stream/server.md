@@ -6,7 +6,7 @@ Classes
 
 `GRPCServe(service: grpc_stream.jobs.Jobs, host_address: str, threads: int = 10)`
 :   `GRPCServe` creates a **server** for **gRPC** services.
-    
+
     `GRPCServe` class is used for **hosting** the **gRPC services** for sending data and receive packets of data.
     
     Params:

@@ -6,8 +6,6 @@ import pandas as pd
 import tensorflow as tf
 from scipy import signal as ss
 
-from logger_config import logger as log
-
 
 class WindowWriter:
     """

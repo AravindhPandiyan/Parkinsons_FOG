@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from logger_config import logger as log
 from src import Inference
 
 

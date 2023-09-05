@@ -6,7 +6,7 @@ Classes
 
 `GRPCConnect(data_generator: Generator, host_address: str, state: int = 1)`
 :   `GRPCConnect` connects to the **gRPC** server **servicer**.
-    
+
     `GRPCConnect` class is used for connecting to the **gRPC stream** to send data and receive packets of data.
     
     Params:
