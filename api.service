@@ -8,15 +8,15 @@ Description=The Uvicorn ASGI API server.
 Type=simple
 
 # It is the Directory from which the code/command from ExecStart will be run.
-WorkingDirectory=/home/<user>/Documents/data_science/Parkinsons_FOG
+WorkingDirectory=/<path_to_project_file_from_root>/Parkinsons_FOG
 
 # This is the 'virtual environment' under which execution of the code/command will happen.
-Environment="PATH=/home/<user>/miniconda3/envs/<env_name>/bin"
+Environment="PATH=/<path_to_env_from_root>/<env_name>/bin"
 
 # This is used to pointing to the library directory from which packages will be imported.
 # But In this case as the cude is installed only on the 'virtual environment', it is used for pointing to that.
 # So this is Optional.
-Environment="LD_LIBRARY_PATH=/home/<user>/miniconda3/envs/<env_name>/lib"
+Environment="LD_LIBRARY_PATH=/<path_to_env_from_root>/<env_name>/lib"
 
 # This is the code or command expected to be executed as a linux service.
 # In this I have set it to execute the

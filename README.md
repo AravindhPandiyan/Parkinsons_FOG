@@ -41,17 +41,18 @@ real-time streaming of predictions using gRPC and WebSocket.
 - Test the trained models using various metrics to assess their performance.
 - Stream real-time predictions using gRPC and WebSocket protocols.
 - Interactive API documentation using Swagger and pdoc.
+- The APIs can be run individually without the UI services.
 
 ## Installation
 
-Clone the repository:
+### Clone the repository:
 
    ```bash
    git clone https://github.com/AravindhPandiyan/Parkinsons_FOG.git
    cd Parkinsons_FOG
    ```
 
-Project Setup:
+### Project Setup:
 
    ```bash
    make setup
@@ -59,28 +60,90 @@ Project Setup:
 
 ## Running Project
 
-Activate Poetry:
+### Activate Poetry:
 
    ```bash
    make activate
    ```
 
-Running Project from the Main file:
+### Running Project from the Main file:
 
    ```bash
    pythom main.py
    ```
 
-## View Model Logs:
+## View Model Logs
 
-Activate Poetry:
-
-   ```bash
-   make activate
-   ```
-
-Activate Poetry:
+### Activate Poetry:
 
    ```bash
    tensorboard --logdir logs/TensorBoard
+   ```
+
+## Running Project using docker containers
+
+### Build docker container using:
+
+   ```bash
+   docker compose build
+   ```
+
+or
+
+### Pull docker container using:
+
+   ```bash
+   docker compose pull
+   ```
+
+--------------------------------
+
+### Run the docker containers:
+
+   ```bash
+   docker compose up
+   ```
+
+or to run the containers in detached mode
+
+   ```bash
+   docker compose up -d
+   ```
+
+## Running APIs without the UI services
+
+### Running using python:
+
+   ```bash
+   pythom api_main.py
+   ```
+
+### Running as a linux service:
+
+- Replace all the given tags in the api.service file and make sure it is pointing to the project file and environment.
+- move the api.service file to /etc/systemd/system/ folder.
+- Then follow the bellow commands:
+
+#### Reload the service daemon:
+
+   ```bash
+   systemctl daemon-reload
+   ```
+
+#### Start the api service:
+
+   ```bash
+   systemctl start api.service
+   ```
+
+#### To set the service to auto-start when the system powers on:
+
+   ```bash
+   systemctl enable api.service
+   ```
+
+#### To check the status of the service:
+
+   ```bash
+   systemctl status api.service
    ```
