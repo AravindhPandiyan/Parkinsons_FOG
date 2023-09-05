@@ -1,21 +1,28 @@
 # Making use of the slim version of python as it is light compared to the normal version.
 FROM python:3.8-slim
 
-# Upgrading the pip and installing streamlit library as it is used for running the streamlit ui app,
-# and also to create the dirctory in which the code will be copied and run.
-RUN pip install --upgrade pip \
-    && pip install streamlit==1.26.0 \
-    && mkdir /root/Parkinsons_FOG
-
 # Changing the working directory from root to Parkinsons_FOG
 WORKDIR /root/Parkinsons_FOG
+
+# Copying the streamlit main app script from host machine to the docker image.
+COPY streamlit_main.py ui_entrypoint.sh ./
+
+# Upgrading the pip and installing streamlit library as it is used for running the streamlit ui app,
+# and also to create the dirctory in which the code will be copied and run.
+RUN chmod +x ui_entrypoint.sh \
+    && apt-get update \
+    && apt-get install iproute2 -y \
+    && apt-get install iputils-ping -y \
+    && apt-get install traceroute \
+    && apt-get install nano \
+    && pip install --upgrade pip \
+    && pip install streamlit==1.26.0
+
 
 # Copying the folders with their contents from host machine to Docker Image.
 COPY streamlit_app streamlit_app
 COPY logger_config logger_config
 
-# Copying the streamlit main app script from host machine to the docker image.
-COPY streamlit_main.py ./
 
 ## PERSISTANT DATA SPACES WITHIN THE IMAGE
 # These are expected to be mounts form the host machine.
@@ -23,7 +30,7 @@ VOLUME /root/Parkinsons_FOG/config
 VOLUME /root/Parkinsons_FOG/logs
 
 # Exposing the port 8501, as by default it is the port on which the streamlit app is hosted.
-EXPOSE 8501
+EXPOSE 8502
 
 # The command to run the streamlit APP.
-CMD ["streamlit", "run", "streamlit_main.py;"]
+ENTRYPOINT ["sh", "ui_entrypoint.sh"]

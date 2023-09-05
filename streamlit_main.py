@@ -70,18 +70,22 @@ def landing_page():
 
                     with col1:
                         st.markdown("### Data Type")
-                        api_json["use_data"] = st.radio("", ["TDCSFOG", "DEFOG"])
+                        api_json["use_data"] = st.radio(
+                            "Choose any one", ["TDCSFOG", "DEFOG"]
+                        )
 
                     with col2:
                         st.markdown("### Model Type")
-                        api_json["architecture"] = st.radio("", ["RNN", "CNN"])
+                        api_json["architecture"] = st.radio(
+                            "Choose any one", ["RNN", "CNN"]
+                        )
 
                     submitted = st.form_submit_button("Submit")
 
             else:
                 with st.form(expander_names):
                     api_json["option"] = st.radio(
-                        "", ["WebSocket", "gRPC"], horizontal=True
+                        "Choose any one", ["WebSocket", "gRPC"], horizontal=True
                     )
                     submitted = st.form_submit_button("Submit")
 

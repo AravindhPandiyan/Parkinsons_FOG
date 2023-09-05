@@ -1,0 +1,93 @@
+version: "3.1"
+
+services:
+  apis:
+    build:
+      dockerfile: Dockerfile_api
+      context: .
+
+    image: parkinsons_fog:apis
+
+    container_name: apis
+
+    #    ports:
+    #      - "8080:8080"
+
+    hostname: apis
+
+    volumes:
+      - ./config:/root/Parkinsons_FOG/config
+      - ./data:/root/Parkinsons_FOG/data
+      - ./logs:/root/Parkinsons_FOG/logs
+      - ./models/ModelSaves:/root/Parkinsons_FOG/models/ModelSaves
+      - model_checkpoints:/root/Parkinsons_FOG/models/ModelCheckpoint
+
+    networks:
+      - backend
+
+    cap_add:
+      - NET_ADMIN
+  ui:
+    build:
+      dockerfile: Dockerfile_ui
+      context: .
+
+    image: parkinsons_fog:ui
+
+    container_name: ui
+
+    hostname: ui
+
+    ports:
+      - "8000:8501"
+
+    volumes:
+      - ./config:/root/Parkinsons_FOG/config
+      - ./logs:/root/Parkinsons_FOG/logs
+
+    networks:
+      - frontend
+
+    cap_add:
+      - NET_ADMIN
+
+    depends_on:
+      - apis
+
+  gateway:
+    build:
+      dockerfile: Dockerfile_gateway
+      context: .
+
+    image: parkinsons_fog:gateway
+
+    container_name: gateway
+
+    hostname: gateway
+
+    networks:
+      - frontend
+      - backend
+
+    depends_on:
+      - apis
+      - ui
+
+
+volumes:
+  model_checkpoints:
+
+networks:
+  frontend:
+    ipam:
+      driver: default
+
+      config:
+        - subnet: "10.0.0.0/24"
+
+  backend:
+    ipam:
+      driver: default
+
+      config:
+        - subnet: "10.0.1.0/24"

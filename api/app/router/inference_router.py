@@ -163,7 +163,7 @@ async def web_socket_stream(websocket: WebSocket):
     "/predict",
     response_model=Union[APIResponseModel, GRPCResponseModel, WebSocketResponseModel],
 )
-async def prediction(
+async def streamers(
     choice: StreamingOptionModel, request: Request, background_tasks: BackgroundTasks
 ):
     """

@@ -36,7 +36,7 @@ log_directory = "logs/General"
 log_file_name = os.path.join(log_directory, datetime.now().strftime("%Y-%m-%d.log"))
 
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.ERROR)
 
 handler = logging.FileHandler(log_file_name, mode="a")
 handler.setFormatter(logging.Formatter(log_format))

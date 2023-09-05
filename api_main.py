@@ -57,12 +57,12 @@ app.include_router(modeling_router.router, prefix="/modeling")
 app.include_router(preprocessing_router.router, prefix="/preprocessing")
 
 if __name__ == "__main__":
-    host_name = socket.gethostname()
+    host_name = socket.gethostname().lower()
     apis = dict(paths=dict(), DOMAIN="http://" + host_name + ":8080")
 
     for route in app.routes:
         if isinstance(route, APIRoute):
-            apis["paths"][route.name.upper()] = [list(route.methods)[0], route.path]
+            apis["paths"][route.name.upper()] = [list(route.methods), route.path]
 
     with open("config/apis.json", "w") as file:
         json.dump(apis, file)

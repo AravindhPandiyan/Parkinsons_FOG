@@ -1,0 +1,7 @@
+FROM alpine
+
+RUN apk add iputils \
+    && apk add iproute2 \
+    && apk add traceroute
+
+ENTRYPOINT ["tail", "-f", "/dev/null"]

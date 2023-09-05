@@ -23,9 +23,10 @@ def make_api_call(payload: dict, api_type: str) -> str:
         with open("config/apis.json") as file:
             apis = json.load(file)
 
+        print(payload)
         api = apis["DOMAIN"] + apis["paths"][api_type][1]
 
-        if apis["paths"][api_type][0] == "POST":
+        if "POST" in apis["paths"][api_type][0]:
             response = requests.post(url=api, json=payload)
             response_text = response.json()["detail"]
 
@@ -38,6 +39,7 @@ def make_api_call(payload: dict, api_type: str) -> str:
         log.error(response_text)
 
     except Exception as e:
+        print(e)
         response_text = e
         log.error(e)
 

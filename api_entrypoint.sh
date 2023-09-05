@@ -1,0 +1,3 @@
+ip route add 10.0.0.0/24 via 10.0.1.3
+
+python api_main.py
