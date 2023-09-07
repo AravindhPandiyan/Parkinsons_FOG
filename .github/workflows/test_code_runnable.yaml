@@ -22,9 +22,6 @@ jobs:
     - name: Install Python Dependencies
       run: pip install -r requirements.txt  # Replace with the path to your requirements file
 
-    - name: Execute Script 1
-      run: python main.py
-
     - name: Execute Scripts 2 and 3 in Parallel
       run: |
         python api_main.py &
