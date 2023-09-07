@@ -31,9 +31,3 @@ jobs:
 
     - name: Execute Scripts api_main.py and streamlit_main.py in Parallel
       run: wait
-
-    - name: Stop streamlit_main.py
-      run: pkill -f "python streamlit_main.py"
-
-    - name: Stop api_main.py
-      run: pkill -f "python api_main.py"
