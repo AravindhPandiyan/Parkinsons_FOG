@@ -1,0 +1,5 @@
+{
+  "tracking_uri": "<DAGSHUB_MLFLOW_CONNECTION_URI>",
+  "tracking_username": "<DAGSHUB_USERNAME>",
+  "tracking_password": "<DAGSHUB_MLFLOW_CONNECTION_URI_TOKEN_KEY>"
+}
