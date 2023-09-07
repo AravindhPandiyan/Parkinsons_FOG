@@ -32,6 +32,10 @@ class PackageServicer(object):
 
 
 def add_PackageServicer_to_server(servicer, server):
+    """
+    add_PackageServicer_to_server method is used to add The Jobs to be serviced in the server side for clients'
+    connections to make use.
+    """
     rpc_method_handlers = {
         "bidirectionalStream": grpc.stream_stream_rpc_method_handler(
             servicer.bidirectionalStream,
