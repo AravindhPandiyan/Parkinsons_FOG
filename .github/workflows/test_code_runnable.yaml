@@ -23,10 +23,11 @@ jobs:
     - name: Install Python Dependencies
       run: pip install -r requirements.txt
 
-    - name: Execute Scripts api_main.py and streamlit_main.py in Parallel
-      run: |
-        python api_main.py &
-        python streamlit_main.py &
+    - name: Execute api_main.py with a timeout of 2 minutes
+      run: timeout 2m python api_main.py &
+
+    - name: Execute streamlit_main.py with a timeout of 2 minutes
+      run: timeout 2m python streamlit_main.py &
 
     - name: Execute Scripts api_main.py and streamlit_main.py in Parallel
       run: wait
