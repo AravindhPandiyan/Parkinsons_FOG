@@ -62,6 +62,9 @@ class Package(object):
         timeout=None,
         metadata=None,
     ):
+        """
+        bidirectionalStream is method used for setting up the Bi-directional Streaming process.
+        """
         return grpc.experimental.stream_stream(
             request_iterator,
             target,
