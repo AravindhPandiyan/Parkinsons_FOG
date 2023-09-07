@@ -1,4 +1,4 @@
-name: Parallel Python Execution
+name: Check Execution.
 
 on:
   push:
@@ -17,15 +17,21 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8  # Specify your Python version here
+        python-version: 3.8
 
     - name: Install Python Dependencies
-      run: pip install -r requirements.txt  # Replace with the path to your requirements file
+      run: pip install -r requirements.txt
 
-    - name: Execute Scripts 2 and 3 in Parallel
+    - name: Execute Scripts api_main.py and streamlit_main.py in Parallel
       run: |
         python api_main.py &
         python streamlit_main.py &
 
-    - name: Wait for scripts 2 and 3 to complete
+    - name: Execute Scripts api_main.py and streamlit_main.py in Parallel
       run: wait
+
+    - name: Stop api_main.py
+      run: pkill -f "python api_main.py"
+
+    - name: Stop streamlit_main.py
+      run: pkill -f "python streamlit_main.py"
