@@ -1,0 +1,33 @@
+name: Docker Build and Push
+
+on:
+  workflow_run:
+    workflows: ["Check Execution"]
+    types:
+      - completed
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Log in to Docker Hub
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker images
+      run: |
+        docker build -t stazvlight/parkinsons_fog:gateway -f Dockerfile_gateway .
+        docker push stazvlight/parkinsons_fog:gateway &
+
+        docker build -t stazvlight/parkinsons_fog:apis -f Dockerfile_api .
+        docker push stazvlight/parkinsons_fog:apis &
+
+        docker build -t stazvlight/parkinsons_fog:ui -f Dockerfile_ui .
+        docker push stazvlight/parkinsons_fog:ui &
+
+        wait
+
+    - name: Log out from Docker Hub
+      run: docker logout

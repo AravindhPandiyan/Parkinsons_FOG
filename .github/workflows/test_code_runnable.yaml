@@ -1,4 +1,4 @@
-name: Check Execution.
+name: Check Execution
 
 on:
   workflow_run:
