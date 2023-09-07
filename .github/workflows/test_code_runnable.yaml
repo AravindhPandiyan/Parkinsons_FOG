@@ -1,9 +1,10 @@
 name: Check Execution.
 
 on:
-  push:
-    branches:
-      - master
+  workflow_run:
+    workflows: ["continuous_integration"]
+    types:
+      - completed
 
 jobs:
   execute_python:
