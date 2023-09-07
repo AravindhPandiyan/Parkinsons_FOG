@@ -17,7 +17,7 @@ controller = PreprocessorController()
 @router.post("/", response_model=APIResponseModel)
 async def preprocessing(digest: ModelTypesModel):
     """
-    `streamers` is an API route for **preprocessing** the different options of data in for each model architecture.
+    `preprocessing` is an API route for **preprocessing** the different options of data in for each model architecture.
 
     Params:
         `digest`: digest is the data received from the user, containing the type of

@@ -167,7 +167,7 @@ async def streamers(
     choice: StreamingOptionModel, request: Request, background_tasks: BackgroundTasks
 ):
     """
-    `prediction` is an API route for loading the choices between **Web Socket** and **gRPC** connections for
+    `streamers` is an API route for loading the choices between **Web Socket** and **gRPC** connections for
     **inference streaming**.
 
     Params:

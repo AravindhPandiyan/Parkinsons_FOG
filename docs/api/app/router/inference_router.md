@@ -15,8 +15,8 @@ Functions
         The return values of the function are dependent on the current state of the API.
 
     
-`prediction(choice: api.app.models.inference_model.StreamingOptionModel, request: starlette.requests.Request, background_tasks: starlette.background.BackgroundTasks)`
-:   `prediction` is an API route for loading the choices between **Web Socket** and **gRPC** connections for
+`streamers(choice: api.app.models.inference_model.StreamingOptionModel, request: starlette.requests.Request, background_tasks: starlette.background.BackgroundTasks)`
+:   `streamers` is an API route for loading the choices between **Web Socket** and **gRPC** connections for
 **inference streaming**.
 
     Params:
