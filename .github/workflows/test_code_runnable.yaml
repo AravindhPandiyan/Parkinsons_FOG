@@ -29,5 +29,5 @@ jobs:
     - name: Execute streamlit_main.py with a timeout of 2 minutes
       run: timeout 2m python streamlit_main.py &
 
-    - name: Execute Scripts api_main.py and streamlit_main.py in Parallel
+    - name: Wait for both scripts to complete
       run: wait
