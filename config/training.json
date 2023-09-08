@@ -1,12 +1,1 @@
-{
-  "checkpoint_loc": "models/ModelCheckpoint/",
-  "saveModel_loc": "models/ModelSaves/",
-  "tensorBoard_logs": "logs/TensorBoard",
-  "max_train_time": 14400,
-  "batch_size": 16,
-  "epochs": 300,
-  "buffer_size": 10000,
-  "shuffle_seed": 73,
-  "defog_len": 71051,
-  "tdcsfog_len": 5578
-}
+{"checkpoint_loc": "models/ModelCheckpoint/", "saveModel_loc": "models/ModelSaves/", "tensorBoard_logs": "logs/TensorBoard", "max_train_time": 14400, "batch_size": 16, "epochs": 300, "buffer_size": 10000, "shuffle_seed": 73, "defog_len": 71051, "tdcsfog_len": 5578}

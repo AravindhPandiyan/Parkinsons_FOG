@@ -51,9 +51,21 @@ I have set up this structure with my knowledge in CN(Computer Networks) and Dock
 similar types of containers and keeping the other types in different networks will help to secure the system. As 
 when a particular network is hacked, the hacker will only get access to the container in that network, 
 remaining containers on other networks won't be accessible easily, there by securing the system more. On a 
-small scale, the above has been implemented with the help of docker compose. You can view the structure in the below Image:
+small scale, the above has been implemented with the help of docker compose. You can view the structure in the 
+below Image:
 
 ![](images/Dockerization_structure.png)
+
+## USER INTERFACE:
+
+The user interface for this application is built using streamlit. It is a single page UI, with multiple 
+expandable tabs. The user can select the preferred options in under the tab and click on the Submit button to 
+make the API call. The Response of the API will be displayed in the text BOX at the bottom of the page. You can 
+view the UI in the below Image:
+
+![](images/mobile_ui.jpg)
+
+![](images/desktop_ui.jpeg)
 
 ## Table of Contents
 
