@@ -19,12 +19,14 @@
 │           ├── metrics_router.py
 │           ├── modeling_router.py
 │           └── preprocessing_router.py
+├── api_entrypoint.sh
 ├── api_main.py
+├── api.service
 ├── config
 │   ├── apis.json
 │   ├── inference.json
 │   ├── __init__.py
-│   ├── mlflow.json
+│   ├── mlflow_dagshub_tracking_cred.json
 │   ├── model
 │   │   ├── cnn_model.yaml
 │   │   ├── __init__.py
@@ -36,6 +38,7 @@
 │   └── training.json
 ├── data
 │   ├── final
+│   ├── final.dvc
 │   ├── processed
 │   │   ├── defog
 │   │   │   ├── cnn.tfrecords
@@ -47,27 +50,42 @@
 │   │       └── rnn.tfrecords
 │   └── raw
 │       ├── daily_metadata.csv
+│       ├── daily_metadata.csv.dvc
 │       ├── defog_metadata.csv
+│       ├── defog_metadata.csv.dvc
 │       ├── events.csv
+│       ├── events.csv.dvc
 │       ├── sample_submission.csv
+│       ├── sample_submission.csv.dvc
 │       ├── subjects.csv
+│       ├── subjects.csv.dvc
 │       ├── tasks.csv
+│       ├── tasks.csv.dvc
 │       ├── tdcsfog_metadata.csv
+│       ├── tdcsfog_metadata.csv.dvc
 │       ├── test
 │       │   ├── defog
 │       │   │   └── 02ab235146.csv
 │       │   └── tdcsfog
 │       │       └── 003f117e14.csv
-│       ├── tlvmc-parkinsons-freezing-gait-prediction.zip
+│       ├── test.dvc
 │       ├── train
 │       │   ├── defog
 │       │   │   └── *.csv
+│       │   ├── defog.dvc
 │       │   ├── notype
 │       │   │   └── *.csv
-│       │   └── tdcsfog
-│       │       └── *.csv
-│       └── unlabeled
-│           └── *.parquet
+│       │   ├── notype.dvc
+│       │   ├── tdcsfog
+│       │   │   └── *.csv
+│       │   └── tdcsfog.dvc
+│       ├── unlabeled
+│       │   └── *.parquet
+│       └── unlabeled.dvc
+├── docker-compose.yml
+├── Dockerfile_api
+├── Dockerfile_gateway
+├── Dockerfile_ui
 ├── docs
 │   ├── api
 │   │   └── app
@@ -79,6 +97,10 @@
 │   │       │   └── preprocessing_controller.md
 │   │       ├── dependencies.md
 │   │       ├── index.md
+│   │       ├── models
+│   │       │   ├── index.md
+│   │       │   ├── inference_model.md
+│   │       │   └── metrics_model.md
 │   │       └── router
 │   │           ├── index.md
 │   │           ├── inference_router.md
@@ -93,7 +115,9 @@
 │   │   ├── server.md
 │   │   ├── service_pb2_grpc.md
 │   │   └── service_pb2.md
-│   ├── logger_config.md
+│   ├── logger_config
+│   │   ├── index.md
+│   │   └── log_config.md
 │   ├── main.md
 │   ├── src
 │   │   ├── build_model.md
@@ -104,14 +128,16 @@
 │   │   └── train_model.md
 │   ├── streamlit_app
 │   │   ├── api_client.md
-│   │   ├── app.md
 │   │   ├── data_processing.md
 │   │   ├── index.md
 │   │   └── style_utils.md
+│   ├── streamlit_main.md
 │   └── tests
 │       ├── index.md
 │       ├── test_grpc_stream.md
 │       └── test_model.md
+├── dvc.lock
+├── dvc.yaml
 ├── folder_structure.txt
 ├── grpc_stream
 │   ├── client.py
@@ -122,38 +148,55 @@
 │   ├── rpc_service.proto
 │   └── server.py
 ├── images
+│   ├── defog_cnn_training_system_performance.png
 │   ├── defog_rnn_training_system_performance.png
+│   ├── desktop_ui.jpeg
+│   ├── Dockerization_structure.png
+│   ├── mobile_ui.jpg
 │   ├── processed_defog_metadata_plot_1.png
 │   ├── processed_defog_metadata_plot_2.png
 │   ├── processed_tdcsfog_metadata_plot_1.png
 │   ├── processed_tdcsfog_metadata_plot_2.png
-│   └── tdcsfog_cnn_training_system_performance.png
+│   ├── tdcsfog_cnn_training_system_performance.png
+│   └── tdcsfog_rnn_training_system_performance.png
 ├── LICENSE
-├── logger_config.py
+├── logger_config
+│   ├── __init__.py
+│   └── log_config.py
 ├── logs
 │   ├── General
 │   │   └── *.log
 │   └── TensorBoard
 │       ├── train
-│       │   └── events.out.tfevents.*.Energizer.*.*.v2
-│       └── validation
-│           └── events.out.tfevents.*.Energizer.*.*.v2
+│       └── validate
 ├── main.py
 ├── Makefile
 ├── models
-│   └── ModelCheckpoint
+│   ├── ModelCheckpoint
+│   │   ├── defog
+│   │   │   ├── CNN
+│   │   │   │   └── checkpoint
+│   │   │   └── RNN
+│   │   │       └── checkpoint
+│   │   └── tdcsfog
+│   │       ├── CNN
+│   │       │   └── checkpoint
+│   │       └── RNN
+│   │           └── checkpoint
+│   └── ModelSaves
 │       ├── defog
-│       │   ├── CNN
-│       │   └── RNN
-│       │       └── checkpoint
+│       │   ├── CNN.h5
+│       │   └── RNN.h5
 │       └── tdcsfog
-│           ├── CNN
-│           │   └── checkpoint
-│           └── RNN
+│           ├── CNN.h5
+│           └── RNN.h5
 ├── notebooks
 │   ├── defog_metadata_processing.ipynb
 │   └── tdcsfog_metadata_processing.ipynb
+├── poetry.lock
+├── pyproject.toml
 ├── README.md
+├── requirements.txt
 ├── src
 │   ├── build_model.py
 │   ├── config.py
@@ -163,12 +206,13 @@
 │   └── train_model.py
 ├── streamlit_app
 │   ├── api_client.py
-│   ├── app.py
 │   ├── data_processing.py
 │   └── style_utils.py
-└── tests
-    ├── __init__.py
-    ├── test_grpc_stream.py
-    └── test_model.py
+├── streamlit_main.py
+├── tests
+│   ├── __init__.py
+│   ├── test_grpc_stream.py
+│   └── test_model.py
+└── ui_entrypoint.sh
 
-101 directories, 1204 files
+56 directories, 1194 files
